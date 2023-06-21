@@ -20,11 +20,11 @@ The project currently does not require any configuration at all. On startup data
 
 ## Github
 
-1. Clone the project and checkout the dev branch.
-2. Assign yourself to an issue and create a new branch from dev with this format: **$"feature/{InsertTitleOfIssue}"**
+1. Clone the project and checkout the **dev** branch.
+2. Assign yourself to an issue and create a new branch from **dev** with this format: **$"feature/{InsertTitleOfIssue}"**
 3. Make some changes, commit the changes then push them to github
-4. Open up a Pull request from the branch with the changes to the dev branch
-5. Wait for other devs to give feedback. When the Pull request has been approved click squash merge and delete the branch afterwards
+4. Open up a Pull request from the branch with the changes to the **dev** branch
+5. Wait for other developers feedback. When the Pull request has been approved click squash merge and delete the branch afterwards
 
 ## Creating database migrations
 
@@ -41,8 +41,8 @@ After making changes to any entity you need to add a migration and update the da
 - [x] Blazor MAUI + EF + SQLite
 - [x] add UI mockups
 - [x] Readme Building/running/adding migrations
-- [ ] Create issues for MVP.1 and add features to roadmap
-- [ ] Create issues for MVP.2 and add features to roadmap
+- [ ] Create issues for MVP.1 and add features to readme
+- [ ] Create issues for MVP.2 and add features to readme
 - [ ] Readme Roadmap
 
 ## MVP
