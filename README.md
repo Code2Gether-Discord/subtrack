@@ -39,11 +39,11 @@ After making changes to any entity you need to add a migration and update the da
 # Setup - @chrisk00 - WIP
 
 - [x] Blazor MAUI + EF + SQLite
-- [ ] add UI mockups
-- [ ] Create issues for MVP.1
-- [ ] Create issues for MVP.2
-- [ ] Readme Roadmap
+- [x] add UI mockups
 - [x] Readme Building/running/adding migrations
+- [ ] Create issues for MVP.1 and add features to roadmap
+- [ ] Create issues for MVP.2 and add features to roadmap
+- [ ] Readme Roadmap
 
 ## MVP
 
