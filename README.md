@@ -41,11 +41,12 @@ After making changes to any entity you need to add a migration and update the da
 - [x] Blazor MAUI + EF + SQLite
 - [x] add UI mockups
 - [x] Readme Building/running/adding migrations
-- [ ] Create issues for MVP.1 and add features to readme
+- [x] Create issues for MVP.1 and add features to readme
 - [ ] Create issues for MVP.2 and add features to readme
 - [ ] Readme Roadmap
 
 ## MVP
+Every feature has been labeled with "MVP Feature" and contains subtask to fulfill that specific feature. Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description. Feel free to team up with someone and tackle a issue/feature together, that would be a great learning experience. Some Issues might have easier to understand requirements than others, if something is unclear the best communication channel is discord.
 
 ### MVP.1 - Viewing Subscriptions
 
