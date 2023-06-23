@@ -11,6 +11,8 @@ public class Subscription
     public string? Description { get; set; }
     public bool IsAutoPaid { get; set; }
 
+    public decimal Cost { get; set; }
+
     [Required]
     public DateTime LastPayment { get; set; }
 }
