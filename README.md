@@ -17,7 +17,7 @@ Before preceding make sure you have installed ".NET Multi-platform App UI develo
 
 <img src="https://i.postimg.cc/BnGYRhFy/vs-workloads.png)](https://postimg.cc/vc3tVt3L" width="450" height="250">
 
-1. To begin with we only have a mobile app and we focus on making the design and functionality work for Android. You do not need an android phone to actually run the project but you do need to enable **Hyper-V** on your PC https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/hardware-acceleration?pivots=windows.
+1. To begin with we only have a mobile app and we focus on making the design and functionality work for Android. You do not need an android phone to actually run the project but you do need to enable **Hyper-V** on your PC https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/hardware-acceleration?pivots=windows. You also need to enable developer mode on your PC https://www.c-sharpcorner.com/blogs/dep0100-please-ensure-that-target-device-has-developer-mode-enabled.
 2.  After enabling Hyper-V you can run the project with the **Android emulator** (built in to VS) - I am using a **Pixel 5 - API 31 (Android 12.0)** since that was default. You can add the device by opening the **Android Device Manager** inside VS
 
 *Note that you can run the project without the android emulator as long as you won't be making any UI changes, alternatively tell someone else to verify the UI looks ok*
