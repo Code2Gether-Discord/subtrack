@@ -34,7 +34,7 @@ public static class MauiProgram
 
     private static void SeedDb(SubtrackDbContext dbContext)
     {
-        _ = dbContext.Database.EnsureCreated();
+        dbContext.Database.Migrate();
         if (dbContext.Subscriptions.Any())
             return;
 
