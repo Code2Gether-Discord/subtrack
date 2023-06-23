@@ -14,6 +14,7 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
 The project itself currently does not require any configuration at all. On startup data is seeded to a locally stored sqlite database.
 
 Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer
+
 <img src="https://i.postimg.cc/BnGYRhFy/vs-workloads.png)](https://postimg.cc/vc3tVt3L" width="450" height="250">
 
 1. To begin with we only have a mobile app and we focus on making the design and functionality work for Android. You do not need an android phone to actually run the project but you do need to enable **Hyper-V** on your PC https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/hardware-acceleration?pivots=windows.
