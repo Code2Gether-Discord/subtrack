@@ -11,10 +11,13 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
 # Development Info
 
 ## Running the project
-The project currently does not require any configuration at all. On startup data is seeded to a locally stored sqlite database.
+The project itself currently does not require any configuration at all. On startup data is seeded to a locally stored sqlite database.
+
+Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer
+<img src="https://i.postimg.cc/BnGYRhFy/vs-workloads.png)](https://postimg.cc/vc3tVt3L" width="450" height="250">
 
 1. To begin with we only have a mobile app and we focus on making the design and functionality work for Android. You do not need an android phone to actually run the project but you do need to enable **Hyper-V** on your PC https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/hardware-acceleration?pivots=windows.
-2.  After enabling Hyper-V you can run the project with the **Android emulator** - I am using a **Pixel 5 - API 31 (Android 12.0)** since that was default. You can add the device by opening the **Android Device Manager** inside VS
+2.  After enabling Hyper-V you can run the project with the **Android emulator** (built in to VS) - I am using a **Pixel 5 - API 31 (Android 12.0)** since that was default. You can add the device by opening the **Android Device Manager** inside VS
 
 *Note that you can run the project without the android emulator as long as you won't be making any UI changes, alternatively tell someone else to verify the UI looks ok*
 
@@ -62,5 +65,17 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 - [ ] List subscriptions under each month showing the name, cost, if it's auto paid and how many days left until it's due
 
 ### MVP.2 - Creating Subscriptions
+
+#### Create page
+-  Create a new subscription
+
+#### Edit page
+- Edit an existing subscription
+- Mark subscription as paid
+- Delete subscription
+
+#### Start and subscriptions page
+- Clicking on a subscription takes you to the edit page
+- Add a + button at the bottom of the page for adding a new subscription
 
 ## Roadmap 2023
