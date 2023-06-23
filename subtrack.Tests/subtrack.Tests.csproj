@@ -22,4 +22,8 @@
     </PackageReference>
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\subtrack.MAUI\subtrack.MAUI.csproj" />
+  </ItemGroup>
+
 </Project>
