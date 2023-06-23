@@ -34,13 +34,12 @@ public static class MauiProgram
 
     private static void SeedDb(SubtrackDbContext dbContext)
     {
+        _ = dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
-        if (dbContext.Subscriptions.Any())
-            return;
 
         dbContext.Subscriptions.AddRange(
-            new DAL.Entities.Subscription() { Name = "Netflix", IsAutoPaid = true, LastPayment = DateTime.Now.AddDays(-1), Description = "family plan" },
-            new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now }
+            new DAL.Entities.Subscription() { Name = "Netflix", IsAutoPaid = true, LastPayment = DateTime.Now.AddDays(-1), Description = "family plan", Cost = 10 },
+            new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, Cost = 1.5m, }
             );
 
         dbContext.SaveChanges();

@@ -38,7 +38,7 @@ After making changes to any entity you need to add a migration and update the da
 2. Change the "Default Project:" to "subtrack.DAL"
 3. Enter this command in the console `add-migration {insertMigrationName} -StartupProject subtrack.DAL`
 4. Make sure the generated files are as expected. If you wish to undo the migration write `remove-migration -StartupProject subtrack.DAL`
-5. Enter this command in the console `update-database {insertMigrationName} -StartupProject subtrack.DAL`
+5. Enter this command in the console `update-database -StartupProject subtrack.DAL`
 
 # Setup - @chrisk00 - WIP
 
