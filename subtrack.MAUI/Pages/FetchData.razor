@@ -1,12 +1,16 @@
 ﻿@page "/fetchdata"
 
 @using subtrack.MAUI.Data
+@using subtrack.MAUI.Services.Abstractions
+@using subtrack.DAL.Entities
 @inject WeatherForecastService ForecastService
+@inject ISubscriptionsService subscriptionService
 
 <h1>Weather forecast</h1>
 
 <p>This component demonstrates fetching data from a service.</p>
 
+@*
 @if (forecasts == null)
 {
 	<p><em>Loading...</em></p>
@@ -35,12 +39,44 @@ else
 		</tbody>
 	</table>
 }
+*@
 
+@if (subscriptions == null)
+{
+	<p><em>Loading...</em></p>
+}
+else
+{
+	<table class="table">
+		<thead>
+			<tr>
+				<th>Subscription Provider</th>
+				<th>Description</th>
+				<th>Auto Pay Feature</th>
+				<th>Cost</th>
+				<th>Last Payment</th>
+			</tr>
+		</thead>
+		<tbody>
+			@foreach (var sub in subscriptions)
+			{
+				<tr>
+					<td>@sub.Name</td>
+					<td>@sub.Description</td>
+					<td>@sub.IsAutoPaid</td>
+					<td>@sub.Cost</td>
+					<td>@sub.LastPayment</td>
+				</tr>
+			}
+		</tbody>
+	</table>
+}
 @code {
 	private WeatherForecast[] forecasts;
-
+	private IEnumerable<Subscription> subscriptions;
 	protected override async Task OnInitializedAsync()
 	{
 		forecasts = await ForecastService.GetForecastAsync(DateTime.Now);
+		subscriptions = await subscriptionService.GetSubscriptions();
 	}
 }

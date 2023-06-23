@@ -1,6 +1,8 @@
 ﻿using subtrack.MAUI.Data;
 using subtrack.DAL;
 using Microsoft.EntityFrameworkCore;
+using subtrack.MAUI.Services.Abstractions;
+using subtrack.MAUI.Services;
 
 namespace subtrack.MAUI;
 
@@ -25,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString));
 
         builder.Services.AddSingleton<WeatherForecastService>();
+        builder.Services.AddScoped<ISubscriptionsService, SubscriptionService>();
 
         using var sp = builder.Services.BuildServiceProvider();
         SeedDb(sp.GetRequiredService<SubtrackDbContext>());
