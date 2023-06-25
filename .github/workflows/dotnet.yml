@@ -22,5 +22,9 @@ jobs:
         dotnet-version: 6.0.x
     - name: Install MAUI Workload
       run: dotnet workload install maui-android --ignore-failed-sources
+    - name: Restore dependencies
+      run: dotnet restore .\subtrack.Tests
+    - name: Build
+      run: dotnet build .\subtrack.Tests --no-restore
     - name: Test
-      run: dotnet test --no-build --verbosity normal
+      run: dotnet test .\subtrack.Tests --no-build --verbosity normal
