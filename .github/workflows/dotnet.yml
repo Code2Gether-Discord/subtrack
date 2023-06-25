@@ -12,7 +12,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-2022
 
     steps:
     - uses: actions/checkout@v3
@@ -20,10 +20,6 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Install MAUI android Workload
-      run: dotnet workload install maui-android --ignore-failed-sources
-    - name: Install MAUI ios Workload
-      run: dotnet workload install maui-ios --ignore-failed-sources
     - name: Install MAUI Workload
       run: dotnet workload install maui --ignore-failed-sources
     - name: Restore dependencies
