@@ -40,6 +40,10 @@ After making changes to any entity you need to add a migration and update the da
 4. Make sure the generated files are as expected. If you wish to undo the migration write `remove-migration -StartupProject subtrack.DAL`
 5. Enter this command in the console `update-database -StartupProject subtrack.DAL`
 
+## Design
+- This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
+- Mockups are created with drawio and any changes are saved as a png inside /docs
+
 # Setup - @chrisk00 - WIP
 
 - [x] Blazor MAUI + EF + SQLite
@@ -56,7 +60,7 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 
 #### Start page
 
-- [ ] Display total subscriptions cost per month at the top of the page
+- [x] Display total subscriptions cost per month at the top of the page
 - [ ] List every subscription with their name and cost
 - [ ] Show how many days left each subscription is due
 
