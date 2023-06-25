@@ -60,7 +60,7 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 
 #### Start page
 
-- [ ] Display total subscriptions cost per month at the top of the page
+- [x] Display total subscriptions cost per month at the top of the page
 - [ ] List every subscription with their name and cost
 - [ ] Show how many days left each subscription is due
 
