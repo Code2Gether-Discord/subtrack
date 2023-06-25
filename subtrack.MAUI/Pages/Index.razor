@@ -1,6 +1,9 @@
 ﻿@page "/"
 
-@inject subtrack.DAL.SubtrackDbContext Db
+@using subtrack.MAUI.Services.Abstractions
+@using subtrack.MAUI.Responses;
+@using subtrack.MAUI.DtoExtention;
+@inject ISubscriptionsService subscriptionService
 
 <div class="container text-center">
     <div class="row">
@@ -13,21 +16,37 @@
     </div>
 </div>
 
-<div class="container mt-3">
-    @foreach (var sub in Db.Subscriptions)
+<div class="container">
+    @foreach (var sub in _subscriptions)
     {
-        <p>@sub.Name $@sub.Cost</p>
+        <div class="card border-primary mb-3" style="max-width: 20rem;">
+            <div class="card-header">@sub.Subscription.Name</div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>Cost</div>
+                    <div class="text-right">@($"{sub.Subscription.Cost:C}")</div>
+                </div>
+            </div>
+            <div class="card-body">
+                <div class="d-flex justify-content-between">
+                    <div>Due Days</div>
+                    <div class="text-right">@sub.DueDays</div>
+                </div>
+            </div>
+        </div>
     }
 </div>
 
 
+
+
 @code{
     private decimal _subscriptionsCost = 0;
-    private IEnumerable<Subscription> _subscriptions = new List<Subscription>();
+    private IEnumerable<SubscriptionResponse> _subscriptions;
 
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
-        _subscriptions = Db.Subscriptions.ToList();
-        _subscriptionsCost = _subscriptions.GetMonthlyCost();
+        _subscriptionsCost = (await subscriptionService.GetSubscriptions()).GetMonthlyCost();
+        _subscriptions = (await subscriptionService.GetSubscriptions()).ToSubscriptionResponses();
     }
 }

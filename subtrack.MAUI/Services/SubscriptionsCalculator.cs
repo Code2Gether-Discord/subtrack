@@ -10,4 +10,13 @@ public static class SubscriptionsCalculator
         var price = subscriptions.Sum(x => x.Cost);
         return price;
     }
+
+    public static int GetDueDays(this Subscription subscription)
+    {
+        if (subscription is null) return 0;
+        var duration = DateTime.Now.Subtract(subscription.LastPayment);
+        if (duration.Days < 0) return 0;
+        return duration.Days;
+    }
+
 }
