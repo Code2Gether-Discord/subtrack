@@ -2,12 +2,23 @@
 
 @inject subtrack.DAL.SubtrackDbContext Db
 
-Monthly cost @_subscriptionsCost
+<div class="container text-center rounded">
+    <div class="row">
+        <div class="col">
+            <h6 class="pt-1">Monthly</h6>
+        </div>
+        <div class="col">
+            <h5 class="">@($"{_subscriptionsCost:C}")</h5>
+        </div>
+    </div>
+</div>
 
-@foreach (var sub in Db.Subscriptions)
-{
-    <p>@sub.Name $@sub.Cost</p>
-}
+<div class="container mt-3">
+    @foreach (var sub in Db.Subscriptions)
+    {
+        <p>@sub.Name $@sub.Cost</p>
+    }
+</div>
 
 
 @code{
