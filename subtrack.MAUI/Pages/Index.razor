@@ -2,13 +2,21 @@
 
 @inject subtrack.DAL.SubtrackDbContext Db
 
-<h1>Hello, world!</h1>
-
-Welcome to your new app.
-
-<SurveyPrompt Title="How is Blazor working for you?" />
+Monthly cost @_subscriptionsCost
 
 @foreach (var sub in Db.Subscriptions)
 {
     <p>@sub.Name $@sub.Cost</p>
+}
+
+
+@code{
+    private decimal _subscriptionsCost = 0;
+    private IEnumerable<Subscription> _subscriptions = new List<Subscription>();
+
+    protected override void OnInitialized()
+    {
+        _subscriptions = Db.Subscriptions.ToList();
+        _subscriptionsCost = _subscriptions.GetMonthlyCost();
+    }
 }
