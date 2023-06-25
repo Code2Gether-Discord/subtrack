@@ -40,6 +40,10 @@ After making changes to any entity you need to add a migration and update the da
 4. Make sure the generated files are as expected. If you wish to undo the migration write `remove-migration -StartupProject subtrack.DAL`
 5. Enter this command in the console `update-database -StartupProject subtrack.DAL`
 
+## Design
+- This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
+- Mockups are created with drawio and any changes are saved as a png inside /docs
+
 # Setup - @chrisk00 - WIP
 
 - [x] Blazor MAUI + EF + SQLite
