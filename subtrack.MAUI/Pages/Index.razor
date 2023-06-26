@@ -28,6 +28,6 @@
     protected override void OnInitialized()
     {
         _subscriptions = Db.Subscriptions.ToList();
-        _subscriptionsCost = _subscriptions.GetMonthlyCost();
+        _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
     }
 }
