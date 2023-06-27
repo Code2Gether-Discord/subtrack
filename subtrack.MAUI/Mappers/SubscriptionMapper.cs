@@ -1,11 +1,11 @@
 ﻿using subtrack.DAL.Entities;
-using subtrack.MAUI.Data;
+using subtrack.MAUI.Response;
 
 namespace subtrack.MAUI.Mappers
 {
-    public class SubscriptionMapper
+    public static class SubscriptionMapper
     {
-        public IEnumerable<SubscriptionResponse> Map(IEnumerable<Subscription> subscriptions)
+        public static IEnumerable<SubscriptionResponse> ToResponses(this IEnumerable<Subscription> subscriptions)
         {
             var subscriptionResponse = subscriptions.Select(subscription => new SubscriptionResponse
             {
