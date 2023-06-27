@@ -10,7 +10,7 @@ public class GetMonthlyCostTests
     {
         var subscriptions = new List<Subscription>();
 
-        var result = SubscriptionsCalculator.GetMonthlyCost(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
 
         Assert.Equal(0, result);
     }
@@ -20,7 +20,7 @@ public class GetMonthlyCostTests
     {
         List<Subscription>? subscriptions = null;
 
-        var result = SubscriptionsCalculator.GetMonthlyCost(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
 
         Assert.Equal(0, result);
     }
@@ -33,7 +33,7 @@ public class GetMonthlyCostTests
             new Subscription { Cost = 10.5m }
         };
 
-        var result = SubscriptionsCalculator.GetMonthlyCost(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
 
         Assert.Equal(10.5m, result);
     }
@@ -48,7 +48,7 @@ public class GetMonthlyCostTests
             new Subscription { Cost = 7.75m }
         };
 
-        var result = SubscriptionsCalculator.GetMonthlyCost(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
 
         Assert.Equal(23.5m, result);
     }
