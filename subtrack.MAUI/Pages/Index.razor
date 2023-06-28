@@ -50,6 +50,6 @@
     {
         var subscriptions = await subscriptionService.GetSubscriptions();
         _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(subscriptions);
-        _subscriptionResponses = SubscriptionMapper.GetSubscriptionResponses(subscriptions);
+        _subscriptionResponses = SubscriptionMapper.GetSubscriptionResponses(subscriptions).OrderBy(sub => sub.DueDays).ToList();
     }
 }

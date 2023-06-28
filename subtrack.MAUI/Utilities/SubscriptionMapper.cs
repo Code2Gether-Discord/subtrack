@@ -11,7 +11,7 @@ namespace subtrack.MAUI.Utilities
             return subscriptions.Select(sub => new SubscriptionResponse
             {
                 Subscription = sub,
-                DueDays = SubscriptionsCalculator.GetDueDays(sub) // Replace with your actual logic to calculate due days
+                DueDays = SubscriptionsCalculator.GetDueDays(sub)
             });
         }
     }
