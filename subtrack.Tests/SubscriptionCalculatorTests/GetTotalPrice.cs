@@ -3,10 +3,10 @@ using subtrack.MAUI.Services;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 
-public class GetMonthlyCostTests
+public class GetTotalPrice
 {
     [Fact]
-    public void GetMonthlyCost_EmptySubscriptions_ReturnsZero()
+    public void GetTotalPrice_EmptySubscriptions_ReturnsZero()
     {
         var subscriptions = new List<Subscription>();
 
@@ -16,7 +16,7 @@ public class GetMonthlyCostTests
     }
 
     [Fact]
-    public void GetMonthlyCost_NullSubscriptions_ReturnsZero()
+    public void GetTotalPrice_NullSubscriptions_ReturnsZero()
     {
         List<Subscription>? subscriptions = null;
 
@@ -26,7 +26,7 @@ public class GetMonthlyCostTests
     }
 
     [Fact]
-    public void GetMonthlyCost_OneSubscription_ReturnsCorrectMonthlyCost()
+    public void GetTotalPrice_OneSubscription_ReturnsCorrectMonthlyCost()
     {
         var subscriptions = new List<Subscription>
         {
@@ -39,7 +39,7 @@ public class GetMonthlyCostTests
     }
 
     [Fact]
-    public void GetMonthlyCost_MultipleSubscriptions_ReturnsCorrectMonthlyCost()
+    public void GetTotalPrice_MultipleSubscriptions_ReturnsCorrectMonthlyCost()
     {
         var subscriptions = new List<Subscription>
         {
