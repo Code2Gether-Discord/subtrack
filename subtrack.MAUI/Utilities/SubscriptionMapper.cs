@@ -2,9 +2,9 @@
 using subtrack.MAUI.Responses;
 using subtrack.MAUI.Services;
 
-namespace subtrack.MAUI.DtoExtention
+namespace subtrack.MAUI.Utilities
 {
-    internal static class DtoExtention
+    internal static class SubscriptionMapper
     {
         public static IEnumerable<SubscriptionResponse> ToSubscriptionResponses(this IEnumerable<Subscription> subscriptions)
         {
@@ -12,7 +12,7 @@ namespace subtrack.MAUI.DtoExtention
             {
                 Subscription = sub,
                 DueDays = sub.GetDueDays() // Replace with your actual logic to calculate due days
-            }) ;
+            });
         }
     }
 }

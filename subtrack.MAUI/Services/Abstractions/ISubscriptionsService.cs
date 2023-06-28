@@ -2,7 +2,7 @@
 
 namespace subtrack.MAUI.Services.Abstractions
 {
-    internal interface ISubscriptionsService
+    internal interface ISubscriptionService
     {
         Task<IEnumerable<Subscription>> GetSubscriptions();
     }
