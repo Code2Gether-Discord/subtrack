@@ -11,11 +11,13 @@ public static class SubscriptionsCalculator
         return price;
     }
 
-    public static int GetDueDays(this Subscription subscription)
+    public static int GetDueDays(Subscription subscription)
     {
-        if (subscription is null) return 0;
-        var duration = DateTime.Now.Subtract(subscription.LastPayment);
-        if (duration.Days < 0) return 0;
+        if (subscription is null)
+        {
+            throw new ArgumentNullException();
+        }
+        var duration = DateTime.Now.Date.Subtract(subscription.LastPayment.Date);
         return duration.Days;
     }
 

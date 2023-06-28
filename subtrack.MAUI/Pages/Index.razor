@@ -17,20 +17,17 @@
 </div>
 
 <div class="container mt-2">
-    @foreach (var sub in _subscriptions)
+    @foreach (var sub in _subscriptionResponse)
     {
         <div class="card border-primary mb-3" style="max-width: 20rem;">
-            <div class="card-header">@sub.Subscription.Name</div>
             <div class="card-body">
-                <div class="d-flex justify-content-between">
-                    <div>Cost</div>
+                <div class="d-flex justify-content-between fs-5">
+                    <div>@sub.Subscription.Name</div>
                     <div class="text-right">@($"{sub.Subscription.Cost:C}")</div>
                 </div>
-            </div>
-            <div class="card-body">
-                <div class="d-flex justify-content-between">
+                <div class="d-flex justify-content-between fs-6">
                     <div>Due Days</div>
-                    <div class="text-right">@sub.DueDays</div>
+                    <div class="text-right">@($"{sub.DueDays}")</div>
                 </div>
             </div>
         </div>
@@ -46,5 +43,8 @@
 
     protected override async void OnInitialized()
     {
+        var subs = await subscriptionService.GetSubscriptions();
+        _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(subs);
+        _subscriptionResponse = SubscriptionMapper.GetSubscriptionResponses(subs);
     }
 }

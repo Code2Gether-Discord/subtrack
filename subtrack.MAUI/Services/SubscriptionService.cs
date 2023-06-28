@@ -5,7 +5,7 @@ using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.MAUI.Services
 {
-    internal class SubscriptionService : ISubscriptionsService
+    internal class SubscriptionService : ISubscriptionService
     {
         private readonly SubtrackDbContext _context;
         public SubscriptionService(SubtrackDbContext context) => _context = context;
