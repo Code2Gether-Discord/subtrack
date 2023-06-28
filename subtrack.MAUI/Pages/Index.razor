@@ -1,4 +1,4 @@
-﻿@page "/"
+@page "/"
 
 @using subtrack.MAUI.Services.Abstractions
 @using subtrack.MAUI.Responses;
@@ -46,8 +46,5 @@
 
     protected override async void OnInitialized()
     {
-        var subscriptions = await subscriptionService.GetSubscriptions();
-        _subscriptionsCost = subscriptions.GetMonthlyCost();
-        _subscriptionResponse = subscriptions.ToSubscriptionResponses();
     }
 }
