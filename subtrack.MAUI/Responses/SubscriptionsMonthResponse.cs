@@ -1,4 +1,4 @@
-﻿namespace subtrack.MAUI.Response
+﻿namespace subtrack.MAUI.Responses
 {
     public class SubscriptionsMonthResponse
     {
