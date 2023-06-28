@@ -61,8 +61,8 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 #### Start page
 
 - [x] Display total subscriptions cost per month at the top of the page
-- [ ] List every subscription with their name and cost
-- [ ] Show how many days left each subscription is due
+- [x] List every subscription with their name and cost 
+- [x] Show how many days left each subscription is due
 
 #### Subscriptions page
 
@@ -76,11 +76,15 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 
 #### Edit page
 - Edit an existing subscription
-- Mark subscription as paid
 - Delete subscription
+
+### Details page
+- Mark subscription as paid
+- display all details like lastpayment
 
 #### Start and subscriptions page
 - Clicking on a subscription takes you to the edit page
 - Add a + button at the bottom of the page for adding a new subscription
 
-## Roadmap 2023
+## WIP Roadmap 2023
+![Roadmap 2023](docs/roadmap.png)
