@@ -18,4 +18,15 @@ public static class SubscriptionsCalculator
                     .ToList();
         return subscriptionsByMonth;
     }
+  
+    public static int GetDueDays(Subscription subscription)
+    {
+        if (subscription is null)
+        {
+            throw new ArgumentNullException(nameof(subscription));
+        }
+        var dueDate = subscription.LastPayment.AddMonths(1).Date;
+        var duration = dueDate.Subtract(DateTime.Now.Date);
+        return duration.Days;
+    }
 }
