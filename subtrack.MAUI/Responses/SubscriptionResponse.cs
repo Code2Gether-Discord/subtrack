@@ -1,6 +1,4 @@
 ﻿using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using System.Runtime.CompilerServices;
 
 namespace subtrack.MAUI.Responses
 {

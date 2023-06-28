@@ -17,7 +17,8 @@ public static class SubscriptionsCalculator
         {
             throw new ArgumentNullException();
         }
-        var duration = DateTime.Now.Date.Subtract(subscription.LastPayment.Date);
+        var dueDate = subscription.LastPayment.AddMonths(1).Date;
+        var duration = dueDate.Subtract(DateTime.Now.Date);
         return duration.Days;
     }
 

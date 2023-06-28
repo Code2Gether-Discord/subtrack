@@ -12,7 +12,7 @@ namespace subtrack.MAUI.Services
 
         public async Task<IEnumerable<Subscription>> GetSubscriptions()
         {
-            return await _context.Set<Subscription>().ToListAsync();
+            return await _context.Subscriptions.ToListAsync();
         }
     }
 }
