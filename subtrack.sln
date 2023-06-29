@@ -11,9 +11,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		docs\mockups.drawio = docs\mockups.drawio
 		docs\mockups.png = docs\mockups.png
 		README.md = README.md
+		docs\roadmap.drawio = docs\roadmap.drawio
+		docs\roadmap.png = docs\roadmap.png
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "subtrack.Tests", "subtrack.Tests\subtrack.Tests.csproj", "{AA895297-825C-4084-B7FA-9343F46240A6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "subtrack.Tests", "subtrack.Tests\subtrack.Tests.csproj", "{AA895297-825C-4084-B7FA-9343F46240A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
