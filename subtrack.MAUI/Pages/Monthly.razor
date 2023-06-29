@@ -1,4 +1,6 @@
 ﻿@page "/monthly"
+@using System.Globalization;
+@using subtrack.MAUI.Services.Abstractions;
 
 @inject subtrack.DAL.SubtrackDbContext Db
 
@@ -28,26 +30,13 @@
 
 
 @code{
-    private decimal _subscriptionsCost = 0;
-    private IEnumerable<Subscription> _subscriptions = new List<Subscription>();
-    private IEnumerable<string> _months = new List<string>{
-        "January",
-        "February",
-        "March",
-        "April",
-        "May",
-        "June",
-        "July",
-        "August",
-        "September",
-        "October",
-        "November",
-        "December"
-    };
+    decimal _subscriptionsCost = 0;
+    IEnumerable<Subscription> _subscriptions = new List<Subscription>();
+    string[] _months = DateTimeFormatInfo.CurrentInfo.MonthNames;
 
     protected override void OnInitialized()
     {
         _subscriptions = Db.Subscriptions.ToList();
-        _subscriptionsCost = _subscriptions.GetMonthlyCost();
+        _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
     }
 }
