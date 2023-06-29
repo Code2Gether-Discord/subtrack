@@ -4,6 +4,14 @@
 
 @inject subtrack.DAL.SubtrackDbContext Db
 
+<div class="container text-center">
+    <div class="row">
+        <div class="col">
+            <h6 class="pt-1">Monthly</h6>
+        </div>
+    </div>
+</div>
+
 <div class="accordion accordion-flush" id="accordionFlush">
 
     @foreach (var month in _months.Select((Value, Index) => new { Value, Index }))
