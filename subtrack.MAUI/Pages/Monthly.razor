@@ -5,46 +5,101 @@
 @inject subtrack.DAL.SubtrackDbContext Db
 
 <div class="container text-center">
-    <div class="row">
-        <div class="col">
-            <h6 class="pt-1">Monthly</h6>
-        </div>
-    </div>
+	<div class="row">
+		<div class="col">
+			<h6 class="pt-1">@currentYear</h6>
+		</div>
+	</div>
 </div>
 
 <div class="accordion accordion-flush" id="accordionFlush">
 
-    @foreach (var month in _months.Select((Value, Index) => new { Value, Index }))
-    {
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="@($"flush-heading{month.Index}")">
-                <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@($"#flush-collapse{month.Index}")" aria-expanded="false" aria-controls="@($"flush-collapse{month.Index}")">
-                    <div class="d-flex justify-content-between">
-                        <span>@month.Value | @($"{_subscriptionsCost:C}")</span>
-                    </div>
-                </button>
-            </h2>
-            <div id="@($"flush-collapse{month.Index}")" class="accordion-collapse collapse" aria-labelledby="@($"flush-heading{month.Index}")" data-bs-parent="#accordionFlush">
-                <div class="container mt-3">
-                    @foreach (var sub in Db.Subscriptions)
-                    {
-                        <p>@sub.Name $@sub.Cost</p>
-                    }
-                </div>
-            </div>
-        </div>
-    }
+	@foreach (var month in currentYearMonths)
+	{
+		<div class="accordion-item">
+			<h2 class="accordion-header" id="@($"flush-heading{month.Number}")">
+				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@($"#flush-collapse{month.Number}")" aria-expanded="false" aria-controls="@($"flush-collapse{month.Number}")">
+					<div class="d-flex justify-content-between">
+						<span>@month.Name | @($"{_subscriptionsCost:C}")</span>
+					</div>
+				</button>
+			</h2>
+			<div id="@($"flush-collapse{month.Number}")" class="accordion-collapse collapse" aria-labelledby="@($"flush-heading{month.Number}")" data-bs-parent="#accordionFlush">
+
+				<div class="container mt-3">
+					@foreach (var sub in Db.Subscriptions)
+					{
+						<SubscriptionItem Subscription="sub" />
+					}
+				</div>
+			</div>
+		</div>
+	}
+	@if (nextYearMonths != null && nextYearMonths.Any())
+	{
+		<div class="container text-center" style="padding-top: 10px">
+			<div class="row">
+				<div class="col">
+					<h6 class="pt-1">@(currentYear + 1)</h6>
+				</div>
+			</div>
+		</div>
+		@foreach (var month in nextYearMonths)
+		{
+			<div class="accordion-item">
+				<h2 class="accordion-header" id="@($"flush-heading{month.Number}")">
+					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@($"#flush-collapse{month.Number}")" aria-expanded="false" aria-controls="@($"flush-collapse{month.Number}")">
+						<div class="d-flex justify-content-between">
+							<span>@month.Name | @($"{_subscriptionsCost:C}")</span>
+						</div>
+					</button>
+				</h2>
+				<div id="@($"flush-collapse{month.Number}")" class="accordion-collapse collapse" aria-labelledby="@($"flush-heading{month.Number}")" data-bs-parent="#accordionFlush">
+					<div class="container mt-3">
+						@foreach (var sub in Db.Subscriptions)
+						{
+							<SubscriptionItem Subscription="sub" />
+						}
+					</div>
+				</div>
+			</div>
+		}
+	}
+
 </div>
 
 
-@code{
-    decimal _subscriptionsCost = 0;
-    IEnumerable<Subscription> _subscriptions = new List<Subscription>();
-    string[] _months = DateTimeFormatInfo.CurrentInfo.MonthNames;
+@code {
+	decimal _subscriptionsCost = 0;
+	IEnumerable<Subscription> _subscriptions = new List<Subscription>();
+	int currentMonth = DateTime.Now.Month;
+	int currentYear = DateTime.Now.Year;
+	string[] _allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames;
 
-    protected override void OnInitialized()
-    {
-        _subscriptions = Db.Subscriptions.ToList();
-        _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
-    }
+	IEnumerable<Month> currentYearMonths;
+	IEnumerable<Month> nextYearMonths;
+
+	class Month
+	{
+		public int Number { get; set; }
+		public string Name { get; set; }
+	}
+
+	protected override void OnInitialized()
+	{
+
+
+		_subscriptions = Db.Subscriptions.ToList();
+		_subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
+
+
+		currentYearMonths = _allMonths
+					.Where(p => !string.IsNullOrEmpty(p))
+					.Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
+					.Where(month => month.Number >= currentMonth);
+		nextYearMonths = _allMonths
+							.Where(p => !string.IsNullOrEmpty(p))
+							.Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
+							.Where(month => month.Number < currentMonth);
+	}
 }
