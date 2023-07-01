@@ -16,6 +16,16 @@ namespace subtrack.MAUI.Services
             return await _context.Subscriptions.ToListAsync();
         }
 
+        public async Task Delete(int id)
+        {
+            var sub = await _context.Subscriptions.FindAsync(id);
+
+            if (sub == null) throw new NotFoundException($"Subscription with an id:{id} not found.");
+
+            _context.Subscriptions.Remove(sub);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<Subscription?> GetById(int id)
         {
             var sub = await _context.Subscriptions.AsNoTracking()
