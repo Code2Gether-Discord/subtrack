@@ -12,7 +12,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
     public class GetSubscriptionListByMonthTests
     {
         [Fact]
-        public void GetSubscriptionListByMonth_MonthProvided_ReturnsUnpaidSubscriptions()
+        public void GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions()
         {
             // Arrange
             IList<Subscription> subscriptions = CreateSubscriptions();
@@ -23,6 +23,18 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             // Assert
             Assert.Contains(subscriptions[0], result);
             Assert.Contains(subscriptions[1], result);
+        }
+
+        [Fact]
+        public void GetSubscriptionListByMonth_MonthProvided_ShouldNotReturn_PaidSubscriptions()
+        {
+            // Arrange
+            IList<Subscription> subscriptions = CreateSubscriptions();
+
+            // Act
+            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Today);
+
+            // Assert
             Assert.DoesNotContain(subscriptions[2], result);
             Assert.DoesNotContain(subscriptions[3], result);
         }
