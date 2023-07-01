@@ -19,20 +19,15 @@ namespace subtrack.MAUI.Services
         {
             var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);
 
-            if (sub != null)
-            {
-                sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
-                sub.Name = subscriptionToUpdate.Name;
-                sub.Description = subscriptionToUpdate.Description;
-                sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
-                sub.Cost = subscriptionToUpdate.Cost;
+            if (sub == null) throw new DirectoryNotFoundException();
 
-                await _context.SaveChangesAsync();
-            }
-            else
-            {
-                throw new DirectoryNotFoundException();
-            }
+            sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
+            sub.Name = subscriptionToUpdate.Name;
+            sub.Description = subscriptionToUpdate.Description;
+            sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
+            sub.Cost = subscriptionToUpdate.Cost;
+
+            await _context.SaveChangesAsync();
         }
     }
 }
