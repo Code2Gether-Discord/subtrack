@@ -16,7 +16,6 @@ namespace subtrack.MAUI.Utilities
                 IsAutoPaid = sub.IsAutoPaid,
                 Cost = sub.Cost,
                 LastPayment = sub.LastPayment,
-                Subscription = sub,
                 DueDays = SubscriptionsCalculator.GetDueDays(sub)
             });
         }
