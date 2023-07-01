@@ -25,5 +25,13 @@ namespace subtrack.MAUI.Services
             _context.Subscriptions.Remove(sub);
             await _context.SaveChangesAsync();
         }
+
+        public async Task<Subscription?> GetById(int id)
+        {
+            var sub = await _context.Subscriptions.AsNoTracking()
+                                                  .FirstOrDefaultAsync(s => s.Id == id);
+
+            return sub;
+        }
     }
 }
