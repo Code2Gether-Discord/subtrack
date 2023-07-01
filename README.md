@@ -57,16 +57,14 @@ After making changes to any entity you need to add a migration and update the da
 - [ ] Display every month and the total cost of subscriptions for that month
 - [ ] List subscriptions under each month showing the name, cost, if it's auto paid and how many days left until it's due
 
-#### Create page
+#### Upsert page
 - [ ]  Create a new subscription
-
-#### Edit page
-- [ ] Edit an existing subscription
-- [ ] Delete subscription
+- [ ]  Edit an existing subscription
 
 ### Details page
 - [ ] Mark subscription as paid
 - [ ] display all details like lastpayment
+- [ ] Delete subscription
 
 #### Start and subscriptions page
 - [ ] Clicking on a subscription takes you to the edit page
