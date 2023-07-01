@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using subtrack.DAL;
 using subtrack.DAL.Entities;
+using subtrack.MAUI.Exceptions;
 using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.MAUI.Services
@@ -19,7 +20,7 @@ namespace subtrack.MAUI.Services
         {
             var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);
 
-            if (sub == null) throw new DirectoryNotFoundException();
+            if (sub == null) throw new SubscriptionNotFoundException($"Subscription not found.");
 
             sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
             sub.Name = subscriptionToUpdate.Name;
