@@ -14,5 +14,20 @@ namespace subtrack.MAUI.Services
         {
             return await _context.Subscriptions.ToListAsync();
         }
+
+        public async Task Delete(int id)
+        {
+            var sub = await _context.Subscriptions.FindAsync(id);
+
+            if (sub != null)
+            {
+                _context.Subscriptions.Remove(sub);
+                await _context.SaveChangesAsync();
+            }
+            else 
+            {
+                throw new DirectoryNotFoundException();
+            }
+        }
     }
 }
