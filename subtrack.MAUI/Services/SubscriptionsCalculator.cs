@@ -23,7 +23,7 @@ public static class SubscriptionsCalculator
 
         return subscriptionsByMonth;
     }
-  
+
     public static int GetDueDays(Subscription subscription)
     {
         if (subscription is null)

@@ -6,16 +6,15 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 
 public class GetDueDaysTests
 {
-
     [Fact(Skip ="Waiting for DateTime mock")]
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
         var subscription = new Subscription { LastPayment = DateTime.Now.AddMonths(-1).AddDays(-3) };
-        
+
         //Act
         var result = SubscriptionsCalculator.GetDueDays(subscription);
-        
+
         //Assert
         Assert.Equal(-3, result);
     }
@@ -33,12 +32,12 @@ public class GetDueDaysTests
 
         //Act
         var result = SubscriptionsCalculator.GetDueDays(subscription);
-        
+
         //Assert
         Assert.Equal(expectedResult, result);
         Assert.Equal(last, last.AddMonths(1));
     }
-    
+
     [Fact]
     public void GetDueDays_NullValue_ThrowsArgumentNullException()
     {
@@ -53,7 +52,6 @@ public class GetDueDaysTestData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        
         yield return new object[] { DateTime.Now, 30 };
         yield return new object[] { DateTime.Now.AddMonths(-1), 0 };
         yield return new object[] { DateTime.Now.AddMonths(-1).AddDays(-1), -1 };
@@ -61,5 +59,3 @@ public class GetDueDaysTestData : IEnumerable<object[]>
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-
-
