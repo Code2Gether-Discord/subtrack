@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using subtrack.DAL;
 using subtrack.DAL.Entities;
+using subtrack.MAUI.Exceptions;
 using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.MAUI.Services
@@ -13,6 +14,14 @@ namespace subtrack.MAUI.Services
         public async Task<IEnumerable<Subscription>> GetSubscriptions()
         {
             return await _context.Subscriptions.ToListAsync();
+        }
+
+        public async Task<Subscription?> GetById(int id)
+        {
+            var sub = await _context.Subscriptions.AsNoTracking()
+                                                  .FirstOrDefaultAsync(s => s.Id == id);
+
+            return sub;
         }
     }
 }
