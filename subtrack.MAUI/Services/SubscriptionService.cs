@@ -20,7 +20,7 @@ namespace subtrack.MAUI.Services
         {
             var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);
 
-            if (sub == null) throw new SubscriptionNotFoundException($"Subscription not found.");
+            if (sub == null) throw new NotFoundException($"Subscription with id: {subscriptionToUpdate.Id} not found.");
 
             sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
             sub.Name = subscriptionToUpdate.Name;
