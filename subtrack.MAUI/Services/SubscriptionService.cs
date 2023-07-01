@@ -16,12 +16,10 @@ namespace subtrack.MAUI.Services
             return await _context.Subscriptions.ToListAsync();
         }
 
-        public async Task<Subscription> GetById(int id)
+        public async Task<Subscription?> GetById(int id)
         {
             var sub = await _context.Subscriptions.AsNoTracking()
                                                   .FirstOrDefaultAsync(s => s.Id == id);
-
-            if (sub == null) throw new SubscriptionNotFoundException($"Subscription not found.");
 
             return sub;
         }
