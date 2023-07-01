@@ -4,7 +4,6 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
 
 # Table of contents
 - [Development info](#development-info)
-- [Current WIP](#setup---chrisk00---wip)
 - [MVP](#mvp)
 - [Roadmap](#roadmap-2023)
 
@@ -30,6 +29,8 @@ Before preceding make sure you have installed ".NET Multi-platform App UI develo
 4. Open up a Pull request from the branch with the changes to the **dev** branch
 5. Wait for other developers feedback. When the Pull request has been approved click squash merge and delete the branch afterwards
 
+*Every feature has been labeled with "Feature" and usually contains subtasks to fulfill that specific feature. Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description. Feel free to team up with someone and tackle an issue together, that would be a great learning experience. Some Issues might have easier to understand requirements than others, if something is unclear the best communication channel is discord.*
+
 ## Creating database migrations
 
 After making changes to any entity you need to add a migration and update the database
@@ -44,20 +45,7 @@ After making changes to any entity you need to add a migration and update the da
 - This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
 - Mockups are created with drawio and any changes are saved as a png inside /docs
 
-# Setup - @chrisk00 - WIP
-
-- [x] Blazor MAUI + EF + SQLite
-- [x] add UI mockups
-- [x] Readme Building/running/adding migrations
-- [x] Create issues for MVP.1 and add features to readme
-- [ ] Create issues for MVP.2 and add features to readme
-- [ ] Readme Roadmap
-
 ## MVP
-Every feature has been labeled with "MVP Feature" and contains subtask to fulfill that specific feature. Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description. Feel free to team up with someone and tackle a issue/feature together, that would be a great learning experience. Some Issues might have easier to understand requirements than others, if something is unclear the best communication channel is discord.
-
-### MVP.1 - Viewing Subscriptions
-
 #### Start page
 
 - [x] Display total subscriptions cost per month at the top of the page
@@ -69,22 +57,23 @@ Every feature has been labeled with "MVP Feature" and contains subtask to fulfil
 - [ ] Display every month and the total cost of subscriptions for that month
 - [ ] List subscriptions under each month showing the name, cost, if it's auto paid and how many days left until it's due
 
-### MVP.2 - Creating Subscriptions
-
 #### Create page
--  Create a new subscription
+- [ ]  Create a new subscription
 
 #### Edit page
-- Edit an existing subscription
-- Delete subscription
+- [ ] Edit an existing subscription
+- [ ] Delete subscription
 
 ### Details page
-- Mark subscription as paid
-- display all details like lastpayment
+- [ ] Mark subscription as paid
+- [ ] display all details like lastpayment
 
 #### Start and subscriptions page
-- Clicking on a subscription takes you to the edit page
-- Add a + button at the bottom of the page for adding a new subscription
+- [ ] Clicking on a subscription takes you to the edit page
+- [ ] Add a + button at the bottom of the page for adding a new subscription
+
+#### Release
+- [ ] Test the app on an android phone 
 
 ## WIP Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png)
