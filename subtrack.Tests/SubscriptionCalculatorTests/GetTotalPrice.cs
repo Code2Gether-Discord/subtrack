@@ -6,40 +6,40 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetTotalPrice
 {
     [Fact]
-    public void GetTotalPrice_EmptySubscriptions_ReturnsZero()
+    public void GetTotalCost_EmptySubscriptions_ReturnsZero()
     {
         var subscriptions = new List<Subscription>();
 
-        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalCost(subscriptions);
 
         Assert.Equal(0, result);
     }
 
     [Fact]
-    public void GetTotalPrice_NullSubscriptions_ReturnsZero()
+    public void GetTotalCost_NullSubscriptions_ReturnsZero()
     {
         List<Subscription>? subscriptions = null;
 
-        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalCost(subscriptions);
 
         Assert.Equal(0, result);
     }
 
     [Fact]
-    public void GetTotalPrice_OneSubscription_ReturnsCorrectMonthlyCost()
+    public void GetTotalCost_OneSubscription_ReturnsCorrectMonthlyCost()
     {
         var subscriptions = new List<Subscription>
         {
             new Subscription { Cost = 10.5m }
         };
 
-        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalCost(subscriptions);
 
         Assert.Equal(10.5m, result);
     }
 
     [Fact]
-    public void GetTotalPrice_MultipleSubscriptions_ReturnsCorrectMonthlyCost()
+    public void GetTotalCost_MultipleSubscriptions_ReturnsCorrectMonthlyCost()
     {
         var subscriptions = new List<Subscription>
         {
@@ -48,7 +48,7 @@ public class GetTotalPrice
             new Subscription { Cost = 7.75m }
         };
 
-        var result = SubscriptionsCalculator.GetTotalPrice(subscriptions);
+        var result = SubscriptionsCalculator.GetTotalCost(subscriptions);
 
         Assert.Equal(23.5m, result);
     }

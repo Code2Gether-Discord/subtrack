@@ -49,7 +49,7 @@
     protected override async void OnInitialized()
     {
         var subscriptions = await subscriptionService.GetSubscriptions();
-        _subscriptionsCost = SubscriptionsCalculator.GetTotalPrice(subscriptions);
+        _subscriptionsCost = SubscriptionsCalculator.GetTotalCost(subscriptions);
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
