@@ -20,7 +20,7 @@ namespace subtrack.MAUI.Services
         {
             var sub = await _context.Subscriptions.FindAsync(id);
 
-            if (sub == null) throw new SubscriptionNotFoundException($"Subscription with an id:{id} not found.");
+            if (sub == null) throw new NotFoundException($"Subscription with an id:{id} not found.");
 
             _context.Subscriptions.Remove(sub);
             await _context.SaveChangesAsync();
