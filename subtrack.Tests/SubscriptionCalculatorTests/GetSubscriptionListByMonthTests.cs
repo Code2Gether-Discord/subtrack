@@ -43,7 +43,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         {
             DateTime today = DateTime.Today;
 
-            Subscription firstSub = new Subscription
+            var firstSub = new Subscription
             {
                 Id = 1,
                 Cost = 65,
@@ -53,7 +53,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Description = ""
             };
 
-            Subscription secondSub = new Subscription
+            var secondSub = new Subscription
             {
                 Id = 2,
                 Cost = 19,
@@ -63,7 +63,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Description = ""
             };
 
-            Subscription thirdSub = new Subscription
+            var thirdSub = new Subscription
             {
                 Id = 3,
                 Cost = 220,
@@ -73,7 +73,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Description = ""
             };
 
-            Subscription fourthSub = new Subscription
+            var fourthSub = new Subscription
             {
                 Id = 4,
                 Cost = 19,
@@ -86,5 +86,4 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             return new List<Subscription> { firstSub, secondSub, thirdSub, fourthSub};
         }
     }
-
 }
