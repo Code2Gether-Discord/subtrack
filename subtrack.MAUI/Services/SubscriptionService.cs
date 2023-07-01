@@ -2,8 +2,6 @@
 using subtrack.DAL;
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
-using System.Linq;
-using static Android.Content.Res.Resources;
 
 namespace subtrack.MAUI.Services
 {
@@ -33,7 +31,7 @@ namespace subtrack.MAUI.Services
             }
             else
             {
-                throw new NotFoundException();
+                throw new DirectoryNotFoundException();
             }
         }
     }
