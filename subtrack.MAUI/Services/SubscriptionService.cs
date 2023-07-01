@@ -19,15 +19,10 @@ namespace subtrack.MAUI.Services
         {
             var sub = await _context.Subscriptions.FindAsync(id);
 
-            if (sub != null)
-            {
-                _context.Subscriptions.Remove(sub);
-                await _context.SaveChangesAsync();
-            }
-            else 
-            {
-                throw new DirectoryNotFoundException();
-            }
+            if (sub == null) throw new DirectoryNotFoundException();
+
+            _context.Subscriptions.Remove(sub);
+            await _context.SaveChangesAsync();
         }
     }
 }
