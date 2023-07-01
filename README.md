@@ -72,5 +72,8 @@ After making changes to any entity you need to add a migration and update the da
 - [ ] Clicking on a subscription takes you to the edit page
 - [ ] Add a + button at the bottom of the page for adding a new subscription
 
+#### Release
+- [ ] Test the app on an android phone 
+
 ## WIP Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png)
