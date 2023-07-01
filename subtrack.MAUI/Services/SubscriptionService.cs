@@ -15,6 +15,21 @@ namespace subtrack.MAUI.Services
         {
             return await _context.Subscriptions.ToListAsync();
         }
+        
+        public async Task Update(Subscription subscriptionToUpdate)
+        {
+            var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);
+
+            if (sub == null) throw new NotFoundException($"Subscription with id: {subscriptionToUpdate.Id} not found.");
+
+            sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
+            sub.Name = subscriptionToUpdate.Name;
+            sub.Description = subscriptionToUpdate.Description;
+            sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
+            sub.Cost = subscriptionToUpdate.Cost;
+
+            await _context.SaveChangesAsync();
+        }
 
         public async Task Delete(int id)
         {
