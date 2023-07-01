@@ -21,5 +21,4 @@ public static class SubscriptionsCalculator
         var duration = dueDate.Subtract(DateTime.Now.Date);
         return duration.Days;
     }
-
 }
