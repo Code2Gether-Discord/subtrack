@@ -6,7 +6,7 @@ public static class SubscriptionsCalculator
 {
     private const int _monthsInAYear = 12;
 
-    public static decimal GetMonthlyCost(IEnumerable<Subscription> subscriptions)
+    public static decimal GetTotalCost(IEnumerable<Subscription> subscriptions)
     {
         if (subscriptions is null || !subscriptions.Any())
             return 0;
@@ -15,6 +15,15 @@ public static class SubscriptionsCalculator
         return price;
     }
 
+    public static IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime localDate)
+    {
+        var subscriptionsByMonth = subscriptions
+                    .Where(s => s.LastPayment.Month != localDate.Month)
+                    .ToList();
+
+        return subscriptionsByMonth;
+    }
+  
     public static int GetDueDays(Subscription subscription)
     {
         if (subscription is null)
