@@ -7,7 +7,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetDueDaysTests
 {
 
-    [Fact]
+    [Fact(Skip = "Waiting for DateTime mock")]
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
