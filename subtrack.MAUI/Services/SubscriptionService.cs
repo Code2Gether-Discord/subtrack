@@ -3,6 +3,7 @@ using subtrack.DAL;
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using System.Linq;
+using static Android.Content.Res.Resources;
 
 namespace subtrack.MAUI.Services
 {
@@ -22,13 +23,17 @@ namespace subtrack.MAUI.Services
 
             if (sub != null)
             {
-                sub.LastPayment = DateTime.Now.Date;
+                sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
                 sub.Name = subscriptionToUpdate.Name;
                 sub.Description = subscriptionToUpdate.Description;
                 sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
                 sub.Cost = subscriptionToUpdate.Cost;
 
                 await _context.SaveChangesAsync();
+            }
+            else
+            {
+                throw new NotFoundException();
             }
         }
     }
