@@ -12,6 +12,5 @@ namespace subtrack.MAUI.Responses
         public decimal Cost { get; set; }
         public DateTime LastPayment { get; set; }
         public int DueDays { get; set; }
-
     }
 }

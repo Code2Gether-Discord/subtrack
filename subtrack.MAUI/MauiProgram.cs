@@ -1,5 +1,4 @@
-﻿using subtrack.MAUI.Data;
-using subtrack.DAL;
+﻿using subtrack.DAL;
 using Microsoft.EntityFrameworkCore;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Services;
@@ -26,7 +25,6 @@ public static class MauiProgram
         var dbConnectionString = $"Data Source={Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "subtrack.db")}";
         builder.Services.AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString));
 
-        builder.Services.AddSingleton<WeatherForecastService>();
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
 
         using var sp = builder.Services.BuildServiceProvider();
@@ -41,6 +39,8 @@ public static class MauiProgram
         dbContext.Database.Migrate();
 
         dbContext.Subscriptions.AddRange(
+            new DAL.Entities.Subscription() { Name = "paramount", LastPayment = DateTime.Now.AddMonths(-1).AddDays(-1), Cost = 3m, },
+            new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = DateTime.Now.AddMonths(-1), Cost = 3m, },
             new DAL.Entities.Subscription() { Name = "Netflix", IsAutoPaid = true, LastPayment = DateTime.Now.AddDays(-1), Description = "family plan", Cost = 10 },
             new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, Cost = 1.5m, }
             );

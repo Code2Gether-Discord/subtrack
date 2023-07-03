@@ -15,10 +15,10 @@ public static class SubscriptionsCalculator
         return price;
     }
 
-    public static IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime localDate)
+    public static IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, int month)
     {
         var subscriptionsByMonth = subscriptions
-                    .Where(s => s.LastPayment.Month != localDate.Month)
+                    .Where(s => s.LastPayment.Month != month)
                     .ToList();
 
         return subscriptionsByMonth;

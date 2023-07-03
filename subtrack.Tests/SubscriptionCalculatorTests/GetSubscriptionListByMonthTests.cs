@@ -18,7 +18,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Today);
+            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
 
             // Assert
             Assert.Contains(subscriptions[0], result);
@@ -32,7 +32,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Today);
+            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
 
             // Assert
             Assert.DoesNotContain(subscriptions[2], result);
