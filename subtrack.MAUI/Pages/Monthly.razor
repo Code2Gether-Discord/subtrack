@@ -22,13 +22,12 @@
     int _currentMonth = DateTime.Now.Month;
     int _currentYear = DateTime.Now.Year;
 
-
     IEnumerable<SubscriptionsMonthResponse> _currentYearSubscriptionMonths;
     IEnumerable<SubscriptionsMonthResponse> _nextYearSubscriptionMonths;
 
     protected override async Task OnInitializedAsync()
     {
-        _subscriptions = await SubscriptionService.GetSubscriptions();
+        _subscriptions = (await SubscriptionService.GetSubscriptions()).OrderBy(s => s.LastPayment.Day).ToArray();
 
         (string Name, int Index)[] allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames
             .Where(m => !string.IsNullOrWhiteSpace(m))
