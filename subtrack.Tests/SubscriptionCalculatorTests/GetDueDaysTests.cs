@@ -1,16 +1,25 @@
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
 using System.Collections;
+using Microsoft.Extensions.DependencyInjection;
+using subtrack.Tests.Extensions;
+using subtrack.Tests.DateAndTimeProvider;
+using System.Collections.Generic;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 
 public class GetDueDaysTests
 {
-    [Fact(Skip ="Waiting for DateTime mock")]
+
+    [Fact]
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
-        var subscription = new Subscription { LastPayment = DateTime.Now.AddMonths(-1).AddDays(-3) };
+        var date = new FixedDateTimeProvider(DateTime.Now
+                                                     .AddMonths(-1)
+                                                     .AddDays(-3));
+
+        var subscription = new Subscription { LastPayment = date.GetNow() };
 
         //Act
         var result = SubscriptionsCalculator.GetDueDays(subscription);
@@ -19,23 +28,18 @@ public class GetDueDaysTests
         Assert.Equal(-3, result);
     }
 
-    [Theory(Skip = "Waiting for dates to be mocked")]
+    [Theory]
     [ClassData(typeof(GetDueDaysTestData))]
     public void GetDueDays_ReturnsCorrectDueDate(DateTime date, int expectedResult)
     {
-        var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        var daysInMonth = DateTime.DaysInMonth(firstDayOfMonth.Year, firstDayOfMonth.Month);
-        var last = firstDayOfMonth.AddDays(daysInMonth - 1);
-
-        //Arrange
+        // Arrange
         var subscription = new Subscription { LastPayment = date };
 
-        //Act
+        // Act
         var result = SubscriptionsCalculator.GetDueDays(subscription);
 
-        //Assert
+        // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(last, last.AddMonths(1));
     }
 
     [Fact]
@@ -50,11 +54,18 @@ public class GetDueDaysTests
 
 public class GetDueDaysTestData : IEnumerable<object[]>
 {
+    private readonly FixedDateTimeProvider _fixedDateTimeProvider;
+
+    public GetDueDaysTestData()
+    {
+        _fixedDateTimeProvider = new FixedDateTimeProvider(DateTime.Now);
+    }
+
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { DateTime.Now, 30 };
-        yield return new object[] { DateTime.Now.AddMonths(-1), 0 };
-        yield return new object[] { DateTime.Now.AddMonths(-1).AddDays(-1), -1 };
+        yield return new object[] { _fixedDateTimeProvider.GetNow(), _fixedDateTimeProvider.DaysInMonth() };
+        yield return new object[] { _fixedDateTimeProvider.GetNow().AddMonths(-1), 0 };
+        yield return new object[] { _fixedDateTimeProvider.GetNow().AddMonths(-1).AddDays(-1), -1 };
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
