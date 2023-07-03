@@ -48,5 +48,13 @@ namespace subtrack.MAUI.Services
 
             return sub;
         }
+
+        public async Task<Subscription> CreateSubscriptionAsync(Subscription subscriptionToCreate)
+        {
+            subscriptionToCreate.LastPayment = subscriptionToCreate.LastPayment.Date;
+            await _context.Subscriptions.AddAsync(subscriptionToCreate);
+            await _context.SaveChangesAsync();
+            return subscriptionToCreate;
+        }
     }
 }
