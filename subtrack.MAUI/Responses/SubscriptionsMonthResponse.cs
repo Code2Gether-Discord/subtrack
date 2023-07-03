@@ -1,9 +1,11 @@
-﻿namespace subtrack.MAUI.Responses
+﻿using subtrack.DAL.Entities;
+
+namespace subtrack.MAUI.Responses
 {
     public class SubscriptionsMonthResponse
     {
-        public DateTime CurrentDate { get; set; }
+        public string MonthName { get; set; }
         public decimal Cost { get; set; }
-        public IEnumerable<SubscriptionResponse> SubscriptionResponses { get; set; }
+        public IEnumerable<Subscription> Subscriptions { get; set; }
     }
 }

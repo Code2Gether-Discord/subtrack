@@ -1,11 +1,11 @@
 <div class="container mt-3">
 
     <div class="d-flex bg-primary rounded mb-1 fw-bold justify-content-between">
-        <div class="p-1 ps-2">@MonthName</div>
-        <div class="p-1 pe-2">@($"{SubscriptionsCost:C}")</div>
+        <div class="p-1 ps-2">@SubscriptionMonth.MonthName</div>
+        <div class="p-1 pe-2">@($"{SubscriptionMonth.Cost:C}")</div>
     </div>
 
-    @foreach (var sub in Subscriptions)
+    @foreach (var sub in SubscriptionMonth.Subscriptions)
     {
         <div class="card mb-2" style="max-width: 20rem;">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 5px;">
@@ -30,15 +30,7 @@
 @code {
     [Parameter]
     [EditorRequired]
-    public IEnumerable<Subscription> Subscriptions { get; set; }
-
-    [Parameter]
-    [EditorRequired]
-    public decimal SubscriptionsCost { get; set; }
-
-    [Parameter]
-    [EditorRequired]
-    public string MonthName { get; set; }
+    public SubscriptionsMonthResponse SubscriptionMonth { get; set; }
 
     public string GetDateSuffix(int day)
     {

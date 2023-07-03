@@ -27,12 +27,12 @@
                 </div>
                 <div class="d-flex justify-content-between fs-6">
                     <div class="text-left">
-                    @if (sub.IsAutoPaid)
+                        @if (sub.IsAutoPaid)
                         {
                             <i class="fa fa-repeat" aria-hidden="true"></i>
                         }
                     </div>
-                    <div class="text-right">@($"{sub.DueDays} days")</div>
+                    <div class="text-right">@GetDueDaysText(sub.DueDays)</div>
                 </div>
             </div>
         </div>
@@ -50,5 +50,18 @@
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
+    }
+
+    private string GetDueDaysText(int dueDays)
+    {
+        return dueDays switch
+        {
+            1 => "1 day",
+            -1 => "1 day ago",
+            0 => "today",
+            < 0 => $"{Math.Abs(dueDays)} days ago",
+            > 0 => $"{dueDays} days",
+
+        };
     }
 }
