@@ -1,105 +1,58 @@
 ﻿@page "/monthly"
 @using System.Globalization;
-@using subtrack.MAUI.Services.Abstractions;
+@using subtrack.MAUI.Shared;
 
-@inject subtrack.DAL.SubtrackDbContext Db
+@inject subtrack.MAUI.Services.Abstractions.ISubscriptionService SubscriptionService
 
-<div class="container text-center">
-	<div class="row">
-		<div class="col">
-			<h6 class="pt-1">@currentYear</h6>
-		</div>
-	</div>
-</div>
+<h6 class="pt-1 text-center">@currentYear</h6>
 
-<div class="accordion accordion-flush" id="accordionFlush">
+@foreach (var month in currentYearMonths)
+{
+    <SubscriptionMonthItem Subscriptions=@_subscriptions SubscriptionsCost=@_subscriptionsCost MonthName=@month.Name />
+}
 
-	@foreach (var month in currentYearMonths)
-	{
-		<div class="accordion-item">
-			<h2 class="accordion-header" id="@($"flush-heading{month.Number}")">
-				<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@($"#flush-collapse{month.Number}")" aria-expanded="false" aria-controls="@($"flush-collapse{month.Number}")">
-					<div class="d-flex justify-content-between">
-						<span>@month.Name | @($"{_subscriptionsCost:C}")</span>
-					</div>
-				</button>
-			</h2>
-			<div id="@($"flush-collapse{month.Number}")" class="accordion-collapse collapse" aria-labelledby="@($"flush-heading{month.Number}")" data-bs-parent="#accordionFlush">
+@if (nextYearMonths != null && nextYearMonths.Any())
+{
+    <h6 class="pt-1 text-center">@(currentYear + 1)</h6>
 
-				<div class="container mt-3">
-					@foreach (var sub in Db.Subscriptions)
-					{
-						<SubscriptionItem Subscription="sub" />
-					}
-				</div>
-			</div>
-		</div>
-	}
-	@if (nextYearMonths != null && nextYearMonths.Any())
-	{
-		<div class="container text-center" style="padding-top: 10px">
-			<div class="row">
-				<div class="col">
-					<h6 class="pt-1">@(currentYear + 1)</h6>
-				</div>
-			</div>
-		</div>
-		@foreach (var month in nextYearMonths)
-		{
-			<div class="accordion-item">
-				<h2 class="accordion-header" id="@($"flush-heading{month.Number}")">
-					<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="@($"#flush-collapse{month.Number}")" aria-expanded="false" aria-controls="@($"flush-collapse{month.Number}")">
-						<div class="d-flex justify-content-between">
-							<span>@month.Name | @($"{_subscriptionsCost:C}")</span>
-						</div>
-					</button>
-				</h2>
-				<div id="@($"flush-collapse{month.Number}")" class="accordion-collapse collapse" aria-labelledby="@($"flush-heading{month.Number}")" data-bs-parent="#accordionFlush">
-					<div class="container mt-3">
-						@foreach (var sub in Db.Subscriptions)
-						{
-							<SubscriptionItem Subscription="sub" />
-						}
-					</div>
-				</div>
-			</div>
-		}
-	}
-
-</div>
-
+    @foreach (var month in nextYearMonths)
+    {
+        <SubscriptionMonthItem Subscriptions=@_subscriptions SubscriptionsCost=@_subscriptionsCost MonthName=@month.Name />
+    }
+}
 
 @code {
-	decimal _subscriptionsCost = 0;
-	IEnumerable<Subscription> _subscriptions = new List<Subscription>();
-	int currentMonth = DateTime.Now.Month;
-	int currentYear = DateTime.Now.Year;
-	string[] _allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames;
+    decimal _subscriptionsCost = 0;
+    IEnumerable<Subscription> _subscriptions = new List<Subscription>();
+    int currentMonth = DateTime.Now.Month;
+    int currentYear = DateTime.Now.Year;
 
-	IEnumerable<Month> currentYearMonths;
-	IEnumerable<Month> nextYearMonths;
+    IEnumerable<Month> currentYearMonths;
+    IEnumerable<Month> nextYearMonths;
 
-	class Month
-	{
-		public int Number { get; set; }
-		public string Name { get; set; }
-	}
+    class Month
+    {
+        public int Number { get; set; }
+        public string Name { get; set; }
+    }
 
-	protected override void OnInitialized()
-	{
+    protected override async Task OnInitializedAsync()
+    {
+        _subscriptions = await SubscriptionService.GetSubscriptions();
+        _subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
 
+        string[] allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames;
 
-		_subscriptions = Db.Subscriptions.ToList();
-		_subscriptionsCost = SubscriptionsCalculator.GetMonthlyCost(_subscriptions);
+        currentYearMonths = allMonths
+                .Where(m => !string.IsNullOrEmpty(m))
+                .Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
+                .Where(month => month.Number >= currentMonth)
+                .ToList();
 
-
-		currentYearMonths = _allMonths
-					.Where(p => !string.IsNullOrEmpty(p))
-					.Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
-					.Where(month => month.Number >= currentMonth);
-		nextYearMonths = _allMonths
-							.Where(p => !string.IsNullOrEmpty(p))
-							.Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
-							.Where(month => month.Number < currentMonth);
-	}
+        nextYearMonths = allMonths
+                            .Where(p => !string.IsNullOrEmpty(p))
+                            .Select((Value, Index) => new Month { Number = Index + 1, Name = Value })
+                            .Where(month => month.Number < currentMonth)
+                            .ToList();
+    }
 }
