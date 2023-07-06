@@ -3,10 +3,10 @@
 @using subtrack.MAUI.Services.Abstractions
 @using subtrack.MAUI.Responses;
 @using subtrack.MAUI.Utilities;
-@using subtrack.MAUI.DateAndTimeProvider;
 @using Components;
 @inject ISubscriptionService subscriptionService
 @inject IDateTimeProvider dateTimeProvider;
+@inject ISubscriptionsCalculator subscriptionsCalculator;
 
 <AddSubscriptionButton/>
 <div class="container text-center">
@@ -50,7 +50,7 @@
     protected override async void OnInitialized()
     {
         var subscriptions = await subscriptionService.GetSubscriptions();
-        _subscriptionsCost = SubscriptionsCalculator.GetTotalCost(subscriptions);
+        _subscriptionsCost = subscriptionsCalculator.GetTotalCost(subscriptions);
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, dateTimeProvider)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
