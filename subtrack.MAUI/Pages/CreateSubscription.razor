@@ -1,0 +1,13 @@
+﻿@page "/CreateSubscription"
+@inject NavigationManager NavigationManager
+
+<h3>CreateSubscription</h3>
+<br/>
+<p>returnUrl: @ReturnUrl</p>
+
+@code {
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string ReturnUrl { get; set; }
+
+}
