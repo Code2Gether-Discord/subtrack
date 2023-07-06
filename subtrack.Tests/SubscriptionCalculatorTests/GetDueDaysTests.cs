@@ -1,28 +1,33 @@
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
 using System.Collections;
-using Microsoft.Extensions.DependencyInjection;
-using subtrack.Tests.Extensions;
-using subtrack.Tests.DateAndTimeProvider;
-using System.Collections.Generic;
+using subtrack.MAUI.DateAndTimeProvider;
+using NSubstitute;
+using NSubstitute.Core;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 
 public class GetDueDaysTests
 {
+    private readonly SubscriptionsCalculator _sut;
+    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+
+    public GetDueDaysTests()
+    {
+        _sut = new SubscriptionsCalculator(_dateTimeProvider);
+    }
 
     [Fact]
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
-        var date = new FixedDateTimeProvider(DateTime.Now
-                                                     .AddMonths(-1)
-                                                     .AddDays(-3));
+        _dateTimeProvider.Now
+                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
 
-        var subscription = new Subscription { LastPayment = date.GetNow() };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02, 8, 0, 0) };
 
         //Act
-        var result = SubscriptionsCalculator.GetDueDays(subscription);
+        var result = _sut.GetDueDays(subscription);
 
         //Assert
         Assert.Equal(-3, result);
@@ -33,10 +38,12 @@ public class GetDueDaysTests
     public void GetDueDays_ReturnsCorrectDueDate(DateTime date, int expectedResult)
     {
         // Arrange
+        _dateTimeProvider.Now
+                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
         var subscription = new Subscription { LastPayment = date };
-
+        
         // Act
-        var result = SubscriptionsCalculator.GetDueDays(subscription);
+        var result = _sut.GetDueDays(subscription);
 
         // Assert
         Assert.Equal(expectedResult, result);
@@ -48,24 +55,17 @@ public class GetDueDaysTests
         //Arrange
         var subscription = new Subscription();
         //Act & Assert
-        _ = Assert.Throws<ArgumentNullException>(() => SubscriptionsCalculator.GetDueDays(null));
+        _ = Assert.Throws<ArgumentNullException>(() => _sut.GetDueDays(null));
     }
 }
 
 public class GetDueDaysTestData : IEnumerable<object[]>
 {
-    private readonly FixedDateTimeProvider _fixedDateTimeProvider;
-
-    public GetDueDaysTestData()
-    {
-        _fixedDateTimeProvider = new FixedDateTimeProvider(DateTime.Now);
-    }
-
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { _fixedDateTimeProvider.GetNow(), _fixedDateTimeProvider.DaysInMonth() };
-        yield return new object[] { _fixedDateTimeProvider.GetNow().AddMonths(-1), 0 };
-        yield return new object[] { _fixedDateTimeProvider.GetNow().AddMonths(-1).AddDays(-1), -1 };
+        yield return new object[] { new DateTime(2023, 06, 05), 30};
+        yield return new object[] { new DateTime(2023, 05, 05), 0 };
+        yield return new object[] { new DateTime(2023, 05, 04), -1};
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();

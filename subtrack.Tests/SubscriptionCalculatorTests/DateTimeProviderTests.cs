@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using subtrack.Tests.DateAndTimeProvider;
+using subtrack.MAUI.DateAndTimeProvider;
 using subtrack.Tests.Extensions;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests

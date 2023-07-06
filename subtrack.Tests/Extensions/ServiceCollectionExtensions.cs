@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using subtrack.Tests.DateAndTimeProvider;
+using subtrack.MAUI.DateAndTimeProvider;
 
 namespace subtrack.Tests.Extensions
 {
