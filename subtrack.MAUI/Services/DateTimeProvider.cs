@@ -1,4 +1,6 @@
-﻿namespace subtrack.MAUI.DateAndTimeProvider
+﻿using subtrack.MAUI.Services.Abstractions;
+
+namespace subtrack.MAUI.Services
 {
     public class DateTimeProvider : IDateTimeProvider
     {
