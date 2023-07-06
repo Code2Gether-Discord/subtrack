@@ -1,10 +1,18 @@
 ﻿using subtrack.DAL.Entities;
+using subtrack.MAUI.DateAndTimeProvider;
 
 namespace subtrack.MAUI.Services;
 
-public static class SubscriptionsCalculator
+public class SubscriptionsCalculator
 {
     private const int _monthsInAYear = 12;
+
+    private readonly IDateTimeProvider _dateTimeProvider;
+
+    public SubscriptionsCalculator(IDateTimeProvider dateTimeProvider)
+    {
+        _dateTimeProvider = dateTimeProvider;
+    }
 
     public static decimal GetTotalCost(IEnumerable<Subscription> subscriptions)
     {
@@ -24,13 +32,13 @@ public static class SubscriptionsCalculator
         return subscriptionsByMonth;
     }
 
-    public static int GetDueDays(Subscription subscription)
+    public int GetDueDays(Subscription subscription)
     {
         if (subscription is null)
             throw new ArgumentNullException(nameof(subscription));
 
         var dueDate = subscription.LastPayment.AddMonths(1).Date;
-        var duration = dueDate.Subtract(DateTime.Now.Date);
+        var duration = dueDate.Subtract(_dateTimeProvider.Now.Date);
         return duration.Days;
     }
 
