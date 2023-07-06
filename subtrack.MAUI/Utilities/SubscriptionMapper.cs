@@ -7,10 +7,8 @@ namespace subtrack.MAUI.Utilities
 {
     public static class SubscriptionMapper
     {
-        public static IEnumerable<SubscriptionResponse> ToResponses(this IEnumerable<Subscription> subscriptions, IDateTimeProvider date)
+        public static IEnumerable<SubscriptionResponse> ToResponses(this IEnumerable<Subscription> subscriptions, IDateTimeProvider date, ISubscriptionsCalculator subscriptionsCalculator)
         {
-            var calculator = new SubscriptionsCalculator(date);
-
             return subscriptions.Select(sub => new SubscriptionResponse
             {
                 Id = sub.Id,
@@ -19,7 +17,7 @@ namespace subtrack.MAUI.Utilities
                 IsAutoPaid = sub.IsAutoPaid,
                 Cost = sub.Cost,
                 LastPayment = sub.LastPayment,
-                DueDays = calculator.GetDueDays(sub)
+                DueDays = subscriptionsCalculator.GetDueDays(sub)
             });
         }
     }

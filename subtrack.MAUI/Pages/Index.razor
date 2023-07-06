@@ -51,7 +51,7 @@
     {
         var subscriptions = await subscriptionService.GetSubscriptions();
         _subscriptionsCost = subscriptionsCalculator.GetTotalCost(subscriptions);
-        _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, dateTimeProvider)
+        _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, dateTimeProvider, subscriptionsCalculator)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
     }
