@@ -5,9 +5,32 @@
 <br/>
 <p>returnUrl: @ReturnUrl</p>
 
+<EditForm Model="@subscription" OnSubmit="@CreateSub">
+    <InputText class="form-control" placeholder="Subscription NName" @bind-Value="@subscription.Name" />
+    <label>
+        Cost:
+        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@subscription.Cost" />
+    </label>
+    <label>Latest Payment:
+        <InputDate class="form-control" placeholder="Payment Date" @bind-Value="@subscription.LastPayment" />
+    </label>
+    <br />
+    <label>Check if autopay monthly: 
+        <InputCheckbox @subscription.IsAutoPaid" />
+    </label>
+    <InputText class="form-control" placeholder="Description" @bind-Value="@subscription.Description" />
+    <button type="Submit" class="btn btn-primary">Submit</button>
+</EditForm>
+
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
 
+    Subscription subscription = new Subscription();
+
+    public void CreateSub()
+    {
+        
+    }
 }
