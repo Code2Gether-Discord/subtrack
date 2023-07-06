@@ -1,15 +1,25 @@
-﻿using subtrack.DAL.Entities;
+﻿using NSubstitute;
+using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
+using subtrack.MAUI.Services.Abstractions;
 using System.Collections;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetYearlyCostTests
 {
+    private readonly ISubscriptionsCalculator _sut;
+    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+
+    public GetYearlyCostTests()
+    {
+        _sut = new SubscriptionsCalculator(_dateTimeProvider);
+    }
+
     [Theory]
     [ClassData(typeof(GetYearlyCostsTestData))]
     public void GetYearlyCost_ReturnsCorrectCost(Subscription subscription, decimal expectedCost)
     {
-        var result = SubscriptionsCalculator.GetYearlyCost(subscription);
+        var result = _sut.GetYearlyCost(subscription);
         Assert.Equal(expectedCost, result);
     }
 
@@ -17,7 +27,7 @@ public class GetYearlyCostTests
     public void GetYearlyCost_NullSubscription_Throws_ArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(
-            () => SubscriptionsCalculator.GetYearlyCost(null));
+            () => _sut.GetYearlyCost(null));
     }
 }
 

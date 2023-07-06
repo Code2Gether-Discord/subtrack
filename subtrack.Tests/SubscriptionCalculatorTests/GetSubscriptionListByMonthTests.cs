@@ -1,16 +1,20 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using subtrack.DAL.Entities;
+﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
-using System.Collections;
+using NSubstitute;
+using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests
 {
     public class GetSubscriptionListByMonthTests
     {
+        private readonly ISubscriptionsCalculator _sut;
+        private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+
+        public GetSubscriptionListByMonthTests()
+        {
+            _sut = new SubscriptionsCalculator(_dateTimeProvider);
+        }
+
         [Fact]
         public void GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions()
         {
@@ -18,7 +22,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
 
             // Assert
             Assert.Contains(subscriptions[0], result);
@@ -32,7 +36,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = SubscriptionsCalculator.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
 
             // Assert
             Assert.DoesNotContain(subscriptions[2], result);
