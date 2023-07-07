@@ -26,6 +26,8 @@ public static class MauiProgram
         builder.Services.AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString));
 
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
+        builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
+        builder.Services.AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>();
 
         using var sp = builder.Services.BuildServiceProvider();
         SeedDb(sp.GetRequiredService<SubtrackDbContext>());

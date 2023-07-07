@@ -1,41 +1,52 @@
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
 using System.Collections;
+using NSubstitute;
+using NSubstitute.Core;
+using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 
 public class GetDueDaysTests
 {
-    [Fact(Skip ="Waiting for DateTime mock")]
+    private readonly ISubscriptionsCalculator _sut;
+    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+
+    public GetDueDaysTests()
+    {
+        _sut = new SubscriptionsCalculator(_dateTimeProvider);
+    }
+
+    [Fact]
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
-        var subscription = new Subscription { LastPayment = DateTime.Now.AddMonths(-1).AddDays(-3) };
+        _dateTimeProvider.Now
+                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
+
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02, 8, 0, 0) };
 
         //Act
-        var result = SubscriptionsCalculator.GetDueDays(subscription);
+        var result = _sut.GetDueDays(subscription);
 
         //Assert
         Assert.Equal(-3, result);
     }
 
-    [Theory(Skip = "Waiting for dates to be mocked")]
+    [Theory]
     [ClassData(typeof(GetDueDaysTestData))]
     public void GetDueDays_ReturnsCorrectDueDate(DateTime date, int expectedResult)
     {
-        var firstDayOfMonth = new DateTime(DateTime.Now.Year, DateTime.Now.Month, 1);
-        var daysInMonth = DateTime.DaysInMonth(firstDayOfMonth.Year, firstDayOfMonth.Month);
-        var last = firstDayOfMonth.AddDays(daysInMonth - 1);
-
-        //Arrange
+        // Arrange
+        _dateTimeProvider.Now
+                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
         var subscription = new Subscription { LastPayment = date };
+        
+        // Act
+        var result = _sut.GetDueDays(subscription);
 
-        //Act
-        var result = SubscriptionsCalculator.GetDueDays(subscription);
-
-        //Assert
+        // Assert
         Assert.Equal(expectedResult, result);
-        Assert.Equal(last, last.AddMonths(1));
     }
 
     [Fact]
@@ -44,7 +55,7 @@ public class GetDueDaysTests
         //Arrange
         var subscription = new Subscription();
         //Act & Assert
-        _ = Assert.Throws<ArgumentNullException>(() => SubscriptionsCalculator.GetDueDays(null));
+        _ = Assert.Throws<ArgumentNullException>(() => _sut.GetDueDays(null));
     }
 }
 
@@ -52,9 +63,9 @@ public class GetDueDaysTestData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { DateTime.Now, 30 };
-        yield return new object[] { DateTime.Now.AddMonths(-1), 0 };
-        yield return new object[] { DateTime.Now.AddMonths(-1).AddDays(-1), -1 };
+        yield return new object[] { new DateTime(2023, 06, 05), 30};
+        yield return new object[] { new DateTime(2023, 05, 05), 0 };
+        yield return new object[] { new DateTime(2023, 05, 04), -1};
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
