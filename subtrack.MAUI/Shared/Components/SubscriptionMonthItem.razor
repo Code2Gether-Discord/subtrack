@@ -1,3 +1,7 @@
+@namespace subtrack.MAUI.Shared.Components
+
+@inject NavigationManager Navigator
+
 <div class="container mt-3">
 
     <div class="d-flex bg-primary rounded mb-1 fw-bold justify-content-between">
@@ -7,7 +11,7 @@
 
     @foreach (var sub in SubscriptionMonth.Subscriptions)
     {
-        <div class="card mb-2" style="max-width: 20rem;">
+        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}")) class="card mb-2 clickable" style="max-width: 20rem;">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 5px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div>@sub.Name</div>
