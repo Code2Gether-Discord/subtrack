@@ -1,0 +1,97 @@
+﻿@page "/details/{Id:int}"
+
+@inject ISubscriptionService subscriptionService
+@inject NavigationManager navigationManager
+@inject ISubscriptionsCalculator subscriptionsCalculator
+
+@if(_subscription is null)
+{
+    <div>Subscription details not found</div>
+} else
+{
+    <div class="container">
+        <div class="row border-bottom py-2">
+            <div class="col-10">
+                <h2>@_subscription.Name</h2>
+            </div>
+            <div class="col-2">
+                <button aria-label="Edit" type="button" class="btn"><i class="bi bi-pencil-square"></i></button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-6 col-md-4">
+                <h5>@($"{_subscription.Cost:C}")</h5>
+            </div>
+            @if (_subscription.IsAutoPaid)
+            {
+                <div class="col-6 col-md-8">
+                    <i class="fa fa-repeat" aria-hidden="true"></i>
+                </div>
+            }
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                @{
+                    var nextPaymentDate = _subscription.LastPayment.AddDays(subscriptionsCalculator.GetDueDays(_subscription));
+                }
+                <span>@nextPaymentDate.ToString("MMMM dd, yyyy")</span><br />
+                <span>@nextPaymentDate.Date.Humanize()</span>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                <button aria-label="Mark as paid" type="button" class="btn btn-primary">
+                    <i class="fa-solid fa-check"></i>&nbsp;
+                   Mark paid
+               </button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                <h5>Note</h5>
+            </div>
+            <div class="col-12">
+                @_subscription.Description
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12">
+                <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
+                    <i class="fa-sharp fa-solid fa-trash"></i>&nbsp;
+                    @(_deleteButtonClicked ? "Confirm" : "Delete")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Subscription? _subscription;
+
+    bool _deleteButtonClicked;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _subscription = await subscriptionService.GetById(Id);
+        _deleteButtonClicked = false;
+    }
+
+    private async Task OnDelete()
+    {
+        if(!_deleteButtonClicked)
+        {
+            _deleteButtonClicked = true;
+            return;
+        }
+        await subscriptionService.Delete(Id);
+        navigationManager.NavigateTo("/", replace: true);
+    }
+}

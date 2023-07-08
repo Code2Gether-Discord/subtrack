@@ -50,6 +50,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <PackageReference Include="Humanizer.Core" Version="2.14.1" />
+    </ItemGroup>
+
+    <ItemGroup>
       <ProjectReference Include="..\subtrack.DAL\subtrack.DAL.csproj" />
     </ItemGroup>
 
