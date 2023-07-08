@@ -49,4 +49,9 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
         return subscriptionsByMonth;
     }
+
+    public DateTime GetNextPaymentDate(Subscription subscription)
+    {
+        return subscription.LastPayment.AddDays(GetDueDays(subscription));
+    }
 }
