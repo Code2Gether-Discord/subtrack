@@ -16,7 +16,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         }
 
         [Fact]
-        public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
+        public void GetNextPaymentDate_ReturnsCorrectNextPaymentDate()
         {
             //Arrange
             _dateTimeProvider.Now
