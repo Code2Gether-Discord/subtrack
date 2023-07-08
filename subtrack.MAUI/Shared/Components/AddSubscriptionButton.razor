@@ -1,27 +1,22 @@
-﻿@namespace Components
-@inject NavigationManager NavigationManager
+﻿@namespace subtrack.MAUI.Shared.Components
+
+@inject NavigationManager Navigator
 
 <div style="
         position: fixed;
-        bottom: 95px;
-        right: 18px;
+        bottom: 90px;
+        right: 20px;
         z-index: 100">
-    <NavLink class="nav-link d-flex align-items-center" data-bs-theme="dark" href="@CreateSubscriptionUrl">
-        <i class="bi bi-plus-circle larger-icon"></i>
+    <NavLink class="nav-link d-flex align-items-center clickable" data-bs-theme="dark" href="@CreateSubscriptionUrl">
+        <i class="bi bi-plus-circle larger-icon" style="font-size: 35px"></i>
     </NavLink>
-    <style>
-        .larger-icon{
-            font-size: 30px;
-        }
-    </style>
 </div>
 
 @code {
-    [Parameter]
     public string CreateSubscriptionUrl { get; set; }
 
     protected override void OnInitialized()
     {
-        CreateSubscriptionUrl = $"/CreateSubscription?ReturnUrl={NavigationManager.Uri}";
+        CreateSubscriptionUrl = $"/create?ReturnUrl={Navigator.Uri}";
     }
 }
