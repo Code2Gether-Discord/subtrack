@@ -29,17 +29,22 @@
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12 d-flex justify-content-center">
-                <span>@_nextPaymentDate.ToString("MMMM dd, yyyy")</span><br />
-                <span>@_nextPaymentDate.Date.Humanize()</span>
+            <div class="col-12 d-flex flex-column justify-content-center">
+                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy")</div>
+                <div class="text-center">@_nextPaymentDate.Date.Humanize()</div>
             </div>
         </div>
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex justify-content-center">
-                <button aria-label="Mark as paid" type="button" class="btn btn-primary">
+                <button aria-label="Mark as paid" type="button" class="btn btn-primary" onclick="@(() => MarkSubscriptionAsPaid())">
                     <i class="fa-solid fa-check"></i>&nbsp;
                    Mark paid
                </button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                Latest payment @_subscription.LastPayment.ToString("MMMM dd, yyyy")
             </div>
         </div>
         <div class="row border-bottom py-2">
@@ -84,6 +89,13 @@
         {
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
         }
+    }
+
+    private async Task MarkSubscriptionAsPaid()
+    {
+        _subscription.LastPayment = DateTime.Now.Date;
+        await subscriptionService.Update(_subscription);
+        this.StateHasChanged();
     }
 
     private async Task OnDelete()
