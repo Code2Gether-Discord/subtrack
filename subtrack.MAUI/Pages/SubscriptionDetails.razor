@@ -1,0 +1,111 @@
+﻿@page "/details/{Id:int}"
+
+@inject ISubscriptionService subscriptionService
+@inject NavigationManager navigationManager
+@inject ISubscriptionsCalculator subscriptionsCalculator
+
+@if(_subscription is null)
+{
+    <div>Subscription details not found</div>
+} else
+{
+    <div class="container">
+        <div class="row border-bottom py-2">
+            <div class="col-1">&nbsp;</div>
+            <div class="col-sm-8 col-md-10 col-9 text-center">
+                <h2>@_subscription.Name</h2>
+            </div>
+            <div class="col-1">
+                <button aria-label="Edit" type="button" class="btn"><i class="bi bi-pencil-square"></i></button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
+                @if (_subscription.IsAutoPaid)
+                {
+                    <i class="fa fa-repeat" aria-hidden="true"></i>
+                }
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex flex-column justify-content-center">
+                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy")</div>
+                <div class="text-center">@_nextPaymentDate.Date.Humanize()</div>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <button aria-label="Mark as paid" type="button" class="btn btn-primary" onclick="@(() => MarkSubscriptionAsPaid())">
+                    <i class="fa-solid fa-check"></i>&nbsp;
+                   Mark paid
+               </button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                Latest payment @_subscription.LastPayment.ToString("MMMM dd, yyyy")
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
+            </div>
+        </div>
+        @if(!string.IsNullOrWhiteSpace(_subscription.Description))
+        {
+            <div class="row border-bottom py-2">
+                <div class="col-12 d-flex justify-content-center">
+                    @_subscription.Description
+                </div>
+            </div>
+        }
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
+                    <i class="fa-sharp fa-solid fa-trash"></i>&nbsp;
+                    @(_deleteButtonClicked ? "Confirm" : "Delete")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    Subscription? _subscription;
+
+    bool _deleteButtonClicked;
+
+    DateTime _nextPaymentDate;
+
+    protected override async Task OnInitializedAsync()
+    {
+        _subscription = await subscriptionService.GetById(Id);
+        _deleteButtonClicked = false;
+        if(_subscription is not null)
+        {
+            _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+        }
+    }
+
+    private async Task MarkSubscriptionAsPaid()
+    {
+        _subscription.LastPayment = DateTime.Now.Date;
+        await subscriptionService.Update(_subscription);
+        navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
+    }
+
+    private async Task OnDelete()
+    {
+        if(!_deleteButtonClicked)
+        {
+            _deleteButtonClicked = true;
+            return;
+        }
+        await subscriptionService.Delete(Id);
+        navigationManager.NavigateTo("/", replace: true);
+    }
+}
