@@ -6,7 +6,6 @@
 @using Components;
 @inject ISubscriptionService subscriptionService
 @inject ISubscriptionsCalculator subscriptionsCalculator;
-@inject NavigationManager navigationManager
 
 <AddSubscriptionButton/>
 <div class="container text-center">
@@ -23,7 +22,7 @@
 <div class="container mt-2">
     @foreach (var sub in _subscriptionResponses)
     {
-        <div id="subscription-card" class="card border-primary mb-3" style="max-width: 20rem; cursor: pointer;" onclick="@(() => NavigateToDetails(sub.Id))">
+        <div id="subscription-card" class="card border-primary mb-3" style="max-width: 20rem;">
             <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div>@sub.Name</div>
@@ -66,10 +65,5 @@
             < 0 => $"{Math.Abs(dueDays)} days ago",
             > 0 => $"{dueDays} days",
         };
-    }
-
-    private void NavigateToDetails(int id)
-    {
-        navigationManager.NavigateTo($"/details/{id}");
     }
 }
