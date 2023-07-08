@@ -95,7 +95,7 @@
     {
         _subscription.LastPayment = DateTime.Now.Date;
         await subscriptionService.Update(_subscription);
-        this.StateHasChanged();
+        navigationManager.NavigateTo($"/details/{_subscription.Id}", true, true);
     }
 
     private async Task OnDelete()
