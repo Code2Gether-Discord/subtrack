@@ -19,24 +19,23 @@
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-6 col-md-4">
-                <h5>@($"{_subscription.Cost:C}")</h5>
-            </div>
-            @if (_subscription.IsAutoPaid)
-            {
-                <div class="col-6 col-md-8">
+            <div class="col-12 d-flex justify-content-center">
+                <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
+                @if (_subscription.IsAutoPaid)
+                {
+                    
                     <i class="fa fa-repeat" aria-hidden="true"></i>
-                </div>
-            }
+                }
+            </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 <span>@_nextPaymentDate.ToString("MMMM dd, yyyy")</span><br />
                 <span>@_nextPaymentDate.Date.Humanize()</span>
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 <button aria-label="Mark as paid" type="button" class="btn btn-primary">
                     <i class="fa-solid fa-check"></i>&nbsp;
                    Mark paid
@@ -44,20 +43,17 @@
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12">
-                <h5>Note</h5>
-            </div>
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 @_subscription.Description
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <div class="col-12">
+            <div class="col-12 d-flex justify-content-center">
                 <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
                     <i class="fa-sharp fa-solid fa-trash"></i>&nbsp;
                     @(_deleteButtonClicked ? "Confirm" : "Delete")
