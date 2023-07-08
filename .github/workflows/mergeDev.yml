@@ -1,0 +1,42 @@
+name: Merge Dev into PR branch
+
+on:
+  pull_request:
+    branches:
+      - dev
+    types:
+      - opened
+      - synchronize
+
+jobs:
+  update-pull-request:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Merge dev branch
+        run: |
+          git fetch origin dev
+          git merge --squash --no-commit origin/dev
+
+      - name: Check for merge conflicts
+        id: check_merge_conflicts
+        run: |
+          if git diff --quiet --cached; then
+            echo "No merge conflicts"
+            echo "::set-output name=merge_conflicts::false"
+          else
+            echo "Merge conflicts exist"
+            echo "::set-output name=merge_conflicts::true"
+          fi
+
+      - name: Stop workflow on merge conflicts
+        if: steps.check_merge_conflicts.outputs.merge_conflicts == 'true'
+        run: |
+          echo "Merge conflicts detected. Stopping the merge process."
+          exit 1
+
+      - name: Push changes
+        run: git push
