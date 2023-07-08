@@ -47,11 +47,14 @@
                 Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
             </div>
         </div>
-        <div class="row border-bottom py-2">
-            <div class="col-12 d-flex justify-content-center">
-                @_subscription.Description
+        @if(!string.IsNullOrWhiteSpace(_subscription.Description))
+        {
+            <div class="row border-bottom py-2">
+                <div class="col-12 d-flex justify-content-center">
+                    @_subscription.Description
+                </div>
             </div>
-        </div>
+        }
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex justify-content-center">
                 <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
