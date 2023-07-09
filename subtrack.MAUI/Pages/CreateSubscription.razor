@@ -1,9 +1,13 @@
 ﻿@page "/CreateSubscription"
+@using subtrack.MAUI.Shared.Components
 @inject NavigationManager NavigationManager
+@inject ISubscriptionService SubscriptionService
 
 <div style="display: flex; justify-content: space-between; padding-bottom: 20px;">
-    <button type="button" class="btn btn-outline-dark">Back</button>
-    <button type="button" class="btn btn-outline-dark">Save</button>
+    <BackButton Url="@ReturnUrl"></BackButton>
+    <button class="btn btn-outline-dark" @onclick="CreateNewSubscription">
+        <i class="bi bi-plus" style="font-size: 40px;"></i>
+    </button>
 </div>
 
 <EditForm Model="@subscription">
@@ -33,4 +37,12 @@
     public string ReturnUrl { get; set; }
 
     Subscription subscription = new();
+
+    
+
+    public void CreateNewSubscription()
+    {
+        SubscriptionService.CreateSubscriptionAsync(subscription);
+        NavigationManager.NavigateTo(ReturnUrl);
+    }
 }

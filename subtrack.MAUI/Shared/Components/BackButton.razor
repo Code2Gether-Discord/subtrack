@@ -1,0 +1,10 @@
+﻿@inject NavigationManager NavigationManager
+
+<button class="btn btn-outline-dark" @onclick="() => NavigationManager.NavigateTo(Url)">
+    <i class="bi bi-arrow-left" style="font-size: 30px;"></i>
+</button>
+
+@code {
+    [Parameter]
+    public string Url { get; set; }
+}
