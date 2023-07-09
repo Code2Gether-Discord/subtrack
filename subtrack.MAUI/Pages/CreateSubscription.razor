@@ -1,25 +1,30 @@
 ﻿@page "/CreateSubscription"
 @inject NavigationManager NavigationManager
 
-<h3>CreateSubscription</h3>
-<br/>
-<p>returnUrl: @ReturnUrl</p>
+<div style="display: flex; justify-content: space-between; padding-bottom: 20px;">
+    <button type="button" class="btn btn-outline-dark">Back</button>
+    <button type="button" class="btn btn-outline-dark">Save</button>
+</div>
 
-<EditForm Model="@subscription" OnSubmit="@CreateSub">
-    <InputText class="form-control" placeholder="Subscription NName" @bind-Value="@subscription.Name" />
-    <label>
-        Cost:
-        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@subscription.Cost" />
-    </label>
-    <label>Latest Payment:
-        <InputDate class="form-control" placeholder="Payment Date" @bind-Value="@subscription.LastPayment" />
-    </label>
-    <br />
-    <label>Check if autopay monthly: 
-        <InputCheckbox @subscription.IsAutoPaid" />
-    </label>
-    <InputText class="form-control" placeholder="Description" @bind-Value="@subscription.Description" />
-    <button type="Submit" class="btn btn-primary">Submit</button>
+<EditForm Model="@subscription">
+    <div>
+        <InputText class="form-control" placeholder="Service Name" @bind-Value="@subscription.Name"></InputText>
+    </div>
+    <div class="input-group mb-3" style="padding-top: 15px;">
+        <span class="input-group-text">$</span>
+        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@subscription.Cost"></InputNumber>
+    </div>
+    <div style="display: flex;">
+        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Last Payment </label>
+        <InputDate class="form-control" @bind-Value="@subscription.LastPayment"></InputDate>
+    </div>
+    <div class="form-check form-switch" style="padding-top: 10px">
+        <label class="form-check-label" for="autopayCheck">Autopay Enabled </label>
+        <InputCheckbox class="form-check-input" id="autopayCheck" @bind-Value="@subscription.IsAutoPaid"></InputCheckbox>
+    </div>
+    <div class="form-group" style="padding-top: 10px;">
+        <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@subscription.Description"></InputTextArea>
+    </div>
 </EditForm>
 
 @code {
@@ -27,10 +32,5 @@
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
 
-    Subscription subscription = new Subscription();
-
-    public void CreateSub()
-    {
-        
-    }
+    Subscription subscription = new();
 }
