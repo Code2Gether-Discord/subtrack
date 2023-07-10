@@ -6,13 +6,19 @@
 
 <div style="display: flex; justify-content: space-between; padding-bottom: 20px;">
     <BackButton Url="@ReturnUrl"></BackButton>
-    <button type="submit" form="SubscriptionForm" class="btn btn-outline-primary" style="--bs-btn-padding-x: 2px; --bs-btn-padding-y: 2px;">
+    <button type="submit" form="SubscriptionForm" class="btn btn-outline-primary smaller-button">
+        <style>
+            .smaller-button {
+                padding-x: 2px;
+            }
+        </style>
         <i class="bi bi-plus" style="font-size: 40px;"></i>
     </button>
 </div>
 
 <EditForm id="SubscriptionForm" Model="@subscription" OnValidSubmit="CreateNewSubscription">
     <div>
+        <ValidationSummary />
         <DataAnnotationsValidator/>
         <InputText class="form-control" placeholder="Service Name" @bind-Value="@subscription.Name"></InputText>
     </div>
@@ -32,7 +38,6 @@
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@subscription.Description"></InputTextArea>
     </div>
     <br/>
-    <ValidationSummary />
 </EditForm>
 
 @code {
@@ -50,9 +55,9 @@
         subscription.LastPayment = DateTime.Today;
     }
 
-    public void CreateNewSubscription()
+    public async Task CreateNewSubscription()
     {
-        SubscriptionService.CreateSubscriptionAsync(subscription);
-        NavigationManager.NavigateTo("Details\\subscription.Id");
+        await SubscriptionService.CreateSubscriptionAsync(subscription);
+        NavigationManager.NavigateTo($"Details\\{subscription.Id}");
     }
 }
