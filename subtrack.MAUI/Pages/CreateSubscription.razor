@@ -1,21 +1,23 @@
 ﻿@page "/CreateSubscription"
+@using System.Globalization;
 @using subtrack.MAUI.Shared.Components
 @inject NavigationManager NavigationManager
 @inject ISubscriptionService SubscriptionService
 
 <div style="display: flex; justify-content: space-between; padding-bottom: 20px;">
     <BackButton Url="@ReturnUrl"></BackButton>
-    <button class="btn btn-outline-dark" @onclick="CreateNewSubscription">
+    <button type="submit" form="SubscriptionForm" class="btn btn-outline-primary" style="--bs-btn-padding-x: 2px; --bs-btn-padding-y: 2px;">
         <i class="bi bi-plus" style="font-size: 40px;"></i>
     </button>
 </div>
 
-<EditForm Model="@subscription">
+<EditForm id="SubscriptionForm" Model="@subscription" OnValidSubmit="CreateNewSubscription">
     <div>
+        <DataAnnotationsValidator/>
         <InputText class="form-control" placeholder="Service Name" @bind-Value="@subscription.Name"></InputText>
     </div>
     <div class="input-group mb-3" style="padding-top: 15px;">
-        <span class="input-group-text">$</span>
+        <span class="input-group-text">@Currency</span>
         <InputNumber class="form-control" placeholder="Cost" @bind-Value="@subscription.Cost"></InputNumber>
     </div>
     <div style="display: flex;">
@@ -23,26 +25,34 @@
         <InputDate class="form-control" @bind-Value="@subscription.LastPayment"></InputDate>
     </div>
     <div class="form-check form-switch" style="padding-top: 10px">
-        <label class="form-check-label" for="autopayCheck">Autopay Enabled </label>
-        <InputCheckbox class="form-check-input" id="autopayCheck" @bind-Value="@subscription.IsAutoPaid"></InputCheckbox>
+        <label class="form-check-label" for="autopaid">Auto Paid </label>
+        <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@subscription.IsAutoPaid"></InputCheckbox>
     </div>
     <div class="form-group" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@subscription.Description"></InputTextArea>
     </div>
+    <br/>
+    <ValidationSummary />
 </EditForm>
 
 @code {
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
+    string Currency = "";
 
     Subscription subscription = new();
 
-    
+    protected override void OnInitialized()
+    {
+        var ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
+        Currency = ri.ISOCurrencySymbol;
+        subscription.LastPayment = DateTime.Today;
+    }
 
     public void CreateNewSubscription()
     {
         SubscriptionService.CreateSubscriptionAsync(subscription);
-        NavigationManager.NavigateTo(ReturnUrl);
+        NavigationManager.NavigateTo("Details\\subscription.Id");
     }
 }
