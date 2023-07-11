@@ -1,12 +1,12 @@
 ﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Responses;
-using subtrack.MAUI.Services;
+using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.MAUI.Utilities
 {
     public static class SubscriptionMapper
     {
-        public static IEnumerable<SubscriptionResponse> ToResponses(this IEnumerable<Subscription> subscriptions)
+        public static IEnumerable<SubscriptionResponse> ToResponses(this IEnumerable<Subscription> subscriptions, ISubscriptionsCalculator subscriptionsCalculator)
         {
             return subscriptions.Select(sub => new SubscriptionResponse
             {
@@ -16,7 +16,7 @@ namespace subtrack.MAUI.Utilities
                 IsAutoPaid = sub.IsAutoPaid,
                 Cost = sub.Cost,
                 LastPayment = sub.LastPayment,
-                DueDays = SubscriptionsCalculator.GetDueDays(sub)
+                DueDays = subscriptionsCalculator.GetDueDays(sub)
             });
         }
     }

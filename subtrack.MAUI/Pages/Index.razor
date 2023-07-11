@@ -3,8 +3,10 @@
 @using subtrack.MAUI.Services.Abstractions
 @using subtrack.MAUI.Responses;
 @using subtrack.MAUI.Utilities;
-@using Components;
+
+@inject NavigationManager Navigator
 @inject ISubscriptionService subscriptionService
+@inject ISubscriptionsCalculator subscriptionsCalculator;
 
 <AddSubscriptionButton/>
 <div class="container text-center">
@@ -21,7 +23,7 @@
 <div class="container mt-2">
     @foreach (var sub in _subscriptionResponses)
     {
-        <div id="subscription-card" class="card border-primary mb-3" style="max-width: 20rem;">
+        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}")) id="subscription-card" class="card border-primary mb-3 clickable" style="max-width: 20rem;">
             <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div>@sub.Name</div>
@@ -48,8 +50,8 @@
     protected override async void OnInitialized()
     {
         var subscriptions = await subscriptionService.GetSubscriptions();
-        _subscriptionsCost = SubscriptionsCalculator.GetTotalCost(subscriptions);
-        _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions)
+        _subscriptionsCost = subscriptionsCalculator.GetTotalCost(subscriptions);
+        _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, subscriptionsCalculator)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
     }

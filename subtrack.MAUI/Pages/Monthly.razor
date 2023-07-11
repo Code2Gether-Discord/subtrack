@@ -2,6 +2,9 @@
 @using System.Globalization;
 
 @inject subtrack.MAUI.Services.Abstractions.ISubscriptionService SubscriptionService
+@inject subtrack.MAUI.Services.Abstractions.ISubscriptionsCalculator SubscriptionCalculator
+
+<AddSubscriptionButton />
 
 <h6 class="text-center">@_currentYear</h6>
 
@@ -45,12 +48,12 @@
         return months.Where(monthSelector).Select(m =>
         {
             // later on we send in the year, alt datetime
-            var subscriptions = SubscriptionsCalculator.GetSubscriptionListByMonth(_subscriptions, m.Index);
+            var subscriptions = SubscriptionCalculator.GetSubscriptionListByMonth(_subscriptions, m.Index);
 
             return new SubscriptionsMonthResponse
             {
                 Subscriptions = subscriptions,
-                Cost = SubscriptionsCalculator.GetTotalCost(subscriptions),
+                    Cost = SubscriptionCalculator.GetTotalCost(subscriptions),
                 MonthName = m.Name
 
             };
