@@ -1,13 +1,7 @@
 ﻿@inject NavigationManager NavigationManager
 
-<style>
-    .smaller-button {
-        padding: 2px 2px;
-    }
-</style>
-
-<button class="btn btn-outline-primary smaller-button" @onclick="() => NavigationManager.NavigateTo(Url)">
-    <i class="bi bi-arrow-left" style="font-size: 30px;"></i>
+<button class="btn btn-outline-primary" @onclick="() => NavigationManager.NavigateTo(Url)">
+    <i class="fa-solid fa-arrow-left"></i>
 </button>
 
 @code {
