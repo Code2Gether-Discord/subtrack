@@ -4,7 +4,7 @@
 @inject NavigationManager NavigationManager
 @inject ISubscriptionService SubscriptionService
 
-<div style="display: flex; justify-content: space-between; padding-bottom: 20px;">
+<div class="d-flex justify-content-between" style="padding-bottom: 20px;">
     <BackButton Url="@ReturnUrl"></BackButton>
     <button type="submit" form="SubscriptionForm" class="btn btn-outline-success">
         <i class="fa-solid fa-plus"></i>
@@ -39,6 +39,7 @@
     [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
+
     string Currency = "";
 
     Subscription subscription = new();
@@ -53,6 +54,6 @@
     public async Task CreateNewSubscription()
     {
         await SubscriptionService.CreateSubscriptionAsync(subscription);
-        NavigationManager.NavigateTo($"Details\\{subscription.Id}");
+        NavigationManager.NavigateTo($"Details/{subscription.Id}?ReturnUrl={ReturnUrl}");
     }
 }
