@@ -23,7 +23,7 @@
 <div class="container mt-2">
     @foreach (var sub in _subscriptionResponses)
     {
-        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}")) id="subscription-card" class="card border-primary mb-3 clickable" style="max-width: 20rem;">
+        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}?ReturnUrl={Navigator.Uri}")) id="subscription-card" class="card border-primary mb-3 clickable" style="max-width: 20rem;">
             <div class="card-body" style="padding-top: 10px; padding-bottom: 10px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div>@sub.Name</div>

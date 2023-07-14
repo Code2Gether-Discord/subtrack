@@ -4,19 +4,22 @@
 @inject NavigationManager navigationManager
 @inject ISubscriptionsCalculator subscriptionsCalculator
 
-@if(_subscription is null)
+@if (_subscription is null)
 {
     <div>Subscription details not found</div>
-} else
+}
+else
 {
     <div class="container">
-        <div class="row border-bottom py-2">
-            <div class="col-1">&nbsp;</div>
-            <div class="col-sm-8 col-md-10 col-9 text-center">
+        <div class="d-flex justify-content-between border-bottom py-2">
+            <div>
+                <BackButton Url="@ReturnUrl"></BackButton>
+            </div>
+            <div>
                 <h2>@_subscription.Name</h2>
             </div>
-            <div class="col-1">
-                <button aria-label="Edit" type="button" class="btn"><i class="bi bi-pencil-square"></i></button>
+            <div>
+                <button aria-label="Edit" type="button" class="btn btn-outline-info"><i class="bi bi-pencil-square"></i></button>
             </div>
         </div>
         <div class="row border-bottom py-2">
@@ -38,8 +41,8 @@
             <div class="col-12 d-flex justify-content-center">
                 <button aria-label="Mark as paid" type="button" class="btn btn-primary" onclick="@(() => MarkSubscriptionAsPaid())">
                     <i class="fa-solid fa-check"></i>&nbsp;
-                   Mark paid
-               </button>
+                    Mark paid
+                </button>
             </div>
         </div>
         <div class="row border-bottom py-2">
@@ -52,7 +55,7 @@
                 Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
             </div>
         </div>
-        @if(!string.IsNullOrWhiteSpace(_subscription.Description))
+        @if (!string.IsNullOrWhiteSpace(_subscription.Description))
         {
             <div class="row border-bottom py-2">
                 <div class="col-12 d-flex justify-content-center">
@@ -75,6 +78,10 @@
     [Parameter]
     public int Id { get; set; }
 
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string ReturnUrl { get; set; }
+
     Subscription? _subscription;
 
     bool _deleteButtonClicked;
@@ -85,7 +92,7 @@
     {
         _subscription = await subscriptionService.GetById(Id);
         _deleteButtonClicked = false;
-        if(_subscription is not null)
+        if (_subscription is not null)
         {
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
         }
@@ -100,7 +107,7 @@
 
     private async Task OnDelete()
     {
-        if(!_deleteButtonClicked)
+        if (!_deleteButtonClicked)
         {
             _deleteButtonClicked = true;
             return;

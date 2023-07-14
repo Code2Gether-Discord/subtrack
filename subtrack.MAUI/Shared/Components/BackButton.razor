@@ -1,0 +1,11 @@
+﻿@inject NavigationManager NavigationManager
+
+<button class="btn btn-outline-primary" @onclick="() => NavigationManager.NavigateTo(Url)">
+    <i class="fa-solid fa-arrow-left"></i>
+</button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Url { get; set; }
+}
