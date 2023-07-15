@@ -1,6 +1,4 @@
-﻿using subtrack.DAL.Entities;
-
-namespace subtrack.MAUI.Responses
+﻿namespace subtrack.MAUI.Responses
 {
     public class SubscriptionResponse
     {

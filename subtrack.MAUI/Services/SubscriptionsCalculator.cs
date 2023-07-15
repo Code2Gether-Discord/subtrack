@@ -1,5 +1,6 @@
 ﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
+using subtrack.MAUI.Utilities;
 
 namespace subtrack.MAUI.Services;
 
@@ -20,7 +21,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             throw new ArgumentNullException(nameof(subscription));
 
         var dueDate = GetNextPaymentDate(subscription);
-        var duration = dueDate.Subtract(_dateTimeProvider.Now.Date);
+        var duration = dueDate.TimeRemainingFromToday(_dateTimeProvider);
         return duration.Days;
     }
 

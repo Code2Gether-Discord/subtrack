@@ -3,6 +3,7 @@
 @inject ISubscriptionService subscriptionService
 @inject NavigationManager navigationManager
 @inject ISubscriptionsCalculator subscriptionsCalculator
+@inject IDateTimeProvider dateTimeProvider
 
 @if (_subscription is null)
 {
@@ -34,7 +35,7 @@ else
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex flex-column justify-content-center">
                 <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy")</div>
-                <div class="text-center">@_nextPaymentDate.Date.Humanize()</div>
+                <div class="text-center">@_dueTimeText</div>
             </div>
         </div>
         <div class="row border-bottom py-2">
@@ -80,7 +81,9 @@ else
 
     [Parameter]
     [SupplyParameterFromQuery]
-    public string ReturnUrl { get; set; }
+    public string? ReturnUrl { get; set; }
+
+    private string _dueTimeText = "";
 
     Subscription? _subscription;
 
@@ -95,7 +98,21 @@ else
         if (_subscription is not null)
         {
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+            _dueTimeText = GetDueTimeText();
         }
+    }
+
+    private string GetDueTimeText()
+    {
+        var dueTime = _nextPaymentDate.TimeRemainingFromToday(dateTimeProvider);
+        if (dueTime.Days == 0)
+        {
+            return "today";
+        }
+
+        var dueTimeText = dueTime.Humanize(3, minUnit: Humanizer.Localisation.TimeUnit.Day, maxUnit: Humanizer.Localisation.TimeUnit.Month);
+
+        return _nextPaymentDate.IsPastDate(dateTimeProvider) ? $"{dueTimeText} ago" : dueTimeText;
     }
 
     private async Task MarkSubscriptionAsPaid()

@@ -6,18 +6,16 @@
 
 <AddSubscriptionButton />
 
-<h6 class="text-center">@_currentYear</h6>
-
 @foreach (var subMonth in _currentYearSubscriptionMonths)
 {
     <SubscriptionMonthItem SubscriptionMonth=@subMonth />
 }
 
-<h6 class="text-center">@(_currentYear + 1)</h6>
+<h6 class="text-center mt-3 mb-2">@(_currentYear + 1)</h6>
 
 @foreach (var subMonth in _nextYearSubscriptionMonths)
 {
-    <SubscriptionMonthItem SubscriptionMonth=@subMonth />
+    <SubscriptionMonthItem Year=@(_currentYear + 1) SubscriptionMonth=@subMonth />
 }
 
 @code {
@@ -25,8 +23,8 @@
     int _currentMonth = DateTime.Now.Month;
     int _currentYear = DateTime.Now.Year;
 
-    IEnumerable<SubscriptionsMonthResponse> _currentYearSubscriptionMonths;
-    IEnumerable<SubscriptionsMonthResponse> _nextYearSubscriptionMonths;
+    IEnumerable<SubscriptionsMonthResponse> _currentYearSubscriptionMonths = null!;
+    IEnumerable<SubscriptionsMonthResponse> _nextYearSubscriptionMonths = null!;
 
     protected override async Task OnInitializedAsync()
     {

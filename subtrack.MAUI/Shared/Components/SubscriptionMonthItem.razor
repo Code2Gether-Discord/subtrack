@@ -2,10 +2,10 @@
 
 @inject NavigationManager Navigator
 
-<div class="container mt-3">
+<div class="container">
 
     <div class="d-flex bg-primary rounded mb-1 fw-bold justify-content-between">
-        <div class="p-1 ps-2">@SubscriptionMonth.MonthName</div>
+        <div class="p-1 ps-2">@_monthText</div>
         <div class="p-1 pe-2">@($"{SubscriptionMonth.Cost:C}")</div>
     </div>
 
@@ -32,9 +32,19 @@
 </div>
 
 @code {
+    private string _monthText = null!;
+
     [Parameter]
     [EditorRequired]
-    public SubscriptionsMonthResponse SubscriptionMonth { get; set; }
+    public SubscriptionsMonthResponse SubscriptionMonth { get; set; } = null!;
+
+    [Parameter]
+    public int? Year { get; set; } = null;
+
+    protected override void OnParametersSet()
+    {
+        _monthText = Year is null ? SubscriptionMonth.MonthName : $"{SubscriptionMonth.MonthName} {Year}";
+    }
 
     public string GetDateSuffix(int day)
     {
