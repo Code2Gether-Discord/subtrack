@@ -117,7 +117,7 @@ else
 
     private async Task MarkSubscriptionAsPaid()
     {
-        _subscription.LastPayment = DateTime.Now.Date;
+        _subscription.LastPayment = _nextPaymentDate;
         await subscriptionService.Update(_subscription);
         navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
     }
