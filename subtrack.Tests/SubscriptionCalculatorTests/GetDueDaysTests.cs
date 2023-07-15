@@ -2,7 +2,6 @@ using subtrack.DAL.Entities;
 using subtrack.MAUI.Services;
 using System.Collections;
 using NSubstitute;
-using NSubstitute.Core;
 using subtrack.MAUI.Services.Abstractions;
 
 namespace subtrack.Tests.SubscriptionCalculatorTests;
@@ -22,9 +21,9 @@ public class GetDueDaysTests
     {
         //Arrange
         _dateTimeProvider.Now
-                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
+                         .Returns(new DateTime(2023, 06, 05));
 
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02, 8, 0, 0) };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02) };
 
         //Act
         var result = _sut.GetDueDays(subscription);
@@ -39,9 +38,9 @@ public class GetDueDaysTests
     {
         // Arrange
         _dateTimeProvider.Now
-                         .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
+                         .Returns(new DateTime(2023, 06, 05));
         var subscription = new Subscription { LastPayment = date };
-        
+
         // Act
         var result = _sut.GetDueDays(subscription);
 

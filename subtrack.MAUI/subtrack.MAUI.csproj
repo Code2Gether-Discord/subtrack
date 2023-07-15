@@ -8,6 +8,7 @@
 		<OutputType Condition="'$(TargetFramework)' != 'net6.0'">Exe</OutputType>
         <RootNamespace>subtrack.MAUI</RootNamespace>
         <UseMaui>true</UseMaui>
+		<Nullable>enable</Nullable>
         <SingleProject>true</SingleProject>
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDefaultCssItems>false</EnableDefaultCssItems>

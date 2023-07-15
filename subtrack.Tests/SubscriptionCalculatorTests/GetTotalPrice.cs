@@ -30,7 +30,7 @@ public class GetTotalPrice
     {
         List<Subscription>? subscriptions = null;
 
-        var result = _sut.GetTotalCost(subscriptions);
+        var result = _sut.GetTotalCost(subscriptions!);
 
         Assert.Equal(0, result);
     }

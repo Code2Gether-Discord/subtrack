@@ -18,17 +18,29 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         [Fact]
         public void GetNextPaymentDate_ReturnsCorrectNextPaymentDate()
         {
-            //Arrange
-            _dateTimeProvider.Now
-                             .Returns(new DateTimeOffset(2023, 06, 05, 8, 0, 0, TimeSpan.Zero));
+            // Arrange
+            var subscription = new Subscription { LastPayment = new DateTime(2023, 06, 02) };
+            var expected = new DateTime(2023, 07, 02);
 
-            var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02, 8, 0, 0) };
-
-            //Act
+            // Act
             var result = _sut.GetNextPaymentDate(subscription);
 
-            //Assert
-            Assert.Equal(new DateTime(2023, 04, 29, 8, 0, 0), result);
+            // Assert
+            Assert.Equal(expected, result);
+        }
+
+        [Fact]
+        public void GetNextPaymentDate_WhenLastPaymentIsLastDayOfMonth_ReturnsPaymentDateWithLastDayOfNextMonth()
+        {
+            // Arrange
+            var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 31) };
+            var expected = new DateTime(2023, 06, 30);
+
+            // Act
+            var result = _sut.GetNextPaymentDate(subscription);
+
+            // Assert
+            Assert.Equal(expected, result);
         }
     }
 }

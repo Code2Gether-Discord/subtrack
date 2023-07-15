@@ -19,7 +19,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         if (subscription is null)
             throw new ArgumentNullException(nameof(subscription));
 
-        var dueDate = subscription.LastPayment.AddMonths(1).Date;
+        var dueDate = GetNextPaymentDate(subscription);
         var duration = dueDate.Subtract(_dateTimeProvider.Now.Date);
         return duration.Days;
     }
@@ -52,6 +52,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
-        return subscription.LastPayment.AddDays(GetDueDays(subscription));
+        return subscription.LastPayment.AddMonths(1).Date;
     }
 }

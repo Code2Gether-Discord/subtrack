@@ -15,7 +15,7 @@ namespace subtrack.MAUI.Services
         {
             return await _context.Subscriptions.ToListAsync();
         }
-        
+
         public async Task Update(Subscription subscriptionToUpdate)
         {
             var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);

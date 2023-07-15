@@ -12,7 +12,7 @@ namespace subtrack.MAUI.Utilities
             {
                 Id = sub.Id,
                 Name = sub.Name,
-                Description = sub?.Description,
+                Description = sub.Description ?? string.Empty,
                 IsAutoPaid = sub.IsAutoPaid,
                 Cost = sub.Cost,
                 LastPayment = sub.LastPayment,

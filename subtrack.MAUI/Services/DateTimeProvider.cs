@@ -4,6 +4,7 @@ namespace subtrack.MAUI.Services
 {
     public class DateTimeProvider : IDateTimeProvider
     {
-        public DateTimeOffset Now => DateTimeOffset.Now;
+        public DateTime Now => DateTime.Now;
+        public DateTime NowUtc => DateTime.UtcNow;
     }
 }
