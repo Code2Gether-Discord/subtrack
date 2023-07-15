@@ -73,5 +73,5 @@ After making changes to any entity you need to add a migration and update the da
 #### Release
 - [ ] Test the app on an android phone 
 
-## WIP Roadmap 2023
+## Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
