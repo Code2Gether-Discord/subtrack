@@ -58,13 +58,13 @@ After making changes to any entity you need to add a migration and update the da
 - [x] List subscriptions under each month showing the name, cost, if it's auto paid and how many days left until it's due
 
 #### Upsert page
-- [ ]  Create a new subscription
+- [x]  Create a new subscription
 - [ ]  Edit an existing subscription
 
 ### Details page
-- [ ] Mark subscription as paid
-- [ ] display all details like lastpayment
-- [ ] Delete subscription
+- [x] Mark subscription as paid
+- [x] display all details like lastpayment
+- [x] Delete subscription
 
 #### Start and subscriptions page
 - [x] Clicking on a subscription takes you to the details page
@@ -74,4 +74,4 @@ After making changes to any entity you need to add a migration and update the da
 - [ ] Test the app on an android phone 
 
 ## WIP Roadmap 2023
-![Roadmap 2023](docs/roadmap.png)
+![Roadmap 2023](docs/roadmap.png?)
