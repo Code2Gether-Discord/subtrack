@@ -13,6 +13,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         public GetSubscriptionListByMonthTests()
         {
             _sut = new SubscriptionsCalculator(_dateTimeProvider);
+            _dateTimeProvider.Now.Returns(DateTime.Now);
         }
 
         [Fact]
@@ -22,11 +23,24 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now);
 
             // Assert
             Assert.Contains(subscriptions[0], result);
             Assert.Contains(subscriptions[1], result);
+        }
+
+        [Fact]
+        public void GetSubscriptionListByMonth_DoesNotReturn_SubscriptionsWithNonStartedPayments()
+        {
+            // Arrange
+            IList<Subscription> subscriptions = new[] { new Subscription() { LastPayment = DateTime.Now.AddMonths(1) } };
+
+            // Act
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now);
+
+            // Assert
+            Assert.DoesNotContain(subscriptions[0], result);
         }
 
         [Fact]
@@ -36,7 +50,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now.Month);
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, DateTime.Now);
 
             // Assert
             Assert.DoesNotContain(subscriptions[2], result);

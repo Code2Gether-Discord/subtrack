@@ -42,10 +42,13 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         return subscription.Cost * _monthsInAYear;
     }
 
-    public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, int month)
+    public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
     {
+        bool paidThisMonth(Subscription s) => s.LastPayment.Month == monthDate.Month && s.LastPayment.Year == monthDate.Year;
+        bool paymentStartsInTheFuture(Subscription s) => s.LastPayment > monthDate;
+
         var subscriptionsByMonth = subscriptions
-                    .Where(s => s.LastPayment.Month != month)
+                    .Where(s => !paidThisMonth(s) && !paymentStartsInTheFuture(s))
                     .ToList();
 
         return subscriptionsByMonth;

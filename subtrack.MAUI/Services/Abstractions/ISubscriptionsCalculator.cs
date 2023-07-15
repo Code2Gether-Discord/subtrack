@@ -7,7 +7,7 @@ namespace subtrack.MAUI.Services.Abstractions
         int GetDueDays(Subscription subscription);
         decimal GetTotalCost(IEnumerable<Subscription> subscriptions);
         decimal GetYearlyCost(Subscription subscription);
-        IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, int month);
+        IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate);
         DateTime GetNextPaymentDate(Subscription subscription);
     }
 }

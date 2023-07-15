@@ -37,21 +37,20 @@
             .Select((name, index) => (name, index + 1))
             .ToArray();
 
-        _currentYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, m => m.Index >= _currentMonth);
-        _nextYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, m => m.Index < _currentMonth);
+        _currentYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, _currentYear, m => m.Index >= _currentMonth);
+        _nextYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, _currentYear + 1, m => m.Index < _currentMonth);
     }
 
-    private IEnumerable<SubscriptionsMonthResponse> GetSubscriptionsMonthResponses((string Name, int Index)[] months, Func<(string Name, int Index), bool> monthSelector)
+    private IEnumerable<SubscriptionsMonthResponse> GetSubscriptionsMonthResponses((string Name, int Index)[] months, int year, Func<(string Name, int Index), bool> monthSelector)
     {
         return months.Where(monthSelector).Select(m =>
         {
-            // later on we send in the year, alt datetime
-            var subscriptions = SubscriptionCalculator.GetSubscriptionListByMonth(_subscriptions, m.Index);
+            var subscriptions = SubscriptionCalculator.GetSubscriptionListByMonth(_subscriptions, new DateTime(year,m.Index, 1));
 
             return new SubscriptionsMonthResponse
             {
                 Subscriptions = subscriptions,
-                    Cost = SubscriptionCalculator.GetTotalCost(subscriptions),
+                Cost = SubscriptionCalculator.GetTotalCost(subscriptions),
                 MonthName = m.Name
 
             };
