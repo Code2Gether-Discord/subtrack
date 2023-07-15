@@ -1,4 +1,5 @@
 @page "/CreateSubscription"
+@page "/EditSubscription/{Id:int}"
 @using System.Globalization;
 @using subtrack.MAUI.Shared.Components
 @inject NavigationManager NavigationManager
@@ -11,49 +12,62 @@
     </button>
 </div>
 
-<EditForm id="SubscriptionForm" Model="@subscription" OnValidSubmit="CreateNewSubscription">
+<EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="CreateNewSubscription">
     <div>
         <ValidationSummary />
         <DataAnnotationsValidator/>
-        <InputText class="form-control" placeholder="Service Name" @bind-Value="@subscription.Name"></InputText>
+        <InputText class="form-control" placeholder="Service Name" @bind-Value="@_subscription.Name"></InputText>
     </div>
     <div class="input-group mb-3" style="padding-top: 15px;">
-        <span class="input-group-text">@Currency</span>
-        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@subscription.Cost"></InputNumber>
+        <span class="input-group-text">@_currency</span>
+        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@_subscription.Cost"></InputNumber>
     </div>
     <div style="display: flex;">
         <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Last Payment </label>
-        <InputDate class="form-control" @bind-Value="@subscription.LastPayment"></InputDate>
+        <InputDate class="form-control" @bind-Value="@_subscription.LastPayment"></InputDate>
     </div>
     <div class="form-check form-switch" style="padding-top: 10px">
         <label class="form-check-label" for="autopaid">Auto Paid </label>
-        <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@subscription.IsAutoPaid"></InputCheckbox>
+        <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@_subscription.IsAutoPaid"></InputCheckbox>
     </div>
     <div class="form-group" style="padding-top: 10px;">
-        <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@subscription.Description"></InputTextArea>
+        <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
     <br/>
 </EditForm>
 
 @code {
     [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
 
-    string Currency = "";
+    string _currency = "";
 
-    Subscription subscription = new();
+    Subscription? _subscription = new();
 
-    protected override void OnInitialized()
+    RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
+
+    protected override async Task OnInitializedAsync()
     {
-        var ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
-        Currency = ri.ISOCurrencySymbol;
-        subscription.LastPayment = DateTime.Today;
+        _subscription = await SubscriptionService.GetById(Id);
+
+        _currency = ri.ISOCurrencySymbol;
+        _subscription.LastPayment = DateTime.Today;
     }
 
     public async Task CreateNewSubscription()
     {
-        await SubscriptionService.CreateSubscriptionAsync(subscription);
-        NavigationManager.NavigateTo($"Details/{subscription.Id}?ReturnUrl={ReturnUrl}");
+        if (Id==0)
+        {
+            await SubscriptionService.CreateSubscriptionAsync(_subscription);
+        }
+        else if (Id > 0)
+        {
+            await SubscriptionService.Update(_subscription);
+        }
+        NavigationManager.NavigateTo($"Details/{_subscription.Id}?ReturnUrl={ReturnUrl}");
     }
 }

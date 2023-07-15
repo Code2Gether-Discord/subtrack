@@ -1,5 +1,5 @@
 ﻿@page "/details/{Id:int}"
-
+@using subtrack.MAUI.Shared.Components
 @inject ISubscriptionService subscriptionService
 @inject NavigationManager navigationManager
 @inject ISubscriptionsCalculator subscriptionsCalculator
@@ -20,7 +20,7 @@ else
                 <h2>@_subscription.Name</h2>
             </div>
             <div>
-                <button aria-label="Edit" type="button" class="btn btn-outline-info"><i class="bi bi-pencil-square"></i></button>
+                <EditButton Url="@EditUrl"></EditButton>
             </div>
         </div>
         <div class="row border-bottom py-2">
@@ -83,6 +83,8 @@ else
     [SupplyParameterFromQuery]
     public string? ReturnUrl { get; set; }
 
+    public string? EditUrl { get; set; }
+
     private string _dueTimeText = "";
 
     Subscription? _subscription;
@@ -97,6 +99,7 @@ else
         _deleteButtonClicked = false;
         if (_subscription is not null)
         {
+            EditUrl = $"{ReturnUrl}/EditSubscription/{Id}?ReturnUrl={ReturnUrl}";
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
             _dueTimeText = GetDueTimeText();
         }
