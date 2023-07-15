@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Services;
+using Microsoft.EntityFrameworkCore.Storage;
+using Microsoft.EntityFrameworkCore.Infrastructure;
 
 namespace subtrack.MAUI;
 
@@ -30,8 +32,15 @@ public static class MauiProgram
         builder.Services.AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>();
 
         using var sp = builder.Services.BuildServiceProvider();
-        SeedDb(sp.GetRequiredService<SubtrackDbContext>());
-
+        var db = sp.GetRequiredService<SubtrackDbContext>();
+#if DEBUG
+        SeedDb(db);
+#else
+        if (!db.Database.GetService<IRelationalDatabaseCreator>().Exists())
+        {
+            db.Database.Migrate();
+        }
+#endif      
         return builder.Build();
     }
 
