@@ -12,7 +12,7 @@
     </button>
 </div>
 
-<EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="CreateNewSubscription">
+<EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="UpsertSubscriptionAsync">
     <div>
         <ValidationSummary />
         <DataAnnotationsValidator/>
@@ -38,7 +38,7 @@
 
 @code {
     [Parameter]
-    public int Id { get; set; }
+    public int? Id { get; set; }
 
     [Parameter]
     [SupplyParameterFromQuery]
@@ -48,19 +48,24 @@
 
     Subscription? _subscription = new();
 
-    RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
-
     protected override async Task OnInitializedAsync()
     {
-        _subscription = await SubscriptionService.GetById(Id);
-
+        RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
         _currency = ri.ISOCurrencySymbol;
         _subscription.LastPayment = DateTime.Today;
     }
 
-    public async Task CreateNewSubscription()
+    protected override async Task OnParametersSetAsync()
     {
-        if (Id==0)
+        if (Id != null)
+        {
+            _subscription = await SubscriptionService.GetById(Id.Value);
+        }
+    }
+
+    public async Task UpsertSubscriptionAsync()
+    {
+        if (Id == null)
         {
             await SubscriptionService.CreateSubscriptionAsync(_subscription);
         }
