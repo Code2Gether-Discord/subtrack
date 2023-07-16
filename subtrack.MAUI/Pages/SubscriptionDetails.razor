@@ -1,4 +1,5 @@
 ﻿@page "/details/{Id:int}"
+@using subtrack.MAUI.Utilities;
 
 @inject ISubscriptionService subscriptionService
 @inject NavigationManager navigationManager
@@ -58,10 +59,8 @@ else
         </div>
         @if (!string.IsNullOrWhiteSpace(_subscription.Description))
         {
-            <div class="row border-bottom py-2">
-                <div class="col-12 d-flex justify-content-center">
-                    @_subscription.Description
-                </div>
+            <div class="row border-bottom py-2 d-flex justify-content-center text-break">
+                @_subscription.Description
             </div>
         }
         <div class="row border-bottom py-2">
