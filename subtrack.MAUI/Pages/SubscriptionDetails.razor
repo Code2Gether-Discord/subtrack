@@ -1,4 +1,5 @@
 ﻿@page "/details/{Id:int}"
+@using subtrack.MAUI.Utilities;
 @using subtrack.MAUI.Shared.Components
 @inject ISubscriptionService subscriptionService
 @inject NavigationManager navigationManager
@@ -17,7 +18,7 @@ else
                 <BackButton Url="@ReturnUrl"></BackButton>
             </div>
             <div>
-                <h2>@_subscription.Name</h2>
+                <h2 class="ps-3 text-break">@_subscription.Name</h2>
             </div>
             <div>
                 <EditButton Url="@EditUrl"></EditButton>
@@ -58,10 +59,8 @@ else
         </div>
         @if (!string.IsNullOrWhiteSpace(_subscription.Description))
         {
-            <div class="row border-bottom py-2">
-                <div class="col-12 d-flex justify-content-center">
-                    @_subscription.Description
-                </div>
+            <div class="row border-bottom py-2 d-flex justify-content-center text-break">
+                @_subscription.Description
             </div>
         }
         <div class="row border-bottom py-2">
