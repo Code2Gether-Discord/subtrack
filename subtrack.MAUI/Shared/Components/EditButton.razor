@@ -1,0 +1,11 @@
+﻿@inject NavigationManager NavigationManager
+
+<button aria-label="Edit" type="button" class="btn btn-outline-info" @onclick="() => NavigationManager.NavigateTo(Url)">
+    <i class="bi bi-pencil-square"></i>
+    </button>
+
+@code {
+    [Parameter]
+    [EditorRequired]
+    public string Url { get; set; }
+}
