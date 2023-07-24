@@ -36,10 +36,7 @@ public static class MauiProgram
 #if DEBUG
         SeedDb(db);
 #else
-        if (!db.Database.GetService<IRelationalDatabaseCreator>().Exists())
-        {
             db.Database.Migrate();
-        }
 #endif      
         return builder.Build();
     }
