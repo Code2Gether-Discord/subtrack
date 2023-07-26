@@ -43,14 +43,15 @@ public static class MauiProgram
 
     private static void SeedDb(SubtrackDbContext dbContext)
     {
+        var todayLastMonth = DateTime.Now.AddMonths(-1);
         _ = dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
 
         dbContext.Subscriptions.AddRange(
-            new DAL.Entities.Subscription() { Name = "paramount", LastPayment = DateTime.Now.AddMonths(-1).AddDays(-1), Cost = 3m, },
-            new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = DateTime.Now.AddMonths(-1), Cost = 3m, },
-            new DAL.Entities.Subscription() { Name = "Netflix", IsAutoPaid = true, LastPayment = DateTime.Now.AddDays(-1), Description = "family plan", Cost = 10 },
-            new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, Cost = 1.5m, }
+            new DAL.Entities.Subscription() { Name = "paramount", FirstPaymentDay = todayLastMonth.AddDays(-1).Day, LastPayment =todayLastMonth.AddDays(-1), Cost = 3m, },
+            new DAL.Entities.Subscription() { Name = "Disney+", FirstPaymentDay = todayLastMonth.Day, LastPayment = todayLastMonth, Cost = 3m, },
+            new DAL.Entities.Subscription() { Name = "Netflix",FirstPaymentDay= todayLastMonth.Day, LastPayment = todayLastMonth, IsAutoPaid = true, Description = "family plan", Cost = 10 },
+            new DAL.Entities.Subscription() { Name = "hbo",FirstPaymentDay = new DateTime(2023,06,3).Day, LastPayment = new DateTime(2023, 06, 30), Cost = 1.5m, }
             );
 
         dbContext.SaveChanges();

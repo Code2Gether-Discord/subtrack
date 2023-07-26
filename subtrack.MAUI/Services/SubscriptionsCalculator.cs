@@ -56,6 +56,26 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
-        return subscription.LastPayment.AddMonths(1).Date;
+
+        var nextPaymentDate = subscription.LastPayment.AddMonths(1).Date;
+        var lastDayOfMonth = DateTime.DaysInMonth(subscription.LastPayment.Year, subscription.LastPayment.Month);
+
+        if (subscription.LastPayment.Day != lastDayOfMonth)
+            return nextPaymentDate;
+
+        if (subscription.LastPayment.Month == 1)
+        {
+            var isLeapYear = DateTime.IsLeapYear(subscription.LastPayment.Year);
+            return new DateTime(subscription.LastPayment.Year,  2 , isLeapYear ? 29 : 28);
+        }
+
+        if (subscription.LastPayment.Month == 2)
+            return new DateTime(subscription.LastPayment.Year, 3, 31);
+
+        if (lastDayOfMonth % 2 == 0)
+            return nextPaymentDate.AddDays(1);
+
+        return nextPaymentDate;
+
     }
 }

@@ -15,5 +15,7 @@ public class Subscription
     public decimal Cost { get; set; }
 
     [Required]
+    public int FirstPaymentDay { get; set; } 
+    [Required]
     public DateTime LastPayment { get; set; }
 }

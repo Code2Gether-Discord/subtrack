@@ -121,9 +121,15 @@ else
 
     private async Task MarkSubscriptionAsPaid()
     {
-        _subscription.LastPayment = _nextPaymentDate;
-        await subscriptionService.Update(_subscription);
-        navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
+        //_subscription.LastPayment = _nextPaymentDate;
+        //await subscriptionService.Update(_subscription);
+        //navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
+
+        _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+        _dueTimeText = GetDueTimeText();
+        _subscription.LastPayment = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
+       
+
     }
 
     private async Task OnDelete()
