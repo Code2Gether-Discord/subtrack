@@ -100,7 +100,7 @@ else
         _deleteButtonClicked = false;
         if (_subscription is not null)
         {
-            EditUrl = $"/EditSubscription/{Id}?ReturnUrl={ReturnUrl}";
+            EditUrl = $"/EditSubscription/{Id}?ReturnUrl={navigationManager.Uri}";
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
             _dueTimeText = GetDueTimeText();
         }
