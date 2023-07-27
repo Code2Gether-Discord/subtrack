@@ -126,9 +126,11 @@ else
         //navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
 
         _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
-        _dueTimeText = GetDueTimeText();
-        _subscription.LastPayment = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
        
+        _subscription.LastPayment = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
+        
+         navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
+
 
     }
 

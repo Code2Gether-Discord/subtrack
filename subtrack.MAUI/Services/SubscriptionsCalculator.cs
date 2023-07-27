@@ -60,7 +60,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         var nextPaymentDate = subscription.LastPayment.AddMonths(1).Date;
         var lastDayOfMonth = DateTime.DaysInMonth(subscription.LastPayment.Year, subscription.LastPayment.Month);
 
-        if (subscription.LastPayment.Day != lastDayOfMonth)
+        if (subscription.FirstPaymentDay != lastDayOfMonth)
             return nextPaymentDate;
 
         if (subscription.LastPayment.Month == 1)
