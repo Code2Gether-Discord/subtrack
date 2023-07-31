@@ -46,7 +46,8 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         public void GetNextPaymentDate_WhenLastPaymentIsLastDayOfFebruary_ReturnsPaymentDateWithLastDayOfNextMonth()
         {
             // Arrange
-            var subscription = new Subscription { LastPayment = new DateTime(2023, 02, 28) };
+            var lastPayment = new DateTime(2023, 02, 28);
+            var subscription = new Subscription { LastPayment = lastPayment, FirstPaymentDay = lastPayment.Day };
             var expected = new DateTime(2023, 03, 31);
 
             // Act
