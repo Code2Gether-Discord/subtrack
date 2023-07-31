@@ -49,7 +49,7 @@ public static class MauiProgram
 
         dbContext.Subscriptions.AddRange(
             new DAL.Entities.Subscription() { Name = "paramount", FirstPaymentDay = todayLastMonth.AddDays(-1).Day, LastPayment =todayLastMonth.AddDays(-1), Cost = 3m, },
-            new DAL.Entities.Subscription() { Name = "Disney+", FirstPaymentDay = todayLastMonth.Day, LastPayment = todayLastMonth, Cost = 3m, },
+            new DAL.Entities.Subscription() { Name = "Disney+", FirstPaymentDay = new DateTime(2023, 02, 28).Day, LastPayment = new DateTime(2023, 02, 28), Cost = 3m, },
             new DAL.Entities.Subscription() { Name = "Netflix",FirstPaymentDay= todayLastMonth.Day, LastPayment = todayLastMonth, IsAutoPaid = true, Description = "family plan", Cost = 10 },
             new DAL.Entities.Subscription() { Name = "hbo",FirstPaymentDay = new DateTime(2023,06,3).Day, LastPayment = new DateTime(2023, 06, 30), Cost = 1.5m, }
             );
