@@ -68,11 +68,14 @@
         if (Id == null)
         {
             await SubscriptionService.CreateSubscriptionAsync(_subscription);
+            NavigationManager.NavigateTo($"Details/{_subscription.Id}?ReturnUrl={ReturnUrl}");
+
         }
         else
         {
             await SubscriptionService.Update(_subscription);
+            NavigationManager.NavigateTo(ReturnUrl);
+
         }
-        NavigationManager.NavigateTo($"Details/{_subscription.Id}?ReturnUrl={ReturnUrl}");
     }
 }
