@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using subtrack.DAL;
 using subtrack.DAL.Entities;
 using Xunit;
-using subtrack.MAUI.Services;
 
 namespace EF.Testing.UnitTests;
 
