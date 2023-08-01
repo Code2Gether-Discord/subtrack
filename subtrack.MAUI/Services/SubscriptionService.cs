@@ -14,9 +14,11 @@ namespace subtrack.MAUI.Services
 
         public async Task<IEnumerable<Subscription>> GetSubscriptions(GetSubscriptionsFilter? filter = null)
         {
-            bool shouldFilter = filter != null;
+            if (filter is not null) return await _context.Subscriptions
+                    .WhereIf(sub => sub.IsAutoPaid == filter.AutoPaid, filter.AutoPaid is not null)
+                    .ToListAsync();
 
-            return await _context.Subscriptions.WhereIf(filter?.GetAutoPaidFilter(), shouldFilter).ToListAsync();
+            return await _context.Subscriptions.ToListAsync();
         }
 
         public async Task Update(Subscription subscriptionToUpdate)
