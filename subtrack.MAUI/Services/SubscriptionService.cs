@@ -3,6 +3,7 @@ using subtrack.DAL;
 using subtrack.DAL.Entities;
 using subtrack.MAUI.Exceptions;
 using subtrack.MAUI.Services.Abstractions;
+using subtrack.MAUI.Utilities;
 
 namespace subtrack.MAUI.Services
 {
@@ -11,9 +12,11 @@ namespace subtrack.MAUI.Services
         private readonly SubtrackDbContext _context;
         public SubscriptionService(SubtrackDbContext context) => _context = context;
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptions()
+        public async Task<IEnumerable<Subscription>> GetSubscriptions(GetSubscriptionsFilter? filter = null)
         {
-            return await _context.Subscriptions.ToListAsync();
+            bool shouldFilter = filter != null;
+
+            return await _context.Subscriptions.WhereIf(filter?.GetAutoPaidFilter(), shouldFilter).ToListAsync();
         }
 
         public async Task Update(Subscription subscriptionToUpdate)
