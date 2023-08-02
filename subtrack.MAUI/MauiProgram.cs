@@ -4,6 +4,7 @@ using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Services;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using subtrack.DAL.Migrations;
 
 namespace subtrack.MAUI;
 
@@ -48,11 +49,12 @@ public static class MauiProgram
         dbContext.Database.Migrate();
 
         dbContext.Subscriptions.AddRange(
-            new DAL.Entities.Subscription() { Name = "paramount", FirstPaymentDay = todayLastMonth.AddDays(-1).Day, LastPayment =todayLastMonth.AddDays(-1), Cost = 3m, },
-            new DAL.Entities.Subscription() { Name = "Disney+", FirstPaymentDay = new DateTime(2023, 02, 28).Day, LastPayment = new DateTime(2023, 02, 28), Cost = 3m, },
-            new DAL.Entities.Subscription() { Name = "Netflix",FirstPaymentDay= todayLastMonth.Day, LastPayment = todayLastMonth, IsAutoPaid = true, Description = "family plan", Cost = 10 },
-            new DAL.Entities.Subscription() { Name = "hbo",FirstPaymentDay = new DateTime(2023,06,3).Day, LastPayment = new DateTime(2023, 06, 30), Cost = 1.5m, }
-            );
+                  new DAL.Entities.Subscription() { Name = "paramount", LastPayment = todayLastMonth.AddDays(-1), FirstPaymentDay = todayLastMonth.AddDays(-1).Day, Cost = 3m, },
+                  new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = todayLastMonth, FirstPaymentDay = todayLastMonth.Day, Cost = 3m, },
+                  new DAL.Entities.Subscription() { Name = "Netflix", LastPayment = DateTime.Now.AddDays(-1), FirstPaymentDay = DateTime.Now.AddDays(-1).Day, IsAutoPaid = true, Description = "family plan", Cost = 10 },
+                  new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, FirstPaymentDay = DateTime.Now.Day, Cost = 1.5m, }
+                  );
+
 
         dbContext.SaveChanges();
     }

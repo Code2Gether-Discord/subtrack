@@ -122,11 +122,8 @@ else
     private async Task MarkSubscriptionAsPaid()
     {
 
-        if (_nextPaymentDate > DateTime.Now)
-            return;
-
+        _ = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
         _subscription.LastPayment = _nextPaymentDate;
-        var lastPaymentDate = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
 
         _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
         _dueTimeText = GetDueTimeText(_subscription.LastPayment.AddMonths(1));

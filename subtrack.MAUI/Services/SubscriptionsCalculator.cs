@@ -1,4 +1,5 @@
-﻿using subtrack.DAL.Entities;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
 
@@ -56,26 +57,21 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
+        int startDay = subscription.FirstPaymentDay;
+        var lastPayment = subscription.LastPayment;
+        var nextPaymentDate = lastPayment.AddMonths(1).Date;
 
-        var nextPaymentDate = subscription.LastPayment.AddMonths(1).Date;
-        var lastDayOfMonth = DateTime.DaysInMonth(subscription.LastPayment.Year, subscription.LastPayment.Month);
+        int currentTotalDays = DateTime.DaysInMonth(lastPayment.Year, lastPayment.Month);
+        int nextMonthTotalDays = DateTime.DaysInMonth(nextPaymentDate.Year, nextPaymentDate.Month);
 
-        if (subscription.FirstPaymentDay != lastDayOfMonth)
-            return nextPaymentDate;
+        bool shouldIncrementDay = startDay == currentTotalDays && startDay < nextMonthTotalDays && nextPaymentDate.Month != 3;
 
-        if (subscription.LastPayment.Month == 1)
-        {
-            var isLeapYear = DateTime.IsLeapYear(subscription.LastPayment.Year);
-            return new DateTime(subscription.LastPayment.Year,  2 , isLeapYear ? 29 : 28);
-        }
-
-        if (subscription.LastPayment.Month == 2)
-            return new DateTime(subscription.LastPayment.Year, 3, 31);
-
-        if (lastDayOfMonth % 2 == 0)
+        if (shouldIncrementDay)
             return nextPaymentDate.AddDays(1);
 
-        return nextPaymentDate;
+
+        int selectedDay = startDay <= nextMonthTotalDays ? startDay : nextPaymentDate.Day;
+        return new DateTime(nextPaymentDate.Year, nextPaymentDate.Month, selectedDay);
 
     }
 }
