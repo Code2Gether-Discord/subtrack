@@ -126,7 +126,7 @@ else
         _subscription.LastPayment = _nextPaymentDate;
 
         _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
-        _dueTimeText = GetDueTimeText(_subscription.LastPayment.AddMonths(1));
+        _dueTimeText = GetDueTimeText(_nextPaymentDate);
       
     }
 

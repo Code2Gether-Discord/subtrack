@@ -59,19 +59,21 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         int startDay = subscription.FirstPaymentDay;
         var lastPayment = subscription.LastPayment;
-        var nextPaymentDate = lastPayment.AddMonths(1).Date;
+        
 
-        int currentTotalDays = DateTime.DaysInMonth(lastPayment.Year, lastPayment.Month);
-        int nextMonthTotalDays = DateTime.DaysInMonth(nextPaymentDate.Year, nextPaymentDate.Month);
-
-        bool shouldIncrementDay = startDay == currentTotalDays && startDay < nextMonthTotalDays && nextPaymentDate.Month != 3;
-
-        if (shouldIncrementDay)
-            return nextPaymentDate.AddDays(1);
+        var nextMonthDate = lastPayment.AddMonths(1);
+        var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
+        int lastPaymentMonthTotalDays = DateTime.DaysInMonth(lastPayment.Year, lastPayment.Month);
 
 
-        int selectedDay = startDay <= nextMonthTotalDays ? startDay : nextPaymentDate.Day;
-        return new DateTime(nextPaymentDate.Year, nextPaymentDate.Month, selectedDay);
+        if (startDay > nextMonthTotalDays)
+            return nextMonthDate;
 
+        bool shouldAddDay = nextMonthTotalDays > startDay && startDay == lastPaymentMonthTotalDays && nextMonthDate.Month != 3;
+
+        if (shouldAddDay)
+            return nextMonthDate.AddDays(1);
+
+        return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
     }
 }

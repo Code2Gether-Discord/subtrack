@@ -44,6 +44,20 @@ public class GetNextPaymentDateTests
         // Assert
         Assert.Equal(expectedNextPaymentDate, result);
     }
+
+    [Fact]
+    public void GetNextPaymentDate_ReturnsSameNextPaymentDateDay_AsFirstPaymentDay()
+    {
+        // Arrange
+        var subscription = new Subscription { FirstPaymentDay = 31, LastPayment = new DateTime(2023,11,30)};
+   
+
+        // Act
+        var result = _sut.GetNextPaymentDate(subscription);
+
+        // Assert
+        Assert.Equal(new DateTime(2023, 12, 31), result);
+    }
 }
 public class GetNextPaymentDateTestData : IEnumerable<object[]>
 {
@@ -55,6 +69,7 @@ public class GetNextPaymentDateTestData : IEnumerable<object[]>
         yield return new object[] { new DateTime(2023, 2, 28), new DateTime(2023, 3, 28) };
         yield return new object[] { new DateTime(2023, 7, 31), new DateTime(2023, 8, 31) };
         yield return new object[] { new DateTime(2023, 8, 31), new DateTime(2023, 9, 30) };
+        yield return new object[] { new DateTime(2023, 9, 30), new DateTime(2023, 10, 31) };
         yield return new object[] { new DateTime(2023, 10, 31), new DateTime(2023, 11, 30) };
         yield return new object[] { new DateTime(2023, 11, 30), new DateTime(2023, 12, 31) };
     }
