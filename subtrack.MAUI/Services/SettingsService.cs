@@ -15,15 +15,13 @@ namespace subtrack.MAUI.Services
         private readonly SubtrackDbContext _context;
         public async Task<T> GetByIdAsync<T>(string id) where T : SettingsBase
         {
-            return (T)await _context.Settings.FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Settings.OfType<T>().FirstOrDefaultAsync(x=>x.Id==id);
         }
 
         public async Task UpdateAsync<T>(T setting) where T : SettingsBase
 
         {
-            var sett = GetByIdAsync<SettingsBase>(setting.Id);
-
-            await _context.SaveChangesAsync();
+            _context.Update(setting);
         }
     }
 }

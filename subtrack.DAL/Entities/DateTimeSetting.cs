@@ -8,7 +8,7 @@ namespace subtrack.DAL.Entities
 {
     public class DateTimeSetting : SettingsBase
     {
-        public const string Key = "LastAutoPaymentTimeStamp";
+        public const string Key = "LastAutoPaymentTimeStampKey";
         public DateTime? Value { get; set; }
     }
 }

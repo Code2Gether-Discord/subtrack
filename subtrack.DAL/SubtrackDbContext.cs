@@ -13,6 +13,7 @@ public class SubtrackDbContext : DbContext
     }
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<SettingsBase>().HasDiscriminator<string>("settings_type").HasValue<DateTimeSetting>(nameof(DateTimeSetting));
+        modelBuilder.Entity<SettingsBase>().HasDiscriminator<string>("settings_type")
+            .HasValue<DateTimeSetting>(nameof(DateTimeSetting));
     }
 }
