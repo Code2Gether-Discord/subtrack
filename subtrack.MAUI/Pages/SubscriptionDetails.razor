@@ -102,11 +102,11 @@ else
         {
             EditUrl = $"/EditSubscription/{Id}?ReturnUrl={navigationManager.Uri}";
             _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
-            _dueTimeText = GetDueTimeText();
+            _dueTimeText = GetDueTimeText(_nextPaymentDate);
         }
     }
 
-    private string GetDueTimeText()
+    private string GetDueTimeText(DateTime duedate)
     {
         var dueTime = _nextPaymentDate.TimeRemainingFromToday(dateTimeProvider);
         if (dueTime.Days == 0)
@@ -116,14 +116,18 @@ else
 
         var dueTimeText = dueTime.Humanize(3, minUnit: Humanizer.Localisation.TimeUnit.Day, maxUnit: Humanizer.Localisation.TimeUnit.Month);
 
-        return _nextPaymentDate.IsPastDate(dateTimeProvider) ? $"{dueTimeText} ago" : dueTimeText;
+        return duedate.IsPastDate(dateTimeProvider) ? $"{dueTimeText} ago" : dueTimeText;
     }
 
     private async Task MarkSubscriptionAsPaid()
     {
+
+        _ = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
         _subscription.LastPayment = _nextPaymentDate;
-        await subscriptionService.Update(_subscription);
-        navigationManager.NavigateTo(navigationManager.Uri, forceLoad: true, replace: true);
+
+        _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+        _dueTimeText = GetDueTimeText(_nextPaymentDate);
+      
     }
 
     private async Task OnDelete()

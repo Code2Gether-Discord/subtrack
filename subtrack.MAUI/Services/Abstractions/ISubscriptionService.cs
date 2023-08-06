@@ -10,5 +10,6 @@ namespace subtrack.MAUI.Services.Abstractions
         Task<Subscription?> GetById(int id);
         Task Delete(int id);
         Task Update(Subscription subscriptionToUpdate);
+        Task<DateTime> UpdateLastPaymentDateAsync(int subscriptionId, DateTime newLastPaymentDate);
     }
 }
