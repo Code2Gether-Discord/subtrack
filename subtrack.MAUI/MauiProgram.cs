@@ -31,6 +31,7 @@ public static class MauiProgram
         builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
         builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         builder.Services.AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>();
+        builder.Services.AddScoped<ISettingsService, SettingsService>();
 
         using var sp = builder.Services.BuildServiceProvider();
         var db = sp.GetRequiredService<SubtrackDbContext>();
