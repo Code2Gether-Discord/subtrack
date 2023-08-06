@@ -22,6 +22,8 @@ namespace subtrack.MAUI.Services
 
         {
             _context.Update(setting);
+
+            await _context.SaveChangesAsync();
         }
     }
 }
