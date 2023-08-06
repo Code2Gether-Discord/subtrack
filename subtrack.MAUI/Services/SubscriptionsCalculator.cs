@@ -69,10 +69,10 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         if (startDay > nextMonthTotalDays)
             return nextMonthDate;
 
-        bool shouldAddDay = nextMonthTotalDays > startDay && startDay == lastPaymentMonthTotalDays && nextMonthDate.Month != 3;
+        //bool shouldAddDay = nextMonthTotalDays > startDay && startDay == lastPaymentMonthTotalDays && nextMonthDate.Month != 3;
 
-        if (shouldAddDay)
-            return nextMonthDate.AddDays(1);
+        //if (shouldAddDay)
+        //    return nextMonthDate.AddDays(1);
 
         return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
     }

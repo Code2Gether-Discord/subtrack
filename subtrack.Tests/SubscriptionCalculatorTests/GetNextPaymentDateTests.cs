@@ -69,9 +69,9 @@ public class GetNextPaymentDateTestData : IEnumerable<object[]>
         yield return new object[] { new DateTime(2023, 2, 28), new DateTime(2023, 3, 28) };
         yield return new object[] { new DateTime(2023, 7, 31), new DateTime(2023, 8, 31) };
         yield return new object[] { new DateTime(2023, 8, 31), new DateTime(2023, 9, 30) };
-        yield return new object[] { new DateTime(2023, 9, 30), new DateTime(2023, 10, 31) };
+        yield return new object[] { new DateTime(2023, 9, 30), new DateTime(2023, 10, 30) };
         yield return new object[] { new DateTime(2023, 10, 31), new DateTime(2023, 11, 30) };
-        yield return new object[] { new DateTime(2023, 11, 30), new DateTime(2023, 12, 31) };
+        yield return new object[] { new DateTime(2023, 11, 30), new DateTime(2023, 12, 30) };
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
