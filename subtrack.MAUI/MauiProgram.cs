@@ -39,6 +39,9 @@ public static class MauiProgram
 #else
             db.Database.Migrate();
 #endif      
+        var autoPaymentHandler = new AutoPaymentHandler();
+        autoPaymentHandler.ExecuteAsync();
+
         return builder.Build();
     }
 
