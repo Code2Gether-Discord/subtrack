@@ -23,7 +23,7 @@ public class GetDueDaysTests
         _dateTimeProvider.Now
                          .Returns(new DateTime(2023, 06, 05));
 
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02) };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02), FirstPaymentDay = new DateTime(2023, 05, 02).Day };
 
         //Act
         var result = _sut.GetDueDays(subscription);
@@ -39,7 +39,7 @@ public class GetDueDaysTests
         // Arrange
         _dateTimeProvider.Now
                          .Returns(new DateTime(2023, 06, 05));
-        var subscription = new Subscription { LastPayment = date };
+        var subscription = new Subscription { LastPayment = date , FirstPaymentDay =date.Day};
 
         // Act
         var result = _sut.GetDueDays(subscription);

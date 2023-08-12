@@ -4,6 +4,7 @@ using subtrack.DAL.Entities;
 using subtrack.MAUI.Exceptions;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
+using System;
 
 namespace subtrack.MAUI.Services
 {
@@ -27,7 +28,12 @@ namespace subtrack.MAUI.Services
 
             if (sub == null) throw new NotFoundException($"Subscription with id: {subscriptionToUpdate.Id} not found.");
 
-            sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
+            if (sub.LastPayment.Date != subscriptionToUpdate.LastPayment.Date)
+            {
+                sub.FirstPaymentDay = subscriptionToUpdate.LastPayment.Day;
+                sub.LastPayment = subscriptionToUpdate.LastPayment.Date;
+            }
+
             sub.Name = subscriptionToUpdate.Name;
             sub.Description = subscriptionToUpdate.Description;
             sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
@@ -57,9 +63,21 @@ namespace subtrack.MAUI.Services
         public async Task<Subscription> CreateSubscriptionAsync(Subscription subscriptionToCreate)
         {
             subscriptionToCreate.LastPayment = subscriptionToCreate.LastPayment.Date;
+            subscriptionToCreate.FirstPaymentDay = subscriptionToCreate.LastPayment.Day;
             await _context.Subscriptions.AddAsync(subscriptionToCreate);
             await _context.SaveChangesAsync();
             return subscriptionToCreate;
+        }
+        public async Task<DateTime> UpdateLastPaymentDateAsync(int subscriptionId, DateTime newLastPaymentDate)
+        {
+            var sub = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId);
+
+            if (sub is  null) throw new NotFoundException($"Subscription with an id:{subscriptionId} not found.");
+
+            sub.LastPayment = newLastPaymentDate;
+            await _context.SaveChangesAsync();
+
+            return newLastPaymentDate;
         }
     }
 }

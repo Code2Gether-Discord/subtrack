@@ -1,4 +1,5 @@
-﻿using subtrack.DAL.Entities;
+﻿using Microsoft.AspNetCore.Components.Forms;
+using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
 
@@ -56,6 +57,15 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
-        return subscription.LastPayment.AddMonths(1).Date;
+        int startDay = subscription.FirstPaymentDay;
+        var lastPayment = subscription.LastPayment;
+        
+
+        var nextMonthDate = lastPayment.AddMonths(1);
+        var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
+
+        if (startDay > nextMonthTotalDays)
+            return nextMonthDate;
+        return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
     }
 }
