@@ -9,9 +9,9 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 {
     private const int _monthsInAYear = 12;
 
-    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IDateProvider _dateTimeProvider;
 
-    public SubscriptionsCalculator(IDateTimeProvider dateTimeProvider)
+    public SubscriptionsCalculator(IDateProvider dateTimeProvider)
     {
         _dateTimeProvider = dateTimeProvider;
     }
@@ -59,13 +59,13 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         int startDay = subscription.FirstPaymentDay;
         var lastPayment = subscription.LastPayment;
-        
 
         var nextMonthDate = lastPayment.AddMonths(1);
         var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
 
         if (startDay > nextMonthTotalDays)
             return nextMonthDate;
+
         return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
     }
 }

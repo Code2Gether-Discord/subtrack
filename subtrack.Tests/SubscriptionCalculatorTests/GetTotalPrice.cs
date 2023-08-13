@@ -8,7 +8,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetTotalPrice
 {
     private readonly ISubscriptionsCalculator _sut;
-    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+    private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
 
     public GetTotalPrice()
     {

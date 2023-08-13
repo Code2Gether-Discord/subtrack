@@ -3,13 +3,13 @@
 namespace subtrack.MAUI.Utilities;
 public static class DateTimeExtensions
 {
-    public static TimeSpan TimeRemainingFromToday(this DateTime date, IDateTimeProvider dateTimeProvider)
+    public static TimeSpan TimeRemainingFromToday(this DateTime date, IDateProvider dateTimeProvider)
     {
-        return date.Subtract(dateTimeProvider.Now.Date);
+        return date.Subtract(dateTimeProvider.Today);
     }
 
-    public static bool IsPastDate(this DateTime date, IDateTimeProvider dateTimeProvider)
+    public static bool IsPastDate(this DateTime date, IDateProvider dateTimeProvider)
     {
-        return date < dateTimeProvider.Now.Date;
+        return date < dateTimeProvider.Today;
     }
 }

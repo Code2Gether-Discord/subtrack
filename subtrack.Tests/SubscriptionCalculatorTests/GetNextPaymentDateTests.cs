@@ -9,7 +9,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetNextPaymentDateTests
 {
     private readonly ISubscriptionsCalculator _sut;
-    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+    private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
 
     public GetNextPaymentDateTests()
     {

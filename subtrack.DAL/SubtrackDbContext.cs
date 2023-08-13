@@ -17,6 +17,6 @@ public class SubtrackDbContext : DbContext
         modelBuilder.Entity<SettingsBase>().HasDiscriminator<string>("settings_type")
             .HasValue<DateTimeSetting>(nameof(DateTimeSetting));
 
-        modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.Key, Value = null });
+        modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.LastAutoPaymentTimeStampKey, Value = null });
     }
 }

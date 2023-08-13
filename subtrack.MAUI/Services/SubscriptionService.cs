@@ -13,7 +13,7 @@ namespace subtrack.MAUI.Services
         private readonly SubtrackDbContext _context;
         public SubscriptionService(SubtrackDbContext context) => _context = context;
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptions(GetSubscriptionsFilter? filter = null)
+        public async Task<IEnumerable<Subscription>> GetAllAsync(GetSubscriptionsFilter? filter = null)
         {
             if (filter is not null) return await _context.Subscriptions
                     .WhereIf(sub => sub.IsAutoPaid == filter.AutoPaid, filter.AutoPaid is not null)

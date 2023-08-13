@@ -24,16 +24,7 @@ public static class MauiProgram
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
 #endif
-
-        var dbConnectionString = $"Data Source={Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "subtrack.db")}";
-        builder.Services.AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString));
-
-        builder.Services.AddScoped<ISubscriptionService, SubscriptionService>();
-        builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
-        builder.Services.AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>();
-        builder.Services.AddScoped<ISettingsService, SettingsService>();
-        builder.Services.AddScoped<AutoPaymentHandler>();
-
+        _ = builder.Services.AddSubtrackServices();
         using var sp = builder.Services.BuildServiceProvider();
         var db = sp.GetRequiredService<SubtrackDbContext>();
 #if DEBUG
@@ -46,6 +37,19 @@ public static class MauiProgram
             .RunSynchronously();
 
         return builder.Build();
+    }
+
+    public static IServiceCollection AddSubtrackServices(this IServiceCollection services)
+    {
+        var dbConnectionString = $"Data Source={Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "subtrack.db")}";
+        return
+            services
+            .AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString))
+            .AddScoped<ISubscriptionService, SubscriptionService>()
+            .AddScoped<IDateProvider, DateProvider>()
+            .AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>()
+            .AddScoped<ISettingsService, SettingsService>()
+            .AddScoped<AutoPaymentHandler>();
     }
 
     private static void SeedDb(SubtrackDbContext dbContext)

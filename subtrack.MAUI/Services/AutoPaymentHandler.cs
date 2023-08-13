@@ -1,45 +1,51 @@
 ﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace subtrack.MAUI.Services
 {
     public class AutoPaymentHandler
     {
-        private ISubscriptionService _subscriptionService;
-        private IDateTimeProvider _dateTimeProvider;
-        private ISettingsService _settingsService;
-        private GetSubscriptionsFilter filter;
-        
-        private Task<bool> HasExecutedToday()
+        private readonly ISubscriptionService _subscriptionService;
+        private readonly IDateProvider _dateProvider;
+        private readonly ISettingsService _settingsService;
+        private readonly ISubscriptionsCalculator _subscriptionsCalculator;
+
+        public AutoPaymentHandler(ISubscriptionService subscriptionService, IDateProvider dateProvider, ISettingsService settingsService, ISubscriptionsCalculator subscriptionsCalculator)
         {
-            if(subscription.LastPayment == DateTime.Today)
-            {
-                return true;
-            } 
-            return false;
+            _subscriptionService = subscriptionService;
+            _dateProvider = dateProvider;
+            _settingsService = settingsService;
+            _subscriptionsCalculator = subscriptionsCalculator;
         }
+
         public async Task ExecuteAsync()
         {
-            filter.AutoPaid = true;
-            var settings = new DateTimeSetting();
+            var today = _dateProvider.Today;
+            var lastTimeRun = await _settingsService.GetByIdAsync<DateTimeSetting>(DateTimeSetting.LastAutoPaymentTimeStampKey);
 
-            IEnumerable<Subscription> autoPaidSubs = (IEnumerable<Subscription>)_subscriptionService.GetSubscriptions(filter);
-            
-            foreach(var sub in autoPaidSubs)
+            if (lastTimeRun?.Value == today)
+                return;
+
+            await HandleAsync();
+
+            lastTimeRun.Value = today;
+            await _settingsService.UpdateAsync(lastTimeRun);
+        }
+
+        private async Task HandleAsync()
+        {
+            var autoPaidSubs = await _subscriptionService.GetAllAsync(new GetSubscriptionsFilter { AutoPaid = true });
+
+            foreach (var sub in autoPaidSubs)
             {
-                if(HasExecutedToday(sub))
-                {
-                    settings.Value = DateTime.Now.Date;
-                    
-                }
-                continue;
-            }  
+                var nextPaymentDate = _subscriptionsCalculator.GetNextPaymentDate(sub);
+                var paymentIsDue = nextPaymentDate <= _dateProvider.Today;
+                if (!paymentIsDue)
+                    continue;
+
+                await _subscriptionService.UpdateLastPaymentDateAsync(sub.Id, nextPaymentDate);
+            }
         }
     }
 }
