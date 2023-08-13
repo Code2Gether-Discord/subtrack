@@ -1,0 +1,81 @@
+@page "/CreateSubscription"
+@page "/EditSubscription/{Id:int}"
+@using System.Globalization;
+@using subtrack.MAUI.Shared.Components
+@inject NavigationManager NavigationManager
+@inject ISubscriptionService SubscriptionService
+
+<div class="d-flex justify-content-between" style="padding-bottom: 20px;">
+    <BackButton Url="@ReturnUrl"></BackButton>
+    <button type="submit" form="SubscriptionForm" class="btn btn-outline-success">
+        <i class="fa-solid fa-floppy-disk"></i>
+    </button>
+</div>
+
+<EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="UpsertSubscriptionAsync">
+    <div>
+        <ValidationSummary />
+        <DataAnnotationsValidator/>
+        <InputText class="form-control" placeholder="Service Name" @bind-Value="@_subscription.Name"></InputText>
+    </div>
+    <div class="input-group mb-3" style="padding-top: 15px;">
+        <span class="input-group-text">@_currency</span>
+        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@_subscription.Cost"></InputNumber>
+    </div>
+    <div style="display: flex;">
+        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Last Payment </label>
+        <InputDate class="form-control" @bind-Value="@_subscription.LastPayment"></InputDate>
+    </div>
+    <div class="form-check form-switch" style="padding-top: 10px">
+        <label class="form-check-label" for="autopaid">Auto Paid </label>
+        <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@_subscription.IsAutoPaid"></InputCheckbox>
+    </div>
+    <div class="form-group" style="padding-top: 10px;">
+        <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
+    </div>
+    <br/>
+</EditForm>
+
+@code {
+    [Parameter]
+    public int? Id { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string ReturnUrl { get; set; }
+
+    string _currency = "";
+
+    Subscription? _subscription = new();
+
+    protected override void OnInitialized()
+    {
+        RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
+        _currency = ri.ISOCurrencySymbol;
+        _subscription.LastPayment = DateTime.Today;
+    }
+
+    protected override async Task OnParametersSetAsync()
+    {
+        if (Id != null)
+        {
+            _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
+        }
+    }
+
+    public async Task UpsertSubscriptionAsync()
+    {
+        if (Id == null)
+        {
+            await SubscriptionService.CreateSubscriptionAsync(_subscription);
+            NavigationManager.NavigateTo($"Details/{_subscription.Id}?ReturnUrl={ReturnUrl}");
+
+        }
+        else
+        {
+            await SubscriptionService.Update(_subscription);
+            NavigationManager.NavigateTo(ReturnUrl);
+
+        }
+    }
+}

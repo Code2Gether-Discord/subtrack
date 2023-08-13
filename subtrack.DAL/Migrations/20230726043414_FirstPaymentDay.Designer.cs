@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using subtrack.DAL;
 
@@ -10,28 +11,13 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    partial class SubtrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230726043414_FirstPaymentDay")]
+    partial class FirstPaymentDay
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.18");
-
-            modelBuilder.Entity("subtrack.DAL.Entities.SettingsBase", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("settings_type")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Settings");
-
-                    b.HasDiscriminator<string>("settings_type").HasValue("SettingsBase");
-                });
 
             modelBuilder.Entity("subtrack.DAL.Entities.Subscription", b =>
                 {
@@ -62,22 +48,6 @@ namespace subtrack.DAL.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Subscriptions");
-                });
-
-            modelBuilder.Entity("subtrack.DAL.Entities.DateTimeSetting", b =>
-                {
-                    b.HasBaseType("subtrack.DAL.Entities.SettingsBase");
-
-                    b.Property<DateTime?>("Value")
-                        .HasColumnType("TEXT");
-
-                    b.HasDiscriminator().HasValue("DateTimeSetting");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "LastAutoPaymentTimeStamp"
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using subtrack.DAL;
 
@@ -10,9 +11,10 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    partial class SubtrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230813120452_settingsdata")]
+    partial class settingsdata
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.18");

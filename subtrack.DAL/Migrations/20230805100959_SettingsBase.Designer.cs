@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using subtrack.DAL;
 
@@ -10,9 +11,10 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    partial class SubtrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230805100959_SettingsBase")]
+    partial class SettingsBase
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.18");
@@ -45,9 +47,6 @@ namespace subtrack.DAL.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("TEXT");
 
-                    b.Property<int>("FirstPaymentDay")
-                        .HasColumnType("INTEGER");
-
                     b.Property<bool>("IsAutoPaid")
                         .HasColumnType("INTEGER");
 
@@ -72,12 +71,6 @@ namespace subtrack.DAL.Migrations
                         .HasColumnType("TEXT");
 
                     b.HasDiscriminator().HasValue("DateTimeSetting");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = "LastAutoPaymentTimeStamp"
-                        });
                 });
 #pragma warning restore 612, 618
         }

@@ -4,7 +4,19 @@ VisualStudioVersion = 17.0.31611.283
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "subtrack.MAUI", "subtrack.MAUI\subtrack.MAUI.csproj", "{CDCB7FEA-8871-4847-B912-E04FC32F61E3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "subtrack.DAL", "subtrack.DAL\subtrack.DAL.csproj", "{D131C870-E059-4BD2-AD60-5AFB0B6D81EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "subtrack.DAL", "subtrack.DAL\subtrack.DAL.csproj", "{D131C870-E059-4BD2-AD60-5AFB0B6D81EE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{29BE4662-B884-4DB2-8211-06EBD93EB0CC}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		docs\mockups.drawio = docs\mockups.drawio
+		docs\mockups.png = docs\mockups.png
+		README.md = README.md
+		docs\roadmap.drawio = docs\roadmap.drawio
+		docs\roadmap.png = docs\roadmap.png
+	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "subtrack.Tests", "subtrack.Tests\subtrack.Tests.csproj", "{AA895297-825C-4084-B7FA-9343F46240A6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,6 +34,10 @@ Global
 		{D131C870-E059-4BD2-AD60-5AFB0B6D81EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D131C870-E059-4BD2-AD60-5AFB0B6D81EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D131C870-E059-4BD2-AD60-5AFB0B6D81EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AA895297-825C-4084-B7FA-9343F46240A6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AA895297-825C-4084-B7FA-9343F46240A6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AA895297-825C-4084-B7FA-9343F46240A6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AA895297-825C-4084-B7FA-9343F46240A6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

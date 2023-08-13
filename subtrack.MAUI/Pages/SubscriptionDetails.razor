@@ -1,0 +1,141 @@
+﻿@page "/details/{Id:int}"
+@using System.Globalization;
+@using subtrack.MAUI.Utilities;
+@using subtrack.MAUI.Shared.Components
+@inject ISubscriptionService subscriptionService
+@inject NavigationManager navigationManager
+@inject ISubscriptionsCalculator subscriptionsCalculator
+@inject IDateProvider dateTimeProvider
+
+@if (_subscription is null)
+{
+    <div>Subscription details not found</div>
+}
+else
+{
+    <div class="container">
+        <div class="d-flex justify-content-between border-bottom py-2">
+            <div>
+                <BackButton Url="@ReturnUrl"></BackButton>
+            </div>
+            <div>
+                <h2 class="ps-3 text-break">@_subscription.Name</h2>
+            </div>
+            <div>
+                <EditButton Url="@EditUrl"></EditButton>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
+                @if (_subscription.IsAutoPaid)
+                {
+                    <i class="fa fa-repeat" aria-hidden="true"></i>
+                }
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex flex-column justify-content-center">
+                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
+                <div class="text-center">@_dueTimeText</div>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <button aria-label="Mark as paid" type="button" class="btn btn-primary" onclick="@(() => MarkSubscriptionAsPaid())">
+                    <i class="fa-solid fa-check"></i>&nbsp;
+                    Mark paid
+                </button>
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                Latest payment @_subscription.LastPayment.ToString("MMMM dd, yyyy", _usCulture)
+            </div>
+        </div>
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
+            </div>
+        </div>
+        @if (!string.IsNullOrWhiteSpace(_subscription.Description))
+        {
+            <div class="row border-bottom py-2 d-flex justify-content-center text-break">
+                @_subscription.Description
+            </div>
+        }
+        <div class="row border-bottom py-2">
+            <div class="col-12 d-flex justify-content-center">
+                <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
+                    <i class="fa-sharp fa-solid fa-trash"></i>&nbsp;
+                    @(_deleteButtonClicked ? "Confirm" : "Delete")
+                </button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    [Parameter]
+    [SupplyParameterFromQuery]
+    public string? ReturnUrl { get; set; }
+
+    public string? EditUrl { get; set; }
+
+    private string _dueTimeText = "";
+
+    Subscription? _subscription;
+
+    bool _deleteButtonClicked;
+
+    DateTime _nextPaymentDate;
+    private CultureInfo _usCulture = new CultureInfo("en-US");
+
+    protected override async Task OnInitializedAsync()
+    {
+        _subscription = await subscriptionService.GetByIdIfExists(Id);
+        _deleteButtonClicked = false;
+        if (_subscription is not null)
+        {
+            EditUrl = $"/EditSubscription/{Id}?ReturnUrl={navigationManager.Uri}";
+            _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+            _dueTimeText = GetDueTimeText(_nextPaymentDate);
+        }
+    }
+
+    private string GetDueTimeText(DateTime duedate)
+    {
+        var dueTime = _nextPaymentDate.TimeRemainingFromToday(dateTimeProvider);
+        if (dueTime.Days == 0)
+        {
+            return "today";
+        }
+
+        var dueTimeText = dueTime.Humanize(3, minUnit: Humanizer.Localisation.TimeUnit.Day, maxUnit: Humanizer.Localisation.TimeUnit.Month);
+
+        return duedate.IsPastDate(dateTimeProvider) ? $"{dueTimeText} ago" : dueTimeText;
+    }
+
+    private async Task MarkSubscriptionAsPaid()
+    {
+        _subscription = await subscriptionService.MarkNextPaymentAsPaidAsync(_subscription.Id);
+
+        _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
+        _dueTimeText = GetDueTimeText(_nextPaymentDate);
+
+    }
+
+    private async Task OnDelete()
+    {
+        if (!_deleteButtonClicked)
+        {
+            _deleteButtonClicked = true;
+            return;
+        }
+        await subscriptionService.Delete(Id);
+        navigationManager.NavigateTo("/", replace: true);
+    }
+}

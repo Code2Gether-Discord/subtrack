@@ -1,0 +1,22 @@
+﻿@namespace subtrack.MAUI.Shared.Components
+
+@inject NavigationManager Navigator
+
+<div style="
+        position: fixed;
+        bottom: 90px;
+        right: 20px;
+        z-index: 100">
+    <NavLink class="nav-link d-flex align-items-center clickable" data-bs-theme="dark" href="@CreateSubscriptionUrl">
+        <i class="bi bi-plus-circle larger-icon" style="font-size: 35px"></i>
+    </NavLink>
+</div>
+
+@code {
+    public string CreateSubscriptionUrl { get; set; } = null!;
+
+    protected override void OnInitialized()
+    {
+        CreateSubscriptionUrl = $"/CreateSubscription?ReturnUrl={Navigator.Uri}";
+    }
+}
