@@ -29,8 +29,7 @@ namespace subtrack.MAUI.Services
 
         public async Task Update(Subscription subscriptionToUpdate)
         {
-            var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id)
-                ?? throw new NotFoundException($"Subscription with id: {subscriptionToUpdate.Id} not found.");
+            var sub = await GetByIdAsync(subscriptionToUpdate.Id);
 
             if (sub.LastPayment.Date != subscriptionToUpdate.LastPayment.Date)
             {
@@ -49,7 +48,7 @@ namespace subtrack.MAUI.Services
 
         public async Task Delete(int id)
         {
-            var sub = await _context.Subscriptions.FindAsync(id) ?? throw new NotFoundException($"Subscription with an id:{id} not found.");
+            var sub = await GetByIdAsync(id);
             _context.Subscriptions.Remove(sub);
             await _context.SaveChangesAsync();
         }
@@ -73,7 +72,7 @@ namespace subtrack.MAUI.Services
 
         public async Task<Subscription> MarkNextPaymentAsPaidAsync(int subscriptionId)
         {
-            var sub = await GetById(subscriptionId);
+            var sub = await GetByIdAsync(subscriptionId);
             sub.LastPayment = _subscriptionsCalculator.GetNextPaymentDate(sub);
             await _context.SaveChangesAsync();
 
@@ -82,7 +81,7 @@ namespace subtrack.MAUI.Services
 
         public async Task<Subscription> AutoPayAsync(int subscriptionId)
         {
-            var subscription = await GetById(subscriptionId);
+            var subscription = await GetByIdAsync(subscriptionId);
             AutoPay(subscription);
             await _context.SaveChangesAsync();
 
@@ -102,7 +101,7 @@ namespace subtrack.MAUI.Services
             AutoPay(subscription);
         }
 
-        private async Task<Subscription> GetById(int subscriptionId)
+        private async Task<Subscription> GetByIdAsync(int subscriptionId)
         {
             return await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId)
                ?? throw new NotFoundException($"Subscription with an id:{subscriptionId} not found.");
