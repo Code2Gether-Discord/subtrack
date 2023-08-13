@@ -1,10 +1,7 @@
-# subtrack <em>- A simplistic subscription tracker</em>
+subtrack <em>- A simplistic subscription tracker</em>
 
 Keep track of what subscriptions you have, when they have to be paid and how much you are paying.
 
-# Table of contents
-- [subtrack - A simplistic subscription tracker](#subtrack---a-simplistic-subscription-tracker)
-- [Table of contents](#table-of-contents)
 - [Development Info](#development-info)
   - [Running the project](#running-the-project)
   - [Github Workflow](#github-workflow)
