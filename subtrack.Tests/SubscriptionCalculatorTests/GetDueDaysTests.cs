@@ -9,7 +9,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetDueDaysTests
 {
     private readonly ISubscriptionsCalculator _sut;
-    private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+    private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
 
     public GetDueDaysTests()
     {
@@ -20,7 +20,7 @@ public class GetDueDaysTests
     public void GetDueDays_DueDateHasPassed_ReturnsNegativeDueDays()
     {
         //Arrange
-        _dateTimeProvider.Now
+        _dateTimeProvider.Today
                          .Returns(new DateTime(2023, 06, 05));
 
         var subscription = new Subscription { LastPayment = new DateTime(2023, 05, 02), FirstPaymentDay = new DateTime(2023, 05, 02).Day };
@@ -37,7 +37,7 @@ public class GetDueDaysTests
     public void GetDueDays_ReturnsCorrectDueDate(DateTime date, int expectedResult)
     {
         // Arrange
-        _dateTimeProvider.Now
+        _dateTimeProvider.Today
                          .Returns(new DateTime(2023, 06, 05));
         var subscription = new Subscription { LastPayment = date , FirstPaymentDay =date.Day};
 

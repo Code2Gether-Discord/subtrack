@@ -4,29 +4,32 @@ using subtrack.DAL.Entities;
 using subtrack.MAUI.Exceptions;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
-using System;
 
 namespace subtrack.MAUI.Services
 {
     internal class SubscriptionService : ISubscriptionService
     {
         private readonly SubtrackDbContext _context;
-        public SubscriptionService(SubtrackDbContext context) => _context = context;
+        private readonly ISubscriptionsCalculator _subscriptionsCalculator;
 
-        public async Task<IEnumerable<Subscription>> GetSubscriptions(GetSubscriptionsFilter? filter = null)
+        public SubscriptionService(SubtrackDbContext context, ISubscriptionsCalculator subscriptionsCalculator)
         {
-            if (filter is not null) return await _context.Subscriptions
-                    .WhereIf(sub => sub.IsAutoPaid == filter.AutoPaid, filter.AutoPaid is not null)
-                    .ToListAsync();
+            _context = context;
+            _subscriptionsCalculator = subscriptionsCalculator;
+        }
 
-            return await _context.Subscriptions.ToListAsync();
+        public async Task<IEnumerable<Subscription>> GetAllAsync(GetSubscriptionsFilter? filter = null)
+        {
+            var query = _context.Subscriptions.AsNoTracking();
+            if (filter is not null)
+                query = query.WhereIf(sub => sub.IsAutoPaid == filter.AutoPaid, filter.AutoPaid is not null);
+
+            return await query.ToListAsync();
         }
 
         public async Task Update(Subscription subscriptionToUpdate)
         {
-            var sub = await _context.Subscriptions.FindAsync(subscriptionToUpdate.Id);
-
-            if (sub == null) throw new NotFoundException($"Subscription with id: {subscriptionToUpdate.Id} not found.");
+            var sub = await GetByIdAsync(subscriptionToUpdate.Id);
 
             if (sub.LastPayment.Date != subscriptionToUpdate.LastPayment.Date)
             {
@@ -37,6 +40,7 @@ namespace subtrack.MAUI.Services
             sub.Name = subscriptionToUpdate.Name;
             sub.Description = subscriptionToUpdate.Description;
             sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
+            AutoPay(sub);
             sub.Cost = subscriptionToUpdate.Cost;
 
             await _context.SaveChangesAsync();
@@ -44,40 +48,63 @@ namespace subtrack.MAUI.Services
 
         public async Task Delete(int id)
         {
-            var sub = await _context.Subscriptions.FindAsync(id);
-
-            if (sub == null) throw new NotFoundException($"Subscription with an id:{id} not found.");
-
+            var sub = await GetByIdAsync(id);
             _context.Subscriptions.Remove(sub);
             await _context.SaveChangesAsync();
         }
 
-        public async Task<Subscription?> GetById(int id)
+        public async Task<Subscription?> GetByIdIfExists(int id)
         {
-            var sub = await _context.Subscriptions.AsNoTracking()
+            return await _context.Subscriptions.AsNoTracking()
                                                   .FirstOrDefaultAsync(s => s.Id == id);
-
-            return sub;
         }
 
         public async Task<Subscription> CreateSubscriptionAsync(Subscription subscriptionToCreate)
         {
             subscriptionToCreate.LastPayment = subscriptionToCreate.LastPayment.Date;
             subscriptionToCreate.FirstPaymentDay = subscriptionToCreate.LastPayment.Day;
+            AutoPay(subscriptionToCreate);
             await _context.Subscriptions.AddAsync(subscriptionToCreate);
             await _context.SaveChangesAsync();
+
             return subscriptionToCreate;
         }
-        public async Task<DateTime> UpdateLastPaymentDateAsync(int subscriptionId, DateTime newLastPaymentDate)
+
+        public async Task<Subscription> MarkNextPaymentAsPaidAsync(int subscriptionId)
         {
-            var sub = await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId);
-
-            if (sub is  null) throw new NotFoundException($"Subscription with an id:{subscriptionId} not found.");
-
-            sub.LastPayment = newLastPaymentDate;
+            var sub = await GetByIdAsync(subscriptionId);
+            sub.LastPayment = _subscriptionsCalculator.GetNextPaymentDate(sub);
             await _context.SaveChangesAsync();
 
-            return newLastPaymentDate;
+            return sub;
+        }
+
+        public async Task<Subscription> AutoPayAsync(int subscriptionId)
+        {
+            var subscription = await GetByIdAsync(subscriptionId);
+            AutoPay(subscription);
+            await _context.SaveChangesAsync();
+
+            return subscription;
+        }
+
+        private void AutoPay(Subscription subscription)
+        {
+            if (!subscription.IsAutoPaid)
+                return;
+
+            var (isDue, dueDate) = _subscriptionsCalculator.IsDue(subscription);
+            if (!isDue)
+                return;
+
+            subscription.LastPayment = dueDate;
+            AutoPay(subscription);
+        }
+
+        private async Task<Subscription> GetByIdAsync(int subscriptionId)
+        {
+            return await _context.Subscriptions.FirstOrDefaultAsync(s => s.Id == subscriptionId)
+               ?? throw new NotFoundException($"Subscription with an id:{subscriptionId} not found.");
         }
     }
 }

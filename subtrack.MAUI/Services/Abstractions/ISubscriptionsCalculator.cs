@@ -9,5 +9,6 @@ namespace subtrack.MAUI.Services.Abstractions
         decimal GetYearlyCost(Subscription subscription);
         IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate);
         DateTime GetNextPaymentDate(Subscription subscription);
+        (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription);
     }
 }
