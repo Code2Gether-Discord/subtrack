@@ -3,9 +3,15 @@
 Keep track of what subscriptions you have, when they have to be paid and how much you are paying.
 
 # Table of contents
-- [Development info](#development-info)
-- [MVP](#mvp)
-- [Roadmap](#roadmap-2023)
+- [subtrack - A simplistic subscription tracker](#subtrack---a-simplistic-subscription-tracker)
+- [Table of contents](#table-of-contents)
+- [Development Info](#development-info)
+  - [Running the project](#running-the-project)
+  - [Github Workflow](#github-workflow)
+  - [Github Issues](#github-issues)
+  - [Creating database migrations](#creating-database-migrations)
+  - [Design](#design)
+- [Roadmap 2023](#roadmap-2023)
 
 # Development Info
 
@@ -21,7 +27,7 @@ Before preceding make sure you have installed ".NET Multi-platform App UI develo
 
 *Note that you can run the project without the android emulator as long as you won't be making any UI changes, alternatively tell someone else to verify the UI looks ok*
 
-## Github
+## Github Workflow
 
 1. Clone the project and checkout the **dev** branch.
 2. Assign yourself to an issue and create a new branch from **dev** with this format if the parent issue has been labeled with "feature": **$"feature/{InsertTitleOfIssue}"**
@@ -29,7 +35,7 @@ Before preceding make sure you have installed ".NET Multi-platform App UI develo
 4. Open up a Pull request from the branch with the changes to the **dev** branch
 5. Wait for other developers feedback. When the Pull request has been approved click squash merge and delete the branch afterwards
 
-### Issues
+## Github Issues
 
 - Every "feature" has been labeled with "feature" and usually contains subtasks to fulfill that specific feature
 - Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description.
@@ -52,5 +58,5 @@ After making changes to any entity you need to add a migration and update the da
 - This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
 - Mockups are created with drawio and any changes are saved as a png inside /docs
 
-## Roadmap 2023
+# Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
