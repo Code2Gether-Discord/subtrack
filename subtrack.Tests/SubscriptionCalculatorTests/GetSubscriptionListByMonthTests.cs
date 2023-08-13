@@ -8,12 +8,12 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
     public class GetSubscriptionListByMonthTests
     {
         private readonly ISubscriptionsCalculator _sut;
-        private readonly IDateTimeProvider _dateTimeProvider = Substitute.For<IDateTimeProvider>();
+        private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
 
         public GetSubscriptionListByMonthTests()
         {
             _sut = new SubscriptionsCalculator(_dateTimeProvider);
-            _dateTimeProvider.Now.Returns(DateTime.Now);
+            _dateTimeProvider.Today.Returns(DateTime.Now);
         }
 
         [Fact]

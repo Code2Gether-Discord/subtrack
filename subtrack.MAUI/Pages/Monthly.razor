@@ -28,7 +28,7 @@
 
     protected override async Task OnInitializedAsync()
     {
-        _subscriptions = (await SubscriptionService.GetSubscriptions())
+        _subscriptions = (await SubscriptionService.GetAllAsync())
             .OrderBy(s => s.LastPayment.Day)
             .ToArray();
 

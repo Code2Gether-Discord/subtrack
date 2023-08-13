@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using subtrack.DAL.Entities;
+﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
 
@@ -9,11 +8,11 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 {
     private const int _monthsInAYear = 12;
 
-    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IDateProvider _dateProvider;
 
-    public SubscriptionsCalculator(IDateTimeProvider dateTimeProvider)
+    public SubscriptionsCalculator(IDateProvider dateProvider)
     {
-        _dateTimeProvider = dateTimeProvider;
+        _dateProvider = dateProvider;
     }
 
     public int GetDueDays(Subscription subscription)
@@ -22,7 +21,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             throw new ArgumentNullException(nameof(subscription));
 
         var dueDate = GetNextPaymentDate(subscription);
-        var duration = dueDate.TimeRemainingFromToday(_dateTimeProvider);
+        var duration = dueDate.TimeRemainingFromToday(_dateProvider);
         return duration.Days;
     }
 
@@ -59,13 +58,19 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         int startDay = subscription.FirstPaymentDay;
         var lastPayment = subscription.LastPayment;
-        
 
         var nextMonthDate = lastPayment.AddMonths(1);
         var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
 
         if (startDay > nextMonthTotalDays)
             return nextMonthDate;
+
         return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
+    }
+
+    public (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription)
+    {
+        var nextPaymentDate = GetNextPaymentDate(subscription);
+        return (nextPaymentDate <= _dateProvider.Today, nextPaymentDate);
     }
 }
