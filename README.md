@@ -24,12 +24,19 @@ Before preceding make sure you have installed ".NET Multi-platform App UI develo
 ## Github
 
 1. Clone the project and checkout the **dev** branch.
-2. Assign yourself to an issue and create a new branch from **dev** with this format: **$"feature/{InsertTitleOfIssue}"**
+2. Assign yourself to an issue and create a new branch from **dev** with this format if the parent issue has been labeled with "feature": **$"feature/{InsertTitleOfIssue}"**
 3. Make some changes, commit the changes then push them to github
 4. Open up a Pull request from the branch with the changes to the **dev** branch
 5. Wait for other developers feedback. When the Pull request has been approved click squash merge and delete the branch afterwards
 
-*Every feature has been labeled with "Feature" and usually contains subtasks to fulfill that specific feature. Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description. Feel free to team up with someone and tackle an issue together, that would be a great learning experience. Some Issues might have easier to understand requirements than others, if something is unclear the best communication channel is discord.*
+### Issues
+
+- Every "feature" has been labeled with "feature" and usually contains subtasks to fulfill that specific feature
+- Feel free to complete multiple subtasks in one Pull request as long as you make it clear which issues the pull requests closes by writing `closes #{issueNumber}` inside the pull request description.
+- Focusing on fewer issues at once allows for concurrent development and prevents issues being blocked by other issues, ensuring smoother workflow.
+- Try to get a Pull request up as soon as possible especially if you are stuck, this way you can easily ask questions about particular implementation details and get feedback before making any major changes.
+- If the issue is unclear make sure to let the creator know, that is the only way they can help you sort out any unclarities
+- Feel free to team up with someone and tackle an issue together, that would be a great learning experience. Some issues might have easier to understand requirements than others*
 
 ## Creating database migrations
 
@@ -44,34 +51,6 @@ After making changes to any entity you need to add a migration and update the da
 ## Design
 - This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
 - Mockups are created with drawio and any changes are saved as a png inside /docs
-
-## MVP
-#### Start page
-
-- [x] Display total subscriptions cost per month at the top of the page
-- [x] List every subscription with their name and cost 
-- [x] Show how many days left each subscription is due
-
-#### Subscriptions page
-
-- [x] Display every month and the total cost of subscriptions for that month
-- [x] List subscriptions under each month showing the name, cost, if it's auto paid and how many days left until it's due
-
-#### Upsert page
-- [x]  Create a new subscription
-- [ ]  Edit an existing subscription
-
-### Details page
-- [x] Mark subscription as paid
-- [x] display all details like lastpayment
-- [x] Delete subscription
-
-#### Start and subscriptions page
-- [x] Clicking on a subscription takes you to the details page
-- [x] Add a + button at the bottom of the page for adding a new subscription
-
-#### Release
-- [ ] Test the app on an android phone 
 
 ## Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
