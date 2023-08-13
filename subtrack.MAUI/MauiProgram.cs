@@ -32,6 +32,7 @@ public static class MauiProgram
         builder.Services.AddScoped<IDateTimeProvider, DateTimeProvider>();
         builder.Services.AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>();
         builder.Services.AddScoped<ISettingsService, SettingsService>();
+        builder.Services.AddScoped<AutoPaymentHandler>();
 
         using var sp = builder.Services.BuildServiceProvider();
         var db = sp.GetRequiredService<SubtrackDbContext>();
@@ -40,8 +41,9 @@ public static class MauiProgram
 #else
             db.Database.Migrate();
 #endif      
-        var autoPaymentHandler = new AutoPaymentHandler();
-        autoPaymentHandler.ExecuteAsync();
+        sp.GetRequiredService<AutoPaymentHandler>()
+            .ExecuteAsync()
+            .RunSynchronously();
 
         return builder.Build();
     }

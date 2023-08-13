@@ -11,9 +11,12 @@ public class SubtrackDbContext : DbContext
     public SubtrackDbContext(DbContextOptions<SubtrackDbContext> options) : base(options)
     {
     }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<SettingsBase>().HasDiscriminator<string>("settings_type")
             .HasValue<DateTimeSetting>(nameof(DateTimeSetting));
+
+        modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.Key, Value = null });
     }
 }

@@ -16,7 +16,7 @@ namespace subtrack.MAUI.Services
         private ISettingsService _settingsService;
         private GetSubscriptionsFilter filter;
         
-        private bool HasExecutedToday(Subscription subscription)
+        private Task<bool> HasExecutedToday()
         {
             if(subscription.LastPayment == DateTime.Today)
             {
