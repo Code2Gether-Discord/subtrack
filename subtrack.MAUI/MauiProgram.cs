@@ -5,6 +5,9 @@ using subtrack.MAUI.Services;
 using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using subtrack.DAL.Migrations;
+using System.Runtime.CompilerServices;
+
+[assembly: InternalsVisibleTo("subtrack.Tests")]
 
 namespace subtrack.MAUI;
 
@@ -15,10 +18,7 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-            });
+            .ConfigureFonts(fonts => fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"));
 
         builder.Services.AddMauiBlazorWebView();
 #if DEBUG
@@ -33,8 +33,7 @@ public static class MauiProgram
             db.Database.Migrate();
 #endif      
         sp.GetRequiredService<AutoPaymentHandler>()
-            .ExecuteAsync()
-            .RunSynchronously();
+            .ExecuteAsync().Wait();
 
         return builder.Build();
     }
@@ -62,9 +61,9 @@ public static class MauiProgram
                   new DAL.Entities.Subscription() { Name = "paramount", LastPayment = todayLastMonth.AddDays(-1), FirstPaymentDay = todayLastMonth.AddDays(-1).Day, Cost = 3m, },
                   new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = todayLastMonth, FirstPaymentDay = todayLastMonth.Day, Cost = 3m, },
                   new DAL.Entities.Subscription() { Name = "Netflix", LastPayment = DateTime.Now.AddDays(-1), FirstPaymentDay = DateTime.Now.AddDays(-1).Day, IsAutoPaid = true, Description = "family plan", Cost = 10 },
-                  new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, FirstPaymentDay = DateTime.Now.Day, Cost = 1.5m, }
+                  new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, FirstPaymentDay = DateTime.Now.Day, Cost = 1.5m, },
+                  new DAL.Entities.Subscription() { Name = "hulu", LastPayment = DateTime.Now.AddMonths(-2), FirstPaymentDay = 1, Cost = 1.5m, IsAutoPaid = true }
                   );
-
 
         dbContext.SaveChanges();
     }

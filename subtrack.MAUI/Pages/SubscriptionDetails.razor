@@ -96,7 +96,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        _subscription = await subscriptionService.GetById(Id);
+        _subscription = await subscriptionService.GetByIdIfExists(Id);
         _deleteButtonClicked = false;
         if (_subscription is not null)
         {
@@ -121,13 +121,11 @@ else
 
     private async Task MarkSubscriptionAsPaid()
     {
-
-        _ = await subscriptionService.UpdateLastPaymentDateAsync(Id, _nextPaymentDate);
-        _subscription.LastPayment = _nextPaymentDate;
+        _subscription = await subscriptionService.MarkNextPaymentAsPaidAsync(_subscription.Id);
 
         _nextPaymentDate = subscriptionsCalculator.GetNextPaymentDate(_subscription);
         _dueTimeText = GetDueTimeText(_nextPaymentDate);
-      
+
     }
 
     private async Task OnDelete()

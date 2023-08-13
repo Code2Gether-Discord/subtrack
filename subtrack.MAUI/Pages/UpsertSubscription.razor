@@ -48,7 +48,7 @@
 
     Subscription? _subscription = new();
 
-    protected override async Task OnInitializedAsync()
+    protected override void OnInitialized()
     {
         RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
         _currency = ri.ISOCurrencySymbol;
@@ -59,7 +59,7 @@
     {
         if (Id != null)
         {
-            _subscription = await SubscriptionService.GetById(Id.Value);
+            _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
         }
     }
 

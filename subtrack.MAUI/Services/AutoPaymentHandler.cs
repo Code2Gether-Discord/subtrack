@@ -39,12 +39,11 @@ namespace subtrack.MAUI.Services
 
             foreach (var sub in autoPaidSubs)
             {
-                var nextPaymentDate = _subscriptionsCalculator.GetNextPaymentDate(sub);
-                var paymentIsDue = nextPaymentDate <= _dateProvider.Today;
-                if (!paymentIsDue)
+                if (!_subscriptionsCalculator.IsDue(sub).IsDue)
                     continue;
 
-                await _subscriptionService.UpdateLastPaymentDateAsync(sub.Id, nextPaymentDate);
+                await _subscriptionService.AutoPayAsync(sub.Id);
+
             }
         }
     }
