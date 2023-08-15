@@ -18,5 +18,11 @@ public class SubtrackDbContext : DbContext
             .HasValue<DateTimeSetting>(nameof(DateTimeSetting));
 
         modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.LastAutoPaymentTimeStampKey, Value = null });
+
+        modelBuilder.Entity<Subscription>(entity =>
+        {
+            entity.Property(e => e.BillingOccurrence).HasDefaultValue(BillingOccurrence.Month);
+            entity.Property(e => e.BillingInterval).HasDefaultValue(1);
+        });
     }
 }

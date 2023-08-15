@@ -18,4 +18,8 @@ public class Subscription
     public int FirstPaymentDay { get; set; } 
     [Required]
     public DateTime LastPayment { get; set; }
+
+    public BillingOccurrence BillingOccurrence { get; set; }
+
+    public int BillingInterval { get; set; }
 }
