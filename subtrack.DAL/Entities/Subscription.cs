@@ -18,4 +18,9 @@ public class Subscription
     public int FirstPaymentDay { get; set; } 
     [Required]
     public DateTime LastPayment { get; set; }
+
+    public BillingOccurrence BillingOccurrence { get; set; }
+
+    [Range(1, int.MaxValue, ErrorMessage = "Interval has to be greater than 0")]
+    public int BillingInterval { get; set; }
 }
