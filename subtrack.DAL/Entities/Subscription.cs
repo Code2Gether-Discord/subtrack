@@ -21,5 +21,6 @@ public class Subscription
 
     public BillingOccurrence BillingOccurrence { get; set; }
 
+    [Range(1, int.MaxValue)]
     public int BillingInterval { get; set; }
 }
