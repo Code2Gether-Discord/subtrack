@@ -46,7 +46,11 @@
 
     string _currency = "";
 
-    Subscription? _subscription = new();
+    Subscription? _subscription = new()
+        {
+            BillingInterval = 1,
+            BillingOccurrence = BillingOccurrence.Month // Temporary solution till #86 is in place
+        };
 
     protected override void OnInitialized()
     {
