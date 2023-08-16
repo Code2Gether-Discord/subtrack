@@ -58,11 +58,11 @@ public static class MauiProgram
         dbContext.Database.Migrate();
 
         dbContext.Subscriptions.AddRange(
-                  new DAL.Entities.Subscription() { Name = "paramount", LastPayment = todayLastMonth.AddDays(-1), FirstPaymentDay = todayLastMonth.AddDays(-1).Day, Cost = 3m, BillingOccurrence = DAL.Entities.BillingOccurrence.Month },
+                  new DAL.Entities.Subscription() { Name = "paramount", LastPayment = todayLastMonth.AddDays(-1), FirstPaymentDay = todayLastMonth.AddDays(-1).Day, Cost = 3m, BillingOccurrence = DAL.Entities.BillingOccurrence.Week, BillingInterval = 2 },
                   new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = todayLastMonth, FirstPaymentDay = todayLastMonth.Day, Cost = 3m, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 1 },
                   new DAL.Entities.Subscription() { Name = "Netflix", LastPayment = DateTime.Now.AddDays(-1), FirstPaymentDay = DateTime.Now.AddDays(-1).Day, IsAutoPaid = true, Description = "family plan", Cost = 10, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 1 },
-                  new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, FirstPaymentDay = DateTime.Now.Day, Cost = 1.5m, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 1 },
-                  new DAL.Entities.Subscription() { Name = "hulu", LastPayment = DateTime.Now.AddMonths(-2), FirstPaymentDay = 1, Cost = 1.5m, IsAutoPaid = true, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 1 }
+                  new DAL.Entities.Subscription() { Name = "hbo", LastPayment = DateTime.Now, FirstPaymentDay = DateTime.Now.Day, Cost = 1.5m, BillingOccurrence = DAL.Entities.BillingOccurrence.Year, BillingInterval = 1 },
+                  new DAL.Entities.Subscription() { Name = "hulu", LastPayment = DateTime.Now.AddMonths(-2), FirstPaymentDay = 1, Cost = 1.5m, IsAutoPaid = true, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 3 }
                   );
 
         dbContext.SaveChanges();
