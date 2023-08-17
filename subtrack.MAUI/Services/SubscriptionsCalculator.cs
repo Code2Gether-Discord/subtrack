@@ -1,6 +1,7 @@
 ﻿using subtrack.DAL.Entities;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
+using System.Globalization;
 
 namespace subtrack.MAUI.Services;
 
@@ -38,8 +39,14 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         if (subscription is null)
             throw new ArgumentNullException(nameof(subscription));
-
-        return subscription.Cost * _monthsInAYear;
+        var weeksInYear = ISOWeek.GetWeeksInYear(_dateProvider.Today.Year);
+        var yearlyPaymentsCount = (subscription.BillingOccurrence, subscription.BillingInterval) switch
+        {
+            (BillingOccurrence.Month, var monthlyInterval) when monthlyInterval <= _monthsInAYear => _monthsInAYear / monthlyInterval,
+            (BillingOccurrence.Week, var weeklyInterval) when weeklyInterval <= weeksInYear => weeksInYear / weeklyInterval,
+            _ => throw new NotImplementedException("Only billing Cycles within a year are supported")
+        };
+        return subscription.Cost * yearlyPaymentsCount;
     }
 
     public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
