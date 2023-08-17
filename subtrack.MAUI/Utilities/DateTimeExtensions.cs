@@ -12,4 +12,8 @@ public static class DateTimeExtensions
     {
         return date < dateTimeProvider.Today;
     }
+    public static DateTime AddWeeks(this DateTime date, int weeks)
+    {
+        return date.AddDays(weeks * 7);
+    }
 }

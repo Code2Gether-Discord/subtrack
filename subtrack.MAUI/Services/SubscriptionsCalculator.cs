@@ -65,14 +65,29 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         int startDay = subscription.FirstPaymentDay;
         var lastPayment = subscription.LastPayment;
+        switch (subscription.BillingOccurrence)
+        {
+            case BillingOccurrence.Week:
+                var nextWeekDate = lastPayment.AddWeeks(subscription.BillingInterval);
+                return new DateTime(nextWeekDate.Year, nextWeekDate.Month, nextWeekDate.Day);
+            case BillingOccurrence.Month:
+                var nextMonthDate = lastPayment.AddMonths(subscription.BillingInterval);
+                var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
 
-        var nextMonthDate = lastPayment.AddMonths(1);
-        var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
+                if (startDay > nextMonthTotalDays)
+                    return nextMonthDate;
 
-        if (startDay > nextMonthTotalDays)
-            return nextMonthDate;
+                return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
+            case BillingOccurrence.Year:
+                var nextYearDate = lastPayment.AddYears(subscription.BillingInterval);
 
-        return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
+                if (!DateTime.IsLeapYear(nextYearDate.Year))
+                    return nextYearDate;
+                return new DateTime(nextYearDate.Year, nextYearDate.Month, startDay);
+            default:
+                throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
+        }
+        
     }
 
     public (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription)
