@@ -34,16 +34,20 @@
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
     <div style="display: flex;padding-top: 10px;">
-        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;" for="billingOccurrence">Billing Occurrence </label>
-        <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control" id="billingOccurrence">
+        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Billing Cycle every </label>
+    </div>
+    <div class="d-flex flex-column flex-sm-row" style="padding-top: 10px;">
+        <div class="flex-fill mr-sm-1">
+            <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control">
             <option value="@BillingOccurrence.Week">Week</option>
             <option value="@BillingOccurrence.Month">Month</option>
             <option value="@BillingOccurrence.Year">Year</option>
         </InputSelect>
-    </div>
-    <div style="display: flex;padding-top: 10px;">
-        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;" for="billingInterval">Billing Interval </label>
-        <InputNumber class="form-control" placeholder="Billing Interval" @bind-Value="@_subscription.BillingInterval" id="billingInterval"></InputNumber>
+        </div>
+        <div class="flex-fill">
+            <InputNumber class="form-control" placeholder="Billing Interval" @bind-Value="@_subscription.BillingInterval" id="billingInterval"></InputNumber>
+        </div>
+        
     </div>
     <br/>
 </EditForm>
