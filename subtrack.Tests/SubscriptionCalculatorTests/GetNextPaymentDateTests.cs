@@ -73,7 +73,7 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_WhenLastPaymentIsLastDayOfMonth_ReturnsPaymentDateWithLastDayOfNextMonth(DateTime lastPayment, DateTime expectedNextPaymentDate)
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = lastPayment, FirstPaymentDay = lastPayment.Day, BillingOccurrence = BillingOccurrence.Month};
+        var subscription = new Subscription { LastPayment = lastPayment, FirstPaymentDay = lastPayment.Day, BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1};
    
 
         // Act
@@ -87,7 +87,7 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsSameNextPaymentDateDay_AsFirstPaymentDay()
     {
         // Arrange
-        var subscription = new Subscription { FirstPaymentDay = 31, LastPayment = new DateTime(2023,11,30),BillingOccurrence = BillingOccurrence.Month};
+        var subscription = new Subscription { FirstPaymentDay = 31, LastPayment = new DateTime(2023,11,30),BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1};
    
 
         // Act
