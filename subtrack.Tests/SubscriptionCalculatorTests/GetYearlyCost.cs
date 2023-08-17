@@ -19,6 +19,7 @@ public class GetYearlyCostTests
     [ClassData(typeof(GetYearlyCostsTestData))]
     public void GetYearlyCost_ReturnsCorrectCost(Subscription subscription, decimal expectedCost)
     {
+        _dateTimeProvider.Today.Returns(new DateTime(2023, 1, 1));
         var result = _sut.GetYearlyCost(subscription);
         Assert.Equal(expectedCost, result);
     }
@@ -29,15 +30,35 @@ public class GetYearlyCostTests
         Assert.Throws<ArgumentNullException>(
             () => _sut.GetYearlyCost(null));
     }
+
+    [Theory]
+    [ClassData(typeof(GetInvalidYearlyCostsTestData))]
+    public void GetYearlyCost_InvalidBillingProps_Throws_NotImplementedException(Subscription subscription)
+    {
+        Assert.Throws<NotImplementedException>(
+            () => _sut.GetYearlyCost(subscription));
+    }
 }
 
 internal class GetYearlyCostsTestData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
-        yield return new object[] { new Subscription { Cost = 2.5m }, 30 };
-        yield return new object[] { new Subscription { Cost = 1 }, 12 };
-        yield return new object[] { new Subscription { Cost = 0 }, 0 };
+        yield return new object[] { new Subscription { Cost = 2.5m, BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1 }, 30 };
+        yield return new object[] { new Subscription { Cost = 5m, BillingOccurrence = BillingOccurrence.Week, BillingInterval = 2 }, 130 };
+        yield return new object[] { new Subscription { Cost = 0, BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1 }, 0 };
+    }
+
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+internal class GetInvalidYearlyCostsTestData : IEnumerable<object[]>
+{
+    public IEnumerator<object[]> GetEnumerator()
+    {
+        yield return new object[] { new Subscription { Cost = 2.5m, BillingOccurrence = BillingOccurrence.Year, BillingInterval = 1 } };
+        yield return new object[] { new Subscription { Cost = 5m, BillingOccurrence = BillingOccurrence.Week, BillingInterval = 60 } };
+        yield return new object[] { new Subscription { Cost = 0, BillingOccurrence = BillingOccurrence.Month, BillingInterval = 14 } };
     }
 
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
