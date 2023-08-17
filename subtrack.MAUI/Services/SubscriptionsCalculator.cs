@@ -68,7 +68,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         switch (subscription.BillingOccurrence)
         {
             case BillingOccurrence.Week:
-                var nextWeekDate = lastPayment.AddDays(7*subscription.BillingInterval);
+                var nextWeekDate = lastPayment.AddWeeks(subscription.BillingInterval);
                 return new DateTime(nextWeekDate.Year, nextWeekDate.Month, nextWeekDate.Day);
             case BillingOccurrence.Month:
                 var nextMonthDate = lastPayment.AddMonths(subscription.BillingInterval);
