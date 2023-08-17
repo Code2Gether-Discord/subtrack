@@ -80,6 +80,9 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
                 return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
             case BillingOccurrence.Year:
                 var nextYearDate = lastPayment.AddYears(subscription.BillingInterval);
+
+                if (!DateTime.IsLeapYear(nextYearDate.Year))
+                    return nextYearDate;
                 return new DateTime(nextYearDate.Year, nextYearDate.Month, nextYearDate.Day);
             default:
                 throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());

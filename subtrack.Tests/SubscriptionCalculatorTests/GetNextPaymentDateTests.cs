@@ -20,7 +20,8 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateWeekly()
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2) , FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence=BillingOccurrence.Week};
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2) , 
+            FirstPaymentDay = 2, BillingInterval = 1, BillingOccurrence=BillingOccurrence.Week};
         var expected = new DateTime(2023, 6, 9);
 
         // Act
@@ -33,7 +34,8 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateMonthly()
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), 
+            FirstPaymentDay = 2, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month };
         var expected = new DateTime(2023, 7, 2);
 
         // Act
@@ -46,7 +48,8 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateYearly()
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Year };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), 
+            FirstPaymentDay = 2, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Year };
         var expected = new DateTime(2024, 6, 2);
 
         // Act
@@ -59,7 +62,8 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateWeeklyTwoInterval()
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 2, BillingOccurrence = BillingOccurrence.Week };
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), 
+            FirstPaymentDay = 2, BillingInterval = 2, BillingOccurrence = BillingOccurrence.Week };
         var expected = new DateTime(2023, 6, 16);
 
         // Act
@@ -87,7 +91,8 @@ public class GetNextPaymentDateTests
     public void GetNextPaymentDate_ReturnsSameNextPaymentDateDay_AsFirstPaymentDay()
     {
         // Arrange
-        var subscription = new Subscription { FirstPaymentDay = 31, LastPayment = new DateTime(2023,11,30),BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1};
+        var subscription = new Subscription { FirstPaymentDay = 31, 
+            LastPayment = new DateTime(2023,11,30),BillingOccurrence = BillingOccurrence.Month, BillingInterval = 1};
    
 
         // Act
