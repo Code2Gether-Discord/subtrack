@@ -83,7 +83,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
                 if (!DateTime.IsLeapYear(nextYearDate.Year))
                     return nextYearDate;
-                return new DateTime(nextYearDate.Year, nextYearDate.Month, nextYearDate.Day);
+                return new DateTime(nextYearDate.Year, nextYearDate.Month, startDay);
             default:
                 throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
         }
