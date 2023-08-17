@@ -17,10 +17,23 @@ public class GetNextPaymentDateTests
     }
 
     [Fact]
-    public void GetNextPaymentDate_ReturnsCorrectNextPaymentDate()
+    public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateWeekly()
     {
         // Arrange
-        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2) , FirstPaymentDay = new DateTime(2023, 6, 2).Day};
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2) , FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence=BillingOccurrence.Week};
+        var expected = new DateTime(2023, 6, 9);
+
+        // Act
+        var result = _sut.GetNextPaymentDate(subscription);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+    [Fact]
+    public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateMonthly()
+    {
+        // Arrange
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month };
         var expected = new DateTime(2023, 7, 2);
 
         // Act
@@ -29,7 +42,32 @@ public class GetNextPaymentDateTests
         // Assert
         Assert.Equal(expected, result);
     }
+    [Fact]
+    public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateYearly()
+    {
+        // Arrange
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Year };
+        var expected = new DateTime(2024, 6, 2);
 
+        // Act
+        var result = _sut.GetNextPaymentDate(subscription);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
+    [Fact]
+    public void GetNextPaymentDate_ReturnsCorrectNextPaymentDateWeeklyTwoInterval()
+    {
+        // Arrange
+        var subscription = new Subscription { LastPayment = new DateTime(2023, 6, 2), FirstPaymentDay = new DateTime(2023, 6, 2).Day, BillingInterval = 2, BillingOccurrence = BillingOccurrence.Week };
+        var expected = new DateTime(2023, 6, 16);
+
+        // Act
+        var result = _sut.GetNextPaymentDate(subscription);
+
+        // Assert
+        Assert.Equal(expected, result);
+    }
     [Theory]
     [ClassData(typeof(GetNextPaymentDateTestData))]
     public void GetNextPaymentDate_WhenLastPaymentIsLastDayOfMonth_ReturnsPaymentDateWithLastDayOfNextMonth(DateTime lastPayment, DateTime expectedNextPaymentDate)

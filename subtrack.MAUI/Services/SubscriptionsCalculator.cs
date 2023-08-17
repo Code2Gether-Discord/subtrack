@@ -61,10 +61,10 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         switch (subscription.BillingOccurrence)
         {
             case BillingOccurrence.Week:
-                var nextWeekDate = lastPayment.AddDays(7);
+                var nextWeekDate = lastPayment.AddDays(7*subscription.BillingInterval);
                 return new DateTime(nextWeekDate.Year, nextWeekDate.Month, nextWeekDate.Day);
             case BillingOccurrence.Month:
-                var nextMonthDate = lastPayment.AddMonths(1);
+                var nextMonthDate = lastPayment.AddMonths(subscription.BillingInterval);
                 var nextMonthTotalDays = DateTime.DaysInMonth(nextMonthDate.Year, nextMonthDate.Month);
 
                 if (startDay > nextMonthTotalDays)
@@ -72,10 +72,10 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
                 return new DateTime(nextMonthDate.Year, nextMonthDate.Month, startDay);
             case BillingOccurrence.Year:
-                var nextYearDate = lastPayment.AddYears(1);
+                var nextYearDate = lastPayment.AddYears(subscription.BillingInterval);
                 return new DateTime(nextYearDate.Year, nextYearDate.Month, nextYearDate.Day);
             default:
-                throw new Exception();
+                throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
         }
         
     }
