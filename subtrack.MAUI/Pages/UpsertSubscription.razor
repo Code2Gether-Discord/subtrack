@@ -42,9 +42,9 @@
         </div>
         <div class="flex-fill">
             <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control">
-            <option value="@BillingOccurrence.Week">Week</option>
-            <option value="@BillingOccurrence.Month">Month</option>
-            <option value="@BillingOccurrence.Year">Year</option>
+                <option value="@BillingOccurrence.Week">@GetBillingOccurrenceDisplayText("Week")</option>
+                <option value="@BillingOccurrence.Month">@GetBillingOccurrenceDisplayText("Month")</option>
+                <option value="@BillingOccurrence.Year">@GetBillingOccurrenceDisplayText("Year")</option>
         </InputSelect>
         </div>
     </div>
@@ -96,5 +96,10 @@
             NavigationManager.NavigateTo(ReturnUrl);
 
         }
+    }
+
+    private string GetBillingOccurrenceDisplayText(string billingOccurrence)
+    {
+        return billingOccurrence.ToQuantity(_subscription.BillingInterval, showQuantityAs: ShowQuantityAs.None);
     }
 }
