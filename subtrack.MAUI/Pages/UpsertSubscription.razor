@@ -33,6 +33,18 @@
     <div class="form-group" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
+    <div style="display: flex;padding-top: 10px;">
+        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Billing Cycle </label>
+    </div>
+    <div class="flex-fill d-flex" style="padding-top: 10px;">
+        <span class="me-4">every </span>
+        <InputNumber class="form-control me-4" placeholder="Billing Interval" @bind-Value="@_subscription.BillingInterval" id="billingInterval" style=" flex: 2 1 6em"></InputNumber>
+         <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control flex-grow-1">
+            <option value="@BillingOccurrence.Week">@GetBillingOccurrenceDisplayText("Week")</option>
+            <option value="@BillingOccurrence.Month">@GetBillingOccurrenceDisplayText("Month")</option>
+            <option value="@BillingOccurrence.Year">@GetBillingOccurrenceDisplayText("Year")</option>
+        </InputSelect>
+    </div>
     <br/>
 </EditForm>
 
@@ -49,7 +61,7 @@
     Subscription? _subscription = new()
         {
             BillingInterval = 1,
-            BillingOccurrence = BillingOccurrence.Month // Temporary solution till #86 is in place
+            BillingOccurrence = BillingOccurrence.Month
         };
 
     protected override void OnInitialized()
@@ -81,5 +93,10 @@
             NavigationManager.NavigateTo(ReturnUrl);
 
         }
+    }
+
+    private string GetBillingOccurrenceDisplayText(string billingOccurrence)
+    {
+        return billingOccurrence.ToQuantity(_subscription.BillingInterval, showQuantityAs: ShowQuantityAs.None);
     }
 }
