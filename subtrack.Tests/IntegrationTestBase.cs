@@ -83,7 +83,9 @@ public abstract class IntegrationTestBase : IDisposable
             FirstPaymentDay = firstPaymentDay ?? lastPayment.Day,
             Description = description,
             Cost = cost,
-            IsAutoPaid = autoPaid
+            IsAutoPaid = autoPaid,
+            BillingInterval = 1,
+            BillingOccurrence = BillingOccurrence.Month
         };
     }
 }
