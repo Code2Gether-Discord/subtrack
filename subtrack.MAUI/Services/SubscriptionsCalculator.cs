@@ -51,14 +51,10 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
     {
-        bool paidThisMonth(Subscription s) => s.LastPayment.Month == monthDate.Month && s.LastPayment.Year == monthDate.Year;
-        bool paymentStartsInTheFuture(Subscription s) => s.LastPayment > monthDate;
-
-        var subscriptionsByMonth = subscriptions
-                    .Where(s => !paidThisMonth(s) && !paymentStartsInTheFuture(s))
-                    .ToList();
-
-        return subscriptionsByMonth;
+        return subscriptions
+                    .Where(subscription => PaidInPast(subscription, monthDate))
+                    .SelectMany(subscription => GetIterationsForMonth(subscription, monthDate))
+                    .OrderBy(subscription => subscription.LastPayment);
     }
 
     public DateTime GetNextPaymentDate(Subscription subscription)
@@ -94,5 +90,32 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     {
         var nextPaymentDate = GetNextPaymentDate(subscription);
         return (nextPaymentDate <= _dateProvider.Today, nextPaymentDate);
+    }
+
+    private static bool PaidThisMonth(Subscription subscription, DateTime monthDate) => subscription.LastPayment.Month == monthDate.Month && subscription.LastPayment.Year == monthDate.Year;
+
+    private static bool PaidInPast(Subscription subscription, DateTime monthDate) => (subscription.LastPayment.Month < monthDate.Month && subscription.LastPayment.Year == monthDate.Year) || subscription.LastPayment.Year < monthDate.Year;
+
+    private IEnumerable<Subscription> GetIterationsForMonth(Subscription subscription, DateTime monthDate)
+    {
+        var subscriptions = new List<Subscription>();
+        var subscriptionToUse = (Subscription)subscription.Clone();
+        while (PaidInPast(GetNextSubscription(subscriptionToUse), monthDate))
+        {
+            subscriptionToUse.LastPayment = GetNextPaymentDate(subscriptionToUse);
+        }
+        while (PaidThisMonth(GetNextSubscription(subscriptionToUse), monthDate))
+        {
+            subscriptions.Add((Subscription)subscriptionToUse.Clone());
+            subscriptionToUse.LastPayment = GetNextPaymentDate(subscriptionToUse);
+        }
+        return subscriptions;
+    }
+
+    private Subscription GetNextSubscription(Subscription subscription)
+    {
+        var subscriptionToReturn = (Subscription)subscription.Clone();
+        subscriptionToReturn.LastPayment = GetNextPaymentDate(subscriptionToReturn);
+        return subscriptionToReturn;
     }
 }
