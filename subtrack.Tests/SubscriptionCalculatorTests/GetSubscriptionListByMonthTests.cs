@@ -1,10 +1,4 @@
-﻿using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using NSubstitute;
-using subtrack.MAUI.Services.Abstractions;
-using subtrack.Tests.Utilities;
-
-namespace subtrack.Tests.SubscriptionCalculatorTests
+﻿namespace subtrack.Tests.SubscriptionCalculatorTests
 {
     public class GetSubscriptionListByMonthTests
     {
