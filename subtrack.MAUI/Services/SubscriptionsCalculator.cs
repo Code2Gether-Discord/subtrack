@@ -50,12 +50,12 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         return subscription.Cost * yearlyPaymentsCount;
     }
 
-    private IEnumerable<Subscription> GetPaymentsUntilMonth(Subscription subscription, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
+    private IEnumerable<Subscription> GetPaymentsUntilMonth(Subscription subscription, DateTime fromIncludedDate, DateTime toIncludedDate)
     {
         subscription.LastPayment = GetNextPaymentDate(subscription);
 
-        while (subscription.LastPayment.Date >= fromIncludedMonthDate.Date
-                && subscription.LastPayment.Date <= finalIncludedMonthDate.Date)
+        while (subscription.LastPayment.Date >= fromIncludedDate.Date
+                && subscription.LastPayment.Date <= toIncludedDate.Date)
         {
             yield return (Subscription)subscription.Clone();
             subscription.LastPayment = GetNextPaymentDate(subscription);
@@ -64,9 +64,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
     {
-        fromIncludedMonthDate = new DateTime(fromIncludedMonthDate.Year, fromIncludedMonthDate.Month, 1);
-        finalIncludedMonthDate = new DateTime(finalIncludedMonthDate.Year, finalIncludedMonthDate.Month, DateTime.DaysInMonth(finalIncludedMonthDate.Year, finalIncludedMonthDate.Month));
-
         return subscriptions
              .SelectMany(s => GetPaymentsUntilMonth(s, fromIncludedMonthDate, finalIncludedMonthDate))
              .GroupBy(s => (s.LastPayment.Year, s.LastPayment.Month))

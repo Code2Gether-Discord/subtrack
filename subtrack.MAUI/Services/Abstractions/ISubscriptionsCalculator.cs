@@ -13,9 +13,9 @@ namespace subtrack.MAUI.Services.Abstractions
         /// Gets lists of due subs for each month up until-including a specific month date
         /// </summary>
         /// <param name="subscriptions"></param>
-        /// <param name="finalIncludedMonthDate"></param>
+        /// <param name="toIncludedDate"></param>
         /// <returns>Subscriptions due for a specific Month Date</returns>
-        IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate);
+        IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedDate, DateTime toIncludedDate);
         DateTime GetNextPaymentDate(Subscription subscription);
         (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription);
     }
