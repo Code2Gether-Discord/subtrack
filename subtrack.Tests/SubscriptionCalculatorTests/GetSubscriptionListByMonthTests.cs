@@ -11,11 +11,11 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         private readonly ISubscriptionsCalculator _sut;
         private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
         private IEqualityComparer<Subscription> _subscriptionComparer;
-        private readonly DateTime today = new(2023, 4, 18);
+        private readonly DateTime _today = new(2023, 4, 18);
         public GetSubscriptionListByMonthTests()
         {
             _sut = new SubscriptionsCalculator(_dateTimeProvider);
-            _dateTimeProvider.Today.Returns(today);
+            _dateTimeProvider.Today.Returns(_today);
             _subscriptionComparer = new SubscriptionEqualityComparer();
         }
 
@@ -26,7 +26,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, today).ToList();
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
 
             // Assert
             Assert.Contains(subscriptions[0], result, _subscriptionComparer);
@@ -37,10 +37,10 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         public void GetSubscriptionListByMonth_DoesNotReturn_SubscriptionsWithNonStartedPayments()
         {
             // Arrange
-            IList<Subscription> subscriptions = new[] { new Subscription() { LastPayment = today.AddMonths(1) } };
+            IList<Subscription> subscriptions = new[] { new Subscription() { LastPayment = _today.AddMonths(1) } };
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, today).ToList();
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
 
             // Assert
             Assert.DoesNotContain(subscriptions[0], result, _subscriptionComparer);
@@ -53,7 +53,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, today).ToList();
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
 
             // Assert
             Assert.DoesNotContain(subscriptions[2], result, _subscriptionComparer);
@@ -69,10 +69,20 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, today.AddMonths(2)).ToList();
+            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(2)).ToList();
 
             // Assert
             Assert.Equal(expectedNumberOfIterationsInMonth, result.Count(s => s.Name == subscriptions[subscriptionsIndex].Name));
+        }
+
+        [Fact]
+        public void GetSubscriptionListByMonth_WeeklySub_ShouldNotContainLastPayment()
+        {
+            var sub = new Subscription { BillingInterval = 1, BillingOccurrence = BillingOccurrence.Week, LastPayment = new DateTime(2023, 4, 19) };
+            var result = _sut.GetSubscriptionListByMonth(new[] { sub }, _today);
+            
+            Assert.Single(result);
+            Assert.DoesNotContain(result, x => x.LastPayment == sub.LastPayment);
         }
 
         [Fact]
@@ -82,9 +92,9 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             IList<Subscription> subscriptions = CreateSubscriptions();
 
             // Act
-            List<Subscription> first = _sut.GetSubscriptionListByMonth(subscriptions, today.AddMonths(2)).ToList(),
-                second = _sut.GetSubscriptionListByMonth(subscriptions, today.AddMonths(4)).ToList(),
-                third = _sut.GetSubscriptionListByMonth(subscriptions, today.AddMonths(5)).ToList();
+            List<Subscription> first = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(2)).ToList(),
+                second = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(4)).ToList(),
+                third = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(5)).ToList();
 
             // Assert
             Assert.Contains(subscriptions[6], first, _subscriptionComparer);
@@ -99,7 +109,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 1,
                 Cost = 65,
                 IsAutoPaid = true,
-                LastPayment = today.AddMonths(-1),
+                LastPayment = _today.AddMonths(-1),
                 Name = "Netflix",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -112,7 +122,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 2,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = today.AddMonths(-1),
+                LastPayment = _today.AddMonths(-1),
                 Name = "AmazonPrime",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -125,7 +135,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 3,
                 Cost = 220,
                 IsAutoPaid = true,
-                LastPayment = today,
+                LastPayment = _today,
                 Name = "Disney+",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -138,7 +148,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = today,
+                LastPayment = _today,
                 Name = "HboMax",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -151,7 +161,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = today.AddMonths(1).AddDays(2),
+                LastPayment = _today.AddMonths(1).AddDays(2),
                 Name = "Curiosity Stream",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -164,7 +174,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = today.AddMonths(1).AddDays(2),
+                LastPayment = _today.AddMonths(1).AddDays(2),
                 Name = "Nebula",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -177,7 +187,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = today.AddMonths(-1).AddDays(2),
+                LastPayment = _today.AddMonths(-1).AddDays(2),
                 Name = "Youtube Premium",
                 Description = "",
                 FirstPaymentDay = 1,

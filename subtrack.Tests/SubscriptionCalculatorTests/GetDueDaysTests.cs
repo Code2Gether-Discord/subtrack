@@ -1,9 +1,3 @@
-using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using System.Collections;
-using NSubstitute;
-using subtrack.MAUI.Services.Abstractions;
-
 namespace subtrack.Tests.SubscriptionCalculatorTests;
 
 public class GetDueDaysTests

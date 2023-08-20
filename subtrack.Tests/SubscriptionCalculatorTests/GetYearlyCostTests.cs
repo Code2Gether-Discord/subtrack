@@ -1,10 +1,4 @@
-﻿using NSubstitute;
-using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using subtrack.MAUI.Services.Abstractions;
-using System.Collections;
-
-namespace subtrack.Tests.SubscriptionCalculatorTests;
+﻿namespace subtrack.Tests.SubscriptionCalculatorTests;
 public class GetYearlyCostTests
 {
     private readonly ISubscriptionsCalculator _sut;

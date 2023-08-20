@@ -1,5 +1,4 @@
-﻿using subtrack.DAL.Entities;
-using System.Diagnostics.CodeAnalysis;
+﻿using System.Diagnostics.CodeAnalysis;
 
 namespace subtrack.Tests.Utilities
 {

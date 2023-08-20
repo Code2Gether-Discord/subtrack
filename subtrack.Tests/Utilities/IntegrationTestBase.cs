@@ -6,7 +6,7 @@ using subtrack.DAL;
 using subtrack.DAL.Entities;
 using subtrack.MAUI;
 
-namespace subtrack.Tests;
+namespace subtrack.Tests.Utilities;
 
 /// <summary>
 /// Allows us simulate a real scenario with actual services used in the project and a in memory database
