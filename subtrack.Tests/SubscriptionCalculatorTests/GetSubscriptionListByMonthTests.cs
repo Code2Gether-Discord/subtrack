@@ -60,8 +60,10 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             Assert.DoesNotContain(subscriptions[3], result, _subscriptionComparer);
         }
 
-        [Fact]
-        public void GetSubscriptionListByMonth_MonthProvided_ShouldReturnWeeklySubscriptionsMultipleTimes()
+        [Theory]
+        [InlineData(5, 5)]
+        [InlineData(4, 3)]
+        public void GetSubscriptionListByMonth_MonthProvided_ShouldReturnWeeklySubscriptionsMultipleTimes(int subscriptionsIndex, int expectedNumberOfIterationsInMonth)
         {
             // Arrange
             IList<Subscription> subscriptions = CreateSubscriptions();
@@ -70,8 +72,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = _sut.GetSubscriptionListByMonth(subscriptions, today.AddMonths(2)).ToList();
 
             // Assert
-            Assert.True(result.Count(s => s.Name == subscriptions[5].Name) == 4);
-            Assert.True(result.Count(s => s.Name == subscriptions[4].Name) == 2);
+            Assert.Equal(expectedNumberOfIterationsInMonth, result.Count(s => s.Name == subscriptions[subscriptionsIndex].Name));
         }
 
         [Fact]

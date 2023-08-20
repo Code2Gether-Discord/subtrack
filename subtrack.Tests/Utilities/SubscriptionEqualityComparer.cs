@@ -15,7 +15,6 @@ namespace subtrack.Tests.Utilities
                    x.IsAutoPaid == y.IsAutoPaid && 
                    x.Cost == y.Cost &&
                    x.FirstPaymentDay == y.FirstPaymentDay &&
-                   x.LastPayment == y.LastPayment &&
                    x.BillingOccurrence == y.BillingOccurrence &&
                    x.BillingInterval == y.BillingInterval;
         }
@@ -27,7 +26,6 @@ namespace subtrack.Tests.Utilities
                    (obj.Description?.GetHashCode() ?? 0) + obj.IsAutoPaid.GetHashCode() + 
                    obj.Cost.GetHashCode() +
                    obj.FirstPaymentDay.GetHashCode() + 
-                   obj.LastPayment.GetHashCode() + 
                    obj.BillingOccurrence.GetHashCode() +
                    obj.BillingInterval.GetHashCode();
         }

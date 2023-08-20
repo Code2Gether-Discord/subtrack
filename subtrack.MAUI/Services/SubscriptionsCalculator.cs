@@ -52,7 +52,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
     public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
     {
         return subscriptions
-                    .Where(subscription => PaidInPast(subscription, monthDate))
+                    .Where(subscription => PaidInPast(subscription, monthDate) || (subscription.BillingOccurrence == BillingOccurrence.Week && PaidThisMonth(subscription, monthDate)))
                     .SelectMany(subscription => GetIterationsForMonth(subscription, monthDate))
                     .OrderBy(subscription => subscription.LastPayment);
     }
@@ -83,7 +83,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             default:
                 throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
         }
-        
     }
 
     public (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription)
@@ -104,7 +103,7 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         {
             subscriptionToUse.LastPayment = GetNextPaymentDate(subscriptionToUse);
         }
-        while (PaidThisMonth(GetNextSubscription(subscriptionToUse), monthDate))
+        while (PaidThisMonth(GetNextSubscription(subscriptionToUse), monthDate) || PaidThisMonth(subscriptionToUse, monthDate))
         {
             subscriptions.Add((Subscription)subscriptionToUse.Clone());
             subscriptionToUse.LastPayment = GetNextPaymentDate(subscriptionToUse);
