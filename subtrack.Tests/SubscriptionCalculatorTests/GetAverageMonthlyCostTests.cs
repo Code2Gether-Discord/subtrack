@@ -34,7 +34,6 @@ public class GetAverageMonthlyCostTests
     }
 }
 
-
 public class GetAverageMonthlyCostsTestData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
@@ -49,27 +48,6 @@ public class GetAverageMonthlyCostsTestData : IEnumerable<object[]>
         };
         yield return new object[] {
             new[] { new Subscription { Name = "Subscription 3", BillingInterval = 2, Cost = 5, BillingOccurrence = BillingOccurrence.Week } },
-            10.83
-        };
-    }
-
-    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
-}
-
-public class GetAverageMonthlyCostTestData : IEnumerable<object[]>
-{
-    public IEnumerator<object[]> GetEnumerator()
-    {
-        yield return new object[] {
-            new Subscription { Name = "Subscription 1", BillingInterval = 1, Cost = 24, BillingOccurrence = BillingOccurrence.Year },
-            2
-        };
-        yield return new object[] {
-            new Subscription { Name = "Subscription 2", BillingInterval = 1, Cost = 5, BillingOccurrence = BillingOccurrence.Week },
-            21.67
-        };
-        yield return new object[] {
-            new Subscription { Name = "Subscription 3", BillingInterval = 2, Cost = 5, BillingOccurrence = BillingOccurrence.Week },
             10.83
         };
     }
