@@ -18,5 +18,7 @@ namespace subtrack.MAUI.Services.Abstractions
         IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedDate, DateTime toIncludedDate);
         DateTime GetNextPaymentDate(Subscription subscription);
         (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription);
+
+        decimal GetAverageMonthlyCost(IEnumerable<Subscription> subscriptions);
     }
 }
