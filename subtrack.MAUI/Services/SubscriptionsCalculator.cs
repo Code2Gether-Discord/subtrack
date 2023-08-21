@@ -128,6 +128,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
 
     public decimal GetAverageMonthlyCost(IEnumerable<Subscription> subscriptions)
     {
-        return subscriptions.Aggregate(0.0M, (acc, curr) => acc + GetAverageMonthlyCost(curr));
+        return subscriptions.Select(GetAverageMonthlyCost).Sum();
     }
 }

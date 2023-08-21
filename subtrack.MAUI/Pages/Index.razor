@@ -15,7 +15,7 @@
             <h6 class="pt-1">Monthly</h6>
         </div>
         <div class="col">
-            <h5>@FormatAmount()</h5>
+            <h5>@($"~{Math.Round(_subscriptionsCost, 2):C}")</h5>
         </div>
     </div>
 </div>
@@ -54,13 +54,6 @@
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, subscriptionsCalculator)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
-    }
-
-    private string FormatAmount()
-    {
-        var rounded = Math.Round(_subscriptionsCost, 2);
-        var prefix = _subscriptionsCost == rounded ? "" : "~";
-        return $"{prefix}{rounded:C}";
     }
 
     private string GetDueDaysText(int dueDays)
