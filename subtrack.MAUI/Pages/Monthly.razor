@@ -4,29 +4,29 @@
 
 <AddSubscriptionButton />
 
-@foreach (var subs in monthlySubscriptions)
+@foreach (var subs in _monthlySubscriptions)
 {
-    var displayYear = subs.Key != currentYear;
+    var displayYear = subs.Key != _currentYear;
     @if (displayYear)
     {
         <h6 class="text-center mt-3 mb-2">@(subs.Key)</h6>
     }
-    @foreach(var subMonth in subs)
+    @foreach(var subMonth in subs.Value)
     {
         <SubscriptionMonthItem Year=@(displayYear ? subs.Key : null) SubscriptionMonth=@subMonth />    
     }
 }
 
 @code {
-    int currentYear;
-    IEnumerable<IGrouping<int, SubscriptionsMonthResponse>> monthlySubscriptions = default!;
+    int _currentYear;
+    IDictionary<int, List<SubscriptionsMonthResponse>> _monthlySubscriptions = default!;
     protected override async Task OnInitializedAsync()
     {
         var fromDate = DateProvider.Today;
-        currentYear = fromDate.Year;
+        _currentYear = fromDate.Year;
         var futureYearsToDisplay = 2;
 
         var toDate = fromDate.AddYears(futureYearsToDisplay);
-        monthlySubscriptions = await MonthlyPageCalculator.GetMonthlySubscriptionLists(fromDate.FirstDayOfMonthDate(), toDate.LastDayOfMonthDate());
+        _monthlySubscriptions = await MonthlyPageCalculator.GetMonthlySubscriptionLists(fromDate.FirstDayOfMonthDate(), toDate.LastDayOfMonthDate());
     }
 }

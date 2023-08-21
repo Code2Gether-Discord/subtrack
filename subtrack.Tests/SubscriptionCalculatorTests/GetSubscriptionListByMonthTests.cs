@@ -34,7 +34,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.First().Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
             Assert.Equal(_numberOfMonths, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
@@ -63,7 +63,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.First().Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
         }
 
         [Theory]
@@ -81,7 +81,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.First().Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
             Assert.Equal(expectedNumberOfIterationsInMonth, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
@@ -96,7 +96,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(2, result.First().Count());
+            Assert.Equal(2, result.First().Value.Count);
         }
 
         [Fact]
@@ -111,8 +111,8 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.First().Count());
-            Assert.Contains(result.Last().Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
+            Assert.Contains(result.Last().Value.Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
         }
 
         private IEnumerable<Subscription> CreateSubscriptions()
@@ -209,9 +209,9 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             };
         }
 
-        private static IEnumerable<Subscription> CollectSubscriptions(IEnumerable<IGrouping<int, SubscriptionsMonthResponse>> subscriptionsMonthResponses)
+        private static IEnumerable<Subscription> CollectSubscriptions(IDictionary<int, List<SubscriptionsMonthResponse>> subscriptionsMonthResponses)
         {
-            return subscriptionsMonthResponses.SelectMany(response => response.SelectMany(r => r.Subscriptions));
+            return subscriptionsMonthResponses.SelectMany(response => response.Value.SelectMany(r => r.Subscriptions));
         }
     }
 }
