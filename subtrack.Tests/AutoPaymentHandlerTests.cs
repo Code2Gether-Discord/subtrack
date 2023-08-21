@@ -1,9 +1,4 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using subtrack.MAUI.Services.Abstractions;
-
-namespace subtrack.Tests
+﻿namespace subtrack.Tests
 {
     public class AutoPaymentHandlerTests : IntegrationTestBase
     {

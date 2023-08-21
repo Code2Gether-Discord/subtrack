@@ -43,7 +43,7 @@
 
     protected override void OnParametersSet()
     {
-        _monthText = Year is null ? SubscriptionMonth.MonthName : $"{SubscriptionMonth.MonthName} {Year}";
+        _monthText = Year is null ? SubscriptionMonth.MonthDate.MonthName() : $"{SubscriptionMonth.MonthDate.MonthName()} {Year}";
     }
 
     public string GetDateSuffix(int day)

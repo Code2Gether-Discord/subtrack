@@ -6,7 +6,7 @@ using subtrack.DAL;
 using subtrack.DAL.Entities;
 using subtrack.MAUI;
 
-namespace subtrack.Tests;
+namespace subtrack.Tests.Utilities;
 
 /// <summary>
 /// Allows us simulate a real scenario with actual services used in the project and a in memory database
@@ -83,7 +83,9 @@ public abstract class IntegrationTestBase : IDisposable
             FirstPaymentDay = firstPaymentDay ?? lastPayment.Day,
             Description = description,
             Cost = cost,
-            IsAutoPaid = autoPaid
+            IsAutoPaid = autoPaid,
+            BillingInterval = 1,
+            BillingOccurrence = BillingOccurrence.Month
         };
     }
 }

@@ -1,16 +1,11 @@
-﻿using NSubstitute;
-using subtrack.DAL.Entities;
-using subtrack.MAUI.Services;
-using subtrack.MAUI.Services.Abstractions;
+﻿namespace subtrack.Tests.SubscriptionCalculatorTests;
 
-namespace subtrack.Tests.SubscriptionCalculatorTests;
-
-public class GetTotalPrice
+public class GetTotalPriceTests
 {
     private readonly ISubscriptionsCalculator _sut;
     private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
 
-    public GetTotalPrice()
+    public GetTotalPriceTests()
     {
         _sut = new SubscriptionsCalculator(_dateTimeProvider);
     }
