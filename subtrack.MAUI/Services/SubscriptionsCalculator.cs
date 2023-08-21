@@ -1,4 +1,5 @@
 ﻿using subtrack.DAL.Entities;
+using subtrack.MAUI.Responses;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
 using System.Globalization;
@@ -49,16 +50,30 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         return subscription.Cost * yearlyPaymentsCount;
     }
 
-    public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
+    private IEnumerable<Subscription> GetPaymentsUntilMonth(Subscription subscription, DateTime fromIncludedDate, DateTime toIncludedDate)
     {
-        bool paidThisMonth(Subscription s) => s.LastPayment.Month == monthDate.Month && s.LastPayment.Year == monthDate.Year;
-        bool paymentStartsInTheFuture(Subscription s) => s.LastPayment > monthDate;
+        subscription.LastPayment = GetNextPaymentDate(subscription);
 
-        var subscriptionsByMonth = subscriptions
-                    .Where(s => !paidThisMonth(s) && !paymentStartsInTheFuture(s))
-                    .ToList();
+        while (subscription.LastPayment.Date >= fromIncludedDate.Date
+                && subscription.LastPayment.Date <= toIncludedDate.Date)
+        {
+            yield return (Subscription)subscription.Clone();
+            subscription.LastPayment = GetNextPaymentDate(subscription);
+        }
+    }
 
-        return subscriptionsByMonth;
+    public IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
+    {
+        return subscriptions
+             .SelectMany(s => GetPaymentsUntilMonth(s, fromIncludedMonthDate, finalIncludedMonthDate))
+             .GroupBy(s => (s.LastPayment.Year, s.LastPayment.Month))
+             .Select(g =>
+                  new SubscriptionsMonthResponse
+                  {
+                      MonthDate = new DateTime(g.Key.Year, g.Key.Month, 1),
+                      Subscriptions = g.OrderBy(s => s.LastPayment).ToList(),
+                      Cost = GetTotalCost(g)
+                  }).ToList();
     }
 
     public DateTime GetNextPaymentDate(Subscription subscription)
@@ -87,7 +102,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             default:
                 throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
         }
-        
     }
 
     public (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription)

@@ -1,6 +1,4 @@
 ﻿@page "/monthly"
-@using System.Globalization;
-
 @inject subtrack.MAUI.Services.Abstractions.ISubscriptionService SubscriptionService
 @inject subtrack.MAUI.Services.Abstractions.ISubscriptionsCalculator SubscriptionCalculator
 
@@ -11,49 +9,37 @@
     <SubscriptionMonthItem SubscriptionMonth=@subMonth />
 }
 
-<h6 class="text-center mt-3 mb-2">@(_currentYear + 1)</h6>
+<h6 class="text-center mt-3 mb-2">@(_currentMonthDate.AddYears(1).Year)</h6>
 
 @foreach (var subMonth in _nextYearSubscriptionMonths)
 {
-    <SubscriptionMonthItem Year=@(_currentYear + 1) SubscriptionMonth=@subMonth />
+    <SubscriptionMonthItem Year=@(_currentMonthDate.AddYears(1).Year) SubscriptionMonth=@subMonth />
+}
+
+<h6 class="text-center mt-3 mb-2">@(_currentMonthDate.AddYears(2).Year)</h6>
+
+@foreach (var subMonth in _nextYearSubscriptionMonths)
+{
+    <SubscriptionMonthItem Year=@(_currentMonthDate.AddYears(2).Year) SubscriptionMonth=@subMonth />
 }
 
 @code {
     IEnumerable<Subscription> _subscriptions = new List<Subscription>();
-    int _currentMonth = DateTime.Now.Month;
-    int _currentYear = DateTime.Now.Year;
+    DateTime _currentMonthDate = DateTime.Now;
 
     IEnumerable<SubscriptionsMonthResponse> _currentYearSubscriptionMonths = null!;
     IEnumerable<SubscriptionsMonthResponse> _nextYearSubscriptionMonths = null!;
+    IEnumerable<SubscriptionsMonthResponse> _twoYearsForwardSubscriptionMonths = null!;
 
     protected override async Task OnInitializedAsync()
     {
-        _subscriptions = (await SubscriptionService.GetAllAsync())
-            .OrderBy(s => s.LastPayment.Day)
-            .ToArray();
+        _subscriptions = await SubscriptionService.GetAllAsync();
 
-        (string Name, int Index)[] allMonths = DateTimeFormatInfo.CurrentInfo.MonthNames
-            .Where(m => !string.IsNullOrWhiteSpace(m))
-            .Select((name, index) => (name, index + 1))
-            .ToArray();
+        var twoYearsForwardDate = _currentMonthDate.AddYears(2);
+        var paymentsTwoYearsForward = SubscriptionCalculator.GetMonthlySubscriptionLists(_subscriptions, _currentMonthDate.FirstDayOfMonthDate(), twoYearsForwardDate.LastDayOfMonthDate());
 
-        _currentYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, _currentYear, m => m.Index >= _currentMonth);
-        _nextYearSubscriptionMonths = GetSubscriptionsMonthResponses(allMonths, _currentYear + 1, m => m.Index < _currentMonth);
-    }
-
-    private IEnumerable<SubscriptionsMonthResponse> GetSubscriptionsMonthResponses((string Name, int Index)[] months, int year, Func<(string Name, int Index), bool> monthSelector)
-    {
-        return months.Where(monthSelector).Select(m =>
-        {
-            var subscriptions = SubscriptionCalculator.GetSubscriptionListByMonth(_subscriptions, new DateTime(year,m.Index, 1));
-
-            return new SubscriptionsMonthResponse
-            {
-                Subscriptions = subscriptions,
-                Cost = SubscriptionCalculator.GetTotalCost(subscriptions),
-                MonthName = m.Name
-
-            };
-        }).ToArray();
+        _currentYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.Year).ToList();
+        _nextYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.AddYears(1).Year).ToList();
+        _twoYearsForwardSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.AddYears(2).Year).ToList();
     }
 }
