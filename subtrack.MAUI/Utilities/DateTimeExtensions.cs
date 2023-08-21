@@ -12,7 +12,7 @@ public static class DateTimeExtensions
 
     public static string MonthName(this DateTime date) => date.ToString("MMMM");
 
-    public static DateTime LastDayOfMonth(this DateTime date) => new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+    public static DateTime LastDayOfMonthDate(this DateTime date) => new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 
-    public static DateTime FirstDayOfMonth(this DateTime date) => new(date.Year, date.Month, 1);
+    public static DateTime FirstDayOfMonthDate(this DateTime date) => new(date.Year, date.Month, 1);
 }

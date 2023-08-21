@@ -45,7 +45,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var subscriptions = new[] { new Subscription() { Name = "Subscription", LastPayment = _fromIncludedDate.AddMonths(1), BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month, FirstPaymentDay = 1 } };
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _fromIncludedDate.LastDayOfMonth());
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _fromIncludedDate.LastDayOfMonthDate());
 
             // Assert
             Assert.Empty(result);
