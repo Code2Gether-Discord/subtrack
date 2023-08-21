@@ -71,9 +71,9 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
                   new SubscriptionsMonthResponse
                   {
                       MonthDate = new DateTime(g.Key.Year, g.Key.Month, 1),
-                      Subscriptions = g.OrderBy(s => s.LastPayment).ToList(),
+                      Subscriptions = g.OrderBy(s => s.LastPayment),
                       Cost = GetTotalCost(g)
-                  }).ToList();
+                  });
     }
 
     public DateTime GetNextPaymentDate(Subscription subscription)

@@ -36,9 +36,7 @@
         _subscriptions = await SubscriptionService.GetAllAsync();
 
         var twoYearsForwardDate = _currentMonthDate.AddYears(2);
-        var paymentsTwoYearsForward = SubscriptionCalculator.GetMonthlySubscriptionLists(_subscriptions,
-            new DateTime(_currentMonthDate.Year, _currentMonthDate.Month, 1),
-             new DateTime(twoYearsForwardDate.Year, twoYearsForwardDate.Month, DateTime.DaysInMonth(twoYearsForwardDate.Year, twoYearsForwardDate.Month)));
+        var paymentsTwoYearsForward = SubscriptionCalculator.GetMonthlySubscriptionLists(_subscriptions, _currentMonthDate.FirstDayOfMonth(), twoYearsForwardDate.LastDayOfMonth());
 
         _currentYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.Year).ToList();
         _nextYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.AddYears(1).Year).ToList();

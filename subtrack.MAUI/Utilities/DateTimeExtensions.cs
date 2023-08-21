@@ -11,4 +11,8 @@ public static class DateTimeExtensions
     public static DateTime AddWeeks(this DateTime date, int weeks) => date.AddDays(weeks * 7);
 
     public static string MonthName(this DateTime date) => date.ToString("MMMM");
+
+    public static DateTime LastDayOfMonth(this DateTime date) => new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
+
+    public static DateTime FirstDayOfMonth(this DateTime date) => new(date.Year, date.Month, 1);
 }
