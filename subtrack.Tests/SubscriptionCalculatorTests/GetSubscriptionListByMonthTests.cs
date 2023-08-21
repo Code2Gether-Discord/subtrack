@@ -1,109 +1,123 @@
-﻿namespace subtrack.Tests.SubscriptionCalculatorTests
+﻿using subtrack.MAUI.Responses;
+using subtrack.MAUI.Utilities;
+
+namespace subtrack.Tests.SubscriptionCalculatorTests
 {
     public class GetSubscriptionListByMonthTests
     {
         private readonly ISubscriptionsCalculator _sut;
         private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
-        private IEqualityComparer<Subscription> _subscriptionComparer;
-        private readonly DateTime _today = new(2023, 4, 18);
+        private readonly IEqualityComparer<Subscription> _subscriptionComparer;
+        private readonly int _numberOfMonths = 3;
+        private readonly DateTime _fromIncludedDate = new(2023, 4, 1),
+                                  _toIncludedDate;
+        
         public GetSubscriptionListByMonthTests()
         {
+            _toIncludedDate = _fromIncludedDate.AddMonths(_numberOfMonths - 1);
             _sut = new SubscriptionsCalculator(_dateTimeProvider);
-            _dateTimeProvider.Today.Returns(_today);
+            _dateTimeProvider.Today.Returns(_fromIncludedDate);
             _subscriptionComparer = new SubscriptionEqualityComparer();
         }
 
-        [Fact]
-        public void GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions()
+        [Theory]
+        [InlineData(0)]
+        [InlineData(1)]
+        public void GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions(int subscriptionIndex)
         {
             // Arrange
-            IList<Subscription> subscriptions = CreateSubscriptions();
+            var subscriptions = CreateSubscriptions();
+            var subscription = subscriptions.ElementAt(subscriptionIndex);
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Contains(subscriptions[0], result, _subscriptionComparer);
-            Assert.Contains(subscriptions[1], result, _subscriptionComparer);
+            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, collectedSubscriptions.Count(sub => _subscriptionComparer.Equals(sub, subscription)));
         }
 
         [Fact]
         public void GetSubscriptionListByMonth_DoesNotReturn_SubscriptionsWithNonStartedPayments()
         {
             // Arrange
-            IList<Subscription> subscriptions = new[] { new Subscription() { LastPayment = _today.AddMonths(1) } };
+            var subscriptions = new[] { new Subscription() { Name = "Subscription", LastPayment = _fromIncludedDate.AddMonths(1), BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month, FirstPaymentDay = 1 } };
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _fromIncludedDate.LastDayOfMonth());
 
             // Assert
-            Assert.DoesNotContain(subscriptions[0], result, _subscriptionComparer);
+            Assert.Empty(result);
         }
 
         [Fact]
         public void GetSubscriptionListByMonth_MonthProvided_ShouldNotReturn_PaidSubscriptions()
         {
             // Arrange
-            IList<Subscription> subscriptions = CreateSubscriptions();
+            var subscriptions = CreateSubscriptions();
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today).ToList();
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.DoesNotContain(subscriptions[2], result, _subscriptionComparer);
-            Assert.DoesNotContain(subscriptions[3], result, _subscriptionComparer);
+            Assert.Equal(_numberOfMonths, result.Count());
         }
 
         [Theory]
-        [InlineData(5, 5)]
-        [InlineData(4, 3)]
+        [InlineData(5, 4)]
+        [InlineData(4, 2)]
         public void GetSubscriptionListByMonth_MonthProvided_ShouldReturnWeeklySubscriptionsMultipleTimes(int subscriptionsIndex, int expectedNumberOfIterationsInMonth)
         {
             // Arrange
-            IList<Subscription> subscriptions = CreateSubscriptions();
+            var subscriptions = CreateSubscriptions();
+            var subscription = subscriptions.ElementAt(subscriptionsIndex);
 
             // Act
-            var result = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(2)).ToList();
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(expectedNumberOfIterationsInMonth, result.Count(s => s.Name == subscriptions[subscriptionsIndex].Name));
+            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Contains(subscription, collectedSubscriptions, _subscriptionComparer);
+            Assert.Equal(expectedNumberOfIterationsInMonth, collectedSubscriptions.Count(sub => _subscriptionComparer.Equals(sub, subscription)));
         }
 
         [Fact]
         public void GetSubscriptionListByMonth_WeeklySub_ShouldNotContainLastPayment()
         {
-            var sub = new Subscription { BillingInterval = 1, BillingOccurrence = BillingOccurrence.Week, LastPayment = new DateTime(2023, 4, 19) };
-            var result = _sut.GetSubscriptionListByMonth(new[] { sub }, _today);
-            
-            Assert.Single(result);
-            Assert.DoesNotContain(result, x => x.LastPayment == sub.LastPayment);
+            // Arrange
+            var sub = new Subscription { Name = "Subscriptions", FirstPaymentDay = 1, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Week, LastPayment = new DateTime(2023, 4, 19) };
+
+            // Act
+            var result = _sut.GetMonthlySubscriptionLists(new[] { sub }, _fromIncludedDate, _toIncludedDate);
+
+            // Assert
+            Assert.Equal(2, result.Count());
         }
 
         [Fact]
         public void GetSubscriptionListByMonth_MonthProvided_SubscriptionsHavingLongerThanMonthlyCycle_ShouldReturnAsExpected()
         {
             // Arrange
-            IList<Subscription> subscriptions = CreateSubscriptions();
+            var subscriptions = CreateSubscriptions();
 
             // Act
-            List<Subscription> first = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(2)).ToList(),
-                second = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(4)).ToList(),
-                third = _sut.GetSubscriptionListByMonth(subscriptions, _today.AddMonths(5)).ToList();
+            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Contains(subscriptions[6], first, _subscriptionComparer);
-            Assert.DoesNotContain(subscriptions[6], second, _subscriptionComparer);
-            Assert.Contains(third, s => s.Name == subscriptions[6].Name);
+            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Contains(subscriptions.ElementAt(6), result.Last().Subscriptions, _subscriptionComparer);
         }
 
-        private IList<Subscription> CreateSubscriptions()
+        private IEnumerable<Subscription> CreateSubscriptions()
         {
-            var firstSub = new Subscription
+            yield return new Subscription
             {
                 Id = 1,
                 Cost = 65,
                 IsAutoPaid = true,
-                LastPayment = _today.AddMonths(-1),
+                LastPayment = _fromIncludedDate.AddMonths(-1),
                 Name = "Netflix",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -111,12 +125,12 @@
                 BillingInterval = 1,
             };
 
-            var secondSub = new Subscription
+            yield return new Subscription
             {
                 Id = 2,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = _today.AddMonths(-1),
+                LastPayment = _fromIncludedDate.AddMonths(-1),
                 Name = "AmazonPrime",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -124,12 +138,12 @@
                 BillingInterval = 1,
             };
 
-            var thirdSub = new Subscription
+            yield return new Subscription
             {
                 Id = 3,
                 Cost = 220,
                 IsAutoPaid = true,
-                LastPayment = _today,
+                LastPayment = _fromIncludedDate,
                 Name = "Disney+",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -137,12 +151,12 @@
                 BillingInterval = 1,
             };
 
-            var fourthSub = new Subscription
+            yield return new Subscription
             {
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = _today,
+                LastPayment = _fromIncludedDate,
                 Name = "HboMax",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -150,12 +164,12 @@
                 BillingInterval = 1,
             };
 
-            var fifthSub = new Subscription
+            yield return new Subscription
             {
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = _today.AddMonths(1).AddDays(2),
+                LastPayment = _fromIncludedDate.AddMonths(1).AddDays(2),
                 Name = "Curiosity Stream",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -163,12 +177,12 @@
                 BillingInterval = 2,
             };
 
-            var sixthSub = new Subscription
+            yield return new Subscription
             {
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = _today.AddMonths(1).AddDays(2),
+                LastPayment = _fromIncludedDate.AddMonths(1).AddDays(2),
                 Name = "Nebula",
                 Description = "",
                 FirstPaymentDay = 1,
@@ -176,20 +190,23 @@
                 BillingInterval = 1,
             };
 
-            var seventhSub = new Subscription
+            yield return new Subscription
             {
                 Id = 4,
                 Cost = 19,
                 IsAutoPaid = false,
-                LastPayment = _today.AddMonths(-1).AddDays(2),
+                LastPayment = _fromIncludedDate.AddMonths(-1).AddDays(2),
                 Name = "Youtube Premium",
                 Description = "",
                 FirstPaymentDay = 1,
                 BillingOccurrence = BillingOccurrence.Month,
                 BillingInterval = 3,
             };
+        }
 
-            return new List<Subscription> { firstSub, secondSub, thirdSub, fourthSub, fifthSub, sixthSub, seventhSub };
+        private static IEnumerable<Subscription> CollectSubscriptions(IEnumerable<SubscriptionsMonthResponse> subscriptionsMonthResponses)
+        {
+            return subscriptionsMonthResponses.SelectMany(response => response.Subscriptions);
         }
     }
 }
