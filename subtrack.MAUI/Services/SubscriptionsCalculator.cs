@@ -109,4 +109,25 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         var nextPaymentDate = GetNextPaymentDate(subscription);
         return (nextPaymentDate <= _dateProvider.Today, nextPaymentDate);
     }
+
+    private decimal GetAverageMonthlyCost(Subscription subscription)
+    {
+        if (subscription is null)
+            throw new ArgumentNullException(nameof(subscription));
+        var weeksInYear = ISOWeek.GetWeeksInYear(_dateProvider.Today.Year);
+        var totalDuration = subscription.BillingOccurrence switch
+        {
+            BillingOccurrence.Month => _monthsInAYear,
+            BillingOccurrence.Week => weeksInYear,
+            BillingOccurrence.Year => 1,
+            _ => throw new ArgumentOutOfRangeException($"Billing occurrence ${subscription.BillingOccurrence} is not supported in GetAverageMonthlyCost")
+        };
+        var yearlyPaymentsCount = totalDuration / subscription.BillingInterval;
+        return yearlyPaymentsCount * subscription.Cost / _monthsInAYear;
+    }
+
+    public decimal GetAverageMonthlyCost(IEnumerable<Subscription> subscriptions)
+    {
+        return subscriptions.Select(GetAverageMonthlyCost).Sum();
+    }
 }
