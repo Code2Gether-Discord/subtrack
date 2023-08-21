@@ -48,7 +48,8 @@ public static class MauiProgram
             .AddScoped<IDateProvider, DateProvider>()
             .AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>()
             .AddScoped<ISettingsService, SettingsService>()
-            .AddScoped<AutoPaymentHandler>();
+            .AddScoped<AutoPaymentHandler>()
+            .AddScoped<IMonthlyPageCalculator, MonthlyPageCalculator>();
     }
 
     private static void SeedDb(SubtrackDbContext dbContext)

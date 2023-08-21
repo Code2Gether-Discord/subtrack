@@ -5,8 +5,8 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
 {
     public class GetSubscriptionListByMonthTests
     {
-        private readonly ISubscriptionsCalculator _sut;
-        private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
+        private readonly IMonthlyPageCalculator _sut;
+        private readonly ISubscriptionService _subscriptionService = Substitute.For<ISubscriptionService>();
         private readonly int _numberOfMonths = 3;
         private readonly DateTime _fromIncludedDate = new(2023, 4, 1),
                                   _toIncludedDate;
@@ -14,98 +14,105 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
         public GetSubscriptionListByMonthTests()
         {
             _toIncludedDate = _fromIncludedDate.AddMonths(_numberOfMonths - 1);
-            _sut = new SubscriptionsCalculator(_dateTimeProvider);
-            _dateTimeProvider.Today.Returns(_fromIncludedDate);
+            var dateProvider = Substitute.For<IDateProvider>();
+            var subscriptionsCalculator = new SubscriptionsCalculator(dateProvider);
+            _sut = new MonthlyPageCalculator(subscriptionsCalculator, _subscriptionService);
         }
 
         [Theory]
         [InlineData(0)]
         [InlineData(1)]
-        public void GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions(int subscriptionIndex)
+        public async Task GetSubscriptionListByMonth_MonthProvided_Returns_UnpaidSubscriptions(int subscriptionIndex)
         {
             // Arrange
             var subscriptions = CreateSubscriptions();
             var subscription = subscriptions.ElementAt(subscriptionIndex);
+            _subscriptionService.GetAllAsync().Returns(subscriptions);
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Count());
             Assert.Equal(_numberOfMonths, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
         [Fact]
-        public void GetSubscriptionListByMonth_DoesNotReturn_SubscriptionsWithNonStartedPayments()
+        public async Task GetSubscriptionListByMonth_DoesNotReturn_SubscriptionsWithNonStartedPayments()
         {
             // Arrange
             var subscriptions = new[] { new Subscription() { Name = "Subscription", LastPayment = _fromIncludedDate.AddMonths(1), BillingInterval = 1, BillingOccurrence = BillingOccurrence.Month, FirstPaymentDay = 1 } };
+            _subscriptionService.GetAllAsync().Returns(subscriptions);
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _fromIncludedDate.LastDayOfMonthDate());
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _fromIncludedDate.LastDayOfMonthDate());
 
             // Assert
             Assert.Empty(result);
         }
 
         [Fact]
-        public void GetSubscriptionListByMonth_MonthProvided_ShouldNotReturn_PaidSubscriptions()
+        public async Task GetSubscriptionListByMonth_MonthProvided_ShouldNotReturn_PaidSubscriptions()
         {
             // Arrange
             var subscriptions = CreateSubscriptions();
+            _subscriptionService.GetAllAsync().Returns(subscriptions);
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Count());
         }
 
         [Theory]
         [InlineData(5, 4)]
         [InlineData(4, 2)]
-        public void GetSubscriptionListByMonth_MonthProvided_ShouldReturnWeeklySubscriptionsMultipleTimes(int subscriptionsIndex, int expectedNumberOfIterationsInMonth)
+        public async Task GetSubscriptionListByMonth_MonthProvided_ShouldReturnWeeklySubscriptionsMultipleTimes(int subscriptionsIndex, int expectedNumberOfIterationsInMonth)
         {
             // Arrange
             var subscriptions = CreateSubscriptions();
             var subscription = subscriptions.ElementAt(subscriptionsIndex);
+            _subscriptionService.GetAllAsync().Returns(subscriptions);
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Count());
             Assert.Equal(expectedNumberOfIterationsInMonth, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
         [Fact]
-        public void GetSubscriptionListByMonth_WeeklySub_ShouldNotContainLastPayment()
+        public async Task GetSubscriptionListByMonth_WeeklySub_ShouldNotContainLastPayment()
         {
             // Arrange
             var sub = new Subscription { Name = "Subscriptions", FirstPaymentDay = 1, BillingInterval = 1, BillingOccurrence = BillingOccurrence.Week, LastPayment = new DateTime(2023, 4, 19) };
+            _subscriptionService.GetAllAsync().Returns(new[] { sub });
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(new[] { sub }, _fromIncludedDate, _toIncludedDate);
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.First().Count());
         }
 
         [Fact]
-        public void GetSubscriptionListByMonth_MonthProvided_SubscriptionsHavingLongerThanMonthlyCycle_ShouldReturnAsExpected()
+        public async Task GetSubscriptionListByMonth_MonthProvided_SubscriptionsHavingLongerThanMonthlyCycle_ShouldReturnAsExpected()
         {
             // Arrange
             var subscriptions = CreateSubscriptions();
             var subscription = subscriptions.ElementAt(6);
+            _subscriptionService.GetAllAsync().Returns(subscriptions);
 
             // Act
-            var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
+            var result = await _sut.GetMonthlySubscriptionLists(_fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
-            Assert.Contains(result.Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
+            Assert.Equal(_numberOfMonths, result.First().Count());
+            Assert.Contains(result.Last().Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
         }
 
         private IEnumerable<Subscription> CreateSubscriptions()
@@ -202,9 +209,9 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             };
         }
 
-        private static IEnumerable<Subscription> CollectSubscriptions(IEnumerable<SubscriptionsMonthResponse> subscriptionsMonthResponses)
+        private static IEnumerable<Subscription> CollectSubscriptions(IEnumerable<IGrouping<int, SubscriptionsMonthResponse>> subscriptionsMonthResponses)
         {
-            return subscriptionsMonthResponses.SelectMany(response => response.Subscriptions);
+            return subscriptionsMonthResponses.SelectMany(response => response.SelectMany(r => r.Subscriptions));
         }
     }
 }

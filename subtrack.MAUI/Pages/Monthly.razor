@@ -1,45 +1,32 @@
 ﻿@page "/monthly"
-@inject subtrack.MAUI.Services.Abstractions.ISubscriptionService SubscriptionService
-@inject subtrack.MAUI.Services.Abstractions.ISubscriptionsCalculator SubscriptionCalculator
+@inject subtrack.MAUI.Services.Abstractions.IDateProvider DateProvider
+@inject subtrack.MAUI.Services.Abstractions.IMonthlyPageCalculator MonthlyPageCalculator
 
 <AddSubscriptionButton />
 
-@foreach (var subMonth in _currentYearSubscriptionMonths)
+@foreach (var subs in monthlySubscriptions)
 {
-    <SubscriptionMonthItem SubscriptionMonth=@subMonth />
-}
-
-<h6 class="text-center mt-3 mb-2">@(_currentMonthDate.AddYears(1).Year)</h6>
-
-@foreach (var subMonth in _nextYearSubscriptionMonths)
-{
-    <SubscriptionMonthItem Year=@(_currentMonthDate.AddYears(1).Year) SubscriptionMonth=@subMonth />
-}
-
-<h6 class="text-center mt-3 mb-2">@(_currentMonthDate.AddYears(2).Year)</h6>
-
-@foreach (var subMonth in _nextYearSubscriptionMonths)
-{
-    <SubscriptionMonthItem Year=@(_currentMonthDate.AddYears(2).Year) SubscriptionMonth=@subMonth />
+    var displayYear = subs.Key != currentYear;
+    @if (displayYear)
+    {
+        <h6 class="text-center mt-3 mb-2">@(subs.Key)</h6>
+    }
+    @foreach(var subMonth in subs)
+    {
+        <SubscriptionMonthItem Year=@(displayYear ? subs.Key : null) SubscriptionMonth=@subMonth />    
+    }
 }
 
 @code {
-    IEnumerable<Subscription> _subscriptions = new List<Subscription>();
-    DateTime _currentMonthDate = DateTime.Now;
-
-    IEnumerable<SubscriptionsMonthResponse> _currentYearSubscriptionMonths = null!;
-    IEnumerable<SubscriptionsMonthResponse> _nextYearSubscriptionMonths = null!;
-    IEnumerable<SubscriptionsMonthResponse> _twoYearsForwardSubscriptionMonths = null!;
-
+    int currentYear;
+    IEnumerable<IGrouping<int, SubscriptionsMonthResponse>> monthlySubscriptions = default!;
     protected override async Task OnInitializedAsync()
     {
-        _subscriptions = await SubscriptionService.GetAllAsync();
+        var fromDate = DateProvider.Today;
+        currentYear = fromDate.Year;
+        var futureYearsToDisplay = 2;
 
-        var twoYearsForwardDate = _currentMonthDate.AddYears(2);
-        var paymentsTwoYearsForward = SubscriptionCalculator.GetMonthlySubscriptionLists(_subscriptions, _currentMonthDate.FirstDayOfMonthDate(), twoYearsForwardDate.LastDayOfMonthDate());
-
-        _currentYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.Year).ToList();
-        _nextYearSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.AddYears(1).Year).ToList();
-        _twoYearsForwardSubscriptionMonths = paymentsTwoYearsForward.Where(m => m.MonthDate.Year == _currentMonthDate.AddYears(2).Year).ToList();
+        var toDate = fromDate.AddYears(futureYearsToDisplay);
+        monthlySubscriptions = await MonthlyPageCalculator.GetMonthlySubscriptionLists(fromDate.FirstDayOfMonthDate(), toDate.LastDayOfMonthDate());
     }
 }
