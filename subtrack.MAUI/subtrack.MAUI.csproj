@@ -51,6 +51,10 @@
     </ItemGroup>
 
     <ItemGroup>
+      <None Include="wwwroot\js\highlightInput.js" />
+    </ItemGroup>
+
+    <ItemGroup>
       <PackageReference Include="Humanizer.Core" Version="2.14.1" />
     </ItemGroup>
 

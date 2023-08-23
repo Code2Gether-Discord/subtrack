@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore.Storage;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using subtrack.DAL.Migrations;
 using System.Runtime.CompilerServices;
+using subtrack.MAUI.Shared.JsInterop;
 
 [assembly: InternalsVisibleTo("subtrack.Tests")]
 
@@ -48,7 +49,8 @@ public static class MauiProgram
             .AddScoped<IDateProvider, DateProvider>()
             .AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>()
             .AddScoped<ISettingsService, SettingsService>()
-            .AddScoped<AutoPaymentHandler>();
+            .AddScoped<AutoPaymentHandler>()
+            .AddTransient<HighlightJsInterop>();
     }
 
     private static void SeedDb(SubtrackDbContext dbContext)

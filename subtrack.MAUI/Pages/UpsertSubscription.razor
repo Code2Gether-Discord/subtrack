@@ -2,9 +2,10 @@
 @page "/EditSubscription/{Id:int}"
 @using System.Globalization;
 @using subtrack.MAUI.Shared.Components
+@using subtrack.MAUI.Shared.JsInterop;
 @inject NavigationManager NavigationManager
 @inject ISubscriptionService SubscriptionService
-
+@implements IAsyncDisposable
 <div class="d-flex justify-content-between" style="padding-bottom: 20px;">
     <BackButton Url="@ReturnUrl"></BackButton>
     <button type="submit" form="SubscriptionForm" class="btn btn-outline-success">
@@ -20,7 +21,7 @@
     </div>
     <div class="input-group mb-3" style="padding-top: 15px;">
         <span class="input-group-text">@_currency</span>
-        <InputNumber class="form-control" placeholder="Cost" @bind-Value="@_subscription.Cost"></InputNumber>
+        <input @ref="costInputElement" inputmode="numeric" @onclick="@HightlightHandler" class="form-control" placeholder="Cost" @bind-value="@_subscription.Cost"></input>
     </div>
     <div style="display: flex;">
         <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Last Payment </label>
@@ -49,6 +50,9 @@
 </EditForm>
 
 @code {
+
+    [Inject] public HighlightJsInterop HighlightJsInterop { get; set; }   
+
     [Parameter]
     public int? Id { get; set; }
 
@@ -57,6 +61,7 @@
     public string ReturnUrl { get; set; }
 
     string _currency = "";
+    private ElementReference costInputElement;
 
     Subscription? _subscription = new()
         {
@@ -79,6 +84,9 @@
         }
     }
 
+    protected async Task HightlightHandler() => await HighlightJsInterop.HighLight(costInputElement);
+
+
     public async Task UpsertSubscriptionAsync()
     {
         if (Id == null)
@@ -93,6 +101,10 @@
             NavigationManager.NavigateTo(ReturnUrl);
 
         }
+    } 
+    public async ValueTask DisposeAsync()
+    {
+        await HighlightJsInterop.DisposeAsync();
     }
 
     private string GetBillingOccurrenceDisplayText(string billingOccurrence)
