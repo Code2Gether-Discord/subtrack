@@ -1,5 +1,4 @@
 ﻿using subtrack.DAL.Entities;
-using subtrack.MAUI.Responses;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Utilities;
 using System.Globalization;
@@ -48,32 +47,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             _ => throw new NotImplementedException("Only billing Cycles within a year are supported")
         };
         return subscription.Cost * yearlyPaymentsCount;
-    }
-
-    private IEnumerable<Subscription> GetPaymentsUntilMonth(Subscription subscription, DateTime fromIncludedDate, DateTime toIncludedDate)
-    {
-        subscription.LastPayment = GetNextPaymentDate(subscription);
-
-        while (subscription.LastPayment.Date >= fromIncludedDate.Date
-                && subscription.LastPayment.Date <= toIncludedDate.Date)
-        {
-            yield return (Subscription)subscription.Clone();
-            subscription.LastPayment = GetNextPaymentDate(subscription);
-        }
-    }
-
-    public IEnumerable<SubscriptionsMonthResponse> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
-    {
-        return subscriptions
-             .SelectMany(s => GetPaymentsUntilMonth(s, fromIncludedMonthDate, finalIncludedMonthDate))
-             .GroupBy(s => (s.LastPayment.Year, s.LastPayment.Month))
-             .Select(g =>
-                  new SubscriptionsMonthResponse
-                  {
-                      MonthDate = new DateTime(g.Key.Year, g.Key.Month, 1),
-                      Subscriptions = g.OrderBy(s => s.LastPayment).ToList(),
-                      Cost = GetTotalCost(g)
-                  }).ToList();
     }
 
     public DateTime GetNextPaymentDate(Subscription subscription)

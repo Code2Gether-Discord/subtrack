@@ -5,17 +5,17 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
 {
     public class GetSubscriptionListByMonthTests
     {
-        private readonly ISubscriptionsCalculator _sut;
-        private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
+        private readonly IMonthlyPageCalculator _sut;
         private readonly int _numberOfMonths = 3;
         private readonly DateTime _fromIncludedDate = new(2023, 4, 1),
                                   _toIncludedDate;
-        
+
         public GetSubscriptionListByMonthTests()
         {
             _toIncludedDate = _fromIncludedDate.AddMonths(_numberOfMonths - 1);
-            _sut = new SubscriptionsCalculator(_dateTimeProvider);
-            _dateTimeProvider.Today.Returns(_fromIncludedDate);
+            var dateProvider = Substitute.For<IDateProvider>();
+            var subscriptionsCalculator = new SubscriptionsCalculator(dateProvider);
+            _sut = new MonthlyPageCalculator(subscriptionsCalculator);
         }
 
         [Theory]
@@ -32,7 +32,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
             Assert.Equal(_numberOfMonths, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
@@ -59,7 +59,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
         }
 
         [Theory]
@@ -76,7 +76,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var collectedSubscriptions = CollectSubscriptions(result);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
             Assert.Equal(expectedNumberOfIterationsInMonth, collectedSubscriptions.Count(sub => sub.Id.Equals(subscription.Id)));
         }
 
@@ -90,7 +90,7 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = _sut.GetMonthlySubscriptionLists(new[] { sub }, _fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(2, result.Count());
+            Assert.Equal(2, result.First().Value.Count);
         }
 
         [Fact]
@@ -104,8 +104,8 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             var result = _sut.GetMonthlySubscriptionLists(subscriptions, _fromIncludedDate, _toIncludedDate);
 
             // Assert
-            Assert.Equal(_numberOfMonths, result.Count());
-            Assert.Contains(result.Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
+            Assert.Equal(_numberOfMonths, result.First().Value.Count);
+            Assert.Contains(result.Last().Value.Last().Subscriptions, (sub) => sub.Id.Equals(subscription.Id));
         }
 
         private IEnumerable<Subscription> CreateSubscriptions()
@@ -202,9 +202,9 @@ namespace subtrack.Tests.SubscriptionCalculatorTests
             };
         }
 
-        private static IEnumerable<Subscription> CollectSubscriptions(IEnumerable<SubscriptionsMonthResponse> subscriptionsMonthResponses)
+        private static IEnumerable<Subscription> CollectSubscriptions(IDictionary<int, List<SubscriptionsMonthResponse>> subscriptionsMonthResponses)
         {
-            return subscriptionsMonthResponses.SelectMany(response => response.Subscriptions);
+            return subscriptionsMonthResponses.SelectMany(response => response.Value.SelectMany(r => r.Subscriptions));
         }
     }
 }

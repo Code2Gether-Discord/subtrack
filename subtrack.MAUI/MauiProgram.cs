@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using subtrack.MAUI.Services.Abstractions;
 using subtrack.MAUI.Services;
-using Microsoft.EntityFrameworkCore.Storage;
-using Microsoft.EntityFrameworkCore.Infrastructure;
-using subtrack.DAL.Migrations;
 using System.Runtime.CompilerServices;
 using subtrack.MAUI.Shared.JsInterop;
 
@@ -49,16 +46,17 @@ public static class MauiProgram
             .AddScoped<IDateProvider, DateProvider>()
             .AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>()
             .AddScoped<ISettingsService, SettingsService>()
+            .AddScoped<IMonthlyPageCalculator, MonthlyPageCalculator>()
             .AddScoped<AutoPaymentHandler>()
             .AddTransient<HighlightJsInterop>();
     }
 
     private static void SeedDb(SubtrackDbContext dbContext)
     {
-        var todayLastMonth = DateTime.Now.AddMonths(-1);
         _ = dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
 
+        var todayLastMonth = DateTime.Now.AddMonths(-1);
         dbContext.Subscriptions.AddRange(
                   new DAL.Entities.Subscription() { Name = "paramount", LastPayment = todayLastMonth.AddDays(-1), FirstPaymentDay = todayLastMonth.AddDays(-1).Day, Cost = 3m, BillingOccurrence = DAL.Entities.BillingOccurrence.Week, BillingInterval = 2 },
                   new DAL.Entities.Subscription() { Name = "Disney+", LastPayment = todayLastMonth, FirstPaymentDay = todayLastMonth.Day, Cost = 3m, BillingOccurrence = DAL.Entities.BillingOccurrence.Month, BillingInterval = 1 },
