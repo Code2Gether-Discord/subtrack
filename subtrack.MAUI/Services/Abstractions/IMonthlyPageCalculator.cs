@@ -1,4 +1,5 @@
-﻿using subtrack.MAUI.Responses;
+﻿using subtrack.DAL.Entities;
+using subtrack.MAUI.Responses;
 
 namespace subtrack.MAUI.Services.Abstractions
 {
@@ -7,9 +8,10 @@ namespace subtrack.MAUI.Services.Abstractions
         /// <summary>
         /// Fetches all subscriptions that are active between the given dates grouped by month and year
         /// </summary>
+        /// <param name="subscriptions"></param>
         /// <param name="fromIncludedDate">Starting date for fetching the subscriptions</param>
         /// <param name="toIncludedDate">Ending date for fetching the subscriptions</param>
-        /// <returns>A <see cref="IDictionary{int, List<SubscriptionsMonthResponse>}"/> object where key is the year and value is the list of subscriptions grouped by month for that year</returns>
-        Task<IDictionary<int, List<SubscriptionsMonthResponse>>> GetMonthlySubscriptionLists(DateTime fromIncludedDate, DateTime toIncludedDate);
+        /// <returns>A dictionary where key is the year and value is the list of subscriptions grouped by month for that year</returns>
+        IDictionary<int, List<SubscriptionsMonthResponse>> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedDate, DateTime toIncludedDate);
     }
 }

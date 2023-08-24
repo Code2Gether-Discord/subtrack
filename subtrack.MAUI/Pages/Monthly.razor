@@ -1,4 +1,6 @@
 ﻿@page "/monthly"
+
+@inject subtrack.MAUI.Services.Abstractions.ISubscriptionService SubscriptionService
 @inject subtrack.MAUI.Services.Abstractions.IDateProvider DateProvider
 @inject subtrack.MAUI.Services.Abstractions.IMonthlyPageCalculator MonthlyPageCalculator
 
@@ -11,9 +13,10 @@
     {
         <h6 class="text-center mt-3 mb-2">@(subs.Key)</h6>
     }
-    @foreach(var subMonth in subs.Value)
+    @foreach (var subMonth in subs.Value)
     {
-        <SubscriptionMonthItem Year=@(displayYear ? subs.Key : null) SubscriptionMonth=@subMonth />    
+        <SubscriptionMonthItem Year=@(displayYear ? subs.Key : null) SubscriptionMonth=@subMonth />
+
     }
 }
 
@@ -22,11 +25,13 @@
     IDictionary<int, List<SubscriptionsMonthResponse>> _monthlySubscriptions = default!;
     protected override async Task OnInitializedAsync()
     {
+        var subscriptions = await SubscriptionService.GetAllAsync();
+
         var fromDate = DateProvider.Today;
         _currentYear = fromDate.Year;
         var futureYearsToDisplay = 2;
 
         var toDate = fromDate.AddYears(futureYearsToDisplay);
-        _monthlySubscriptions = await MonthlyPageCalculator.GetMonthlySubscriptionLists(fromDate.FirstDayOfMonthDate(), toDate.LastDayOfMonthDate());
+        _monthlySubscriptions = MonthlyPageCalculator.GetMonthlySubscriptionLists(subscriptions, fromDate.FirstDayOfMonthDate(), toDate.LastDayOfMonthDate());
     }
 }

@@ -7,12 +7,10 @@ namespace subtrack.MAUI.Services
     internal class MonthlyPageCalculator : IMonthlyPageCalculator
     {
         private readonly ISubscriptionsCalculator _subscriptionsCalculator;
-        private readonly ISubscriptionService _subscriptionService;
 
-        public MonthlyPageCalculator(ISubscriptionsCalculator subscriptionsCalculator, ISubscriptionService subscriptionService)
+        public MonthlyPageCalculator(ISubscriptionsCalculator subscriptionsCalculator)
         {
             _subscriptionsCalculator = subscriptionsCalculator;
-            _subscriptionService = subscriptionService;
         }
 
         private IEnumerable<Subscription> GetPaymentsUntilMonth(Subscription subscription, DateTime fromIncludedDate, DateTime toIncludedDate)
@@ -27,9 +25,8 @@ namespace subtrack.MAUI.Services
             }
         }
 
-        public async Task<IDictionary<int, List<SubscriptionsMonthResponse>>> GetMonthlySubscriptionLists(DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
+        public IDictionary<int, List<SubscriptionsMonthResponse>> GetMonthlySubscriptionLists(IEnumerable<Subscription> subscriptions, DateTime fromIncludedMonthDate, DateTime finalIncludedMonthDate)
         {
-            var subscriptions = await _subscriptionService.GetAllAsync();
             return subscriptions
                  .SelectMany(s => GetPaymentsUntilMonth(s, fromIncludedMonthDate, finalIncludedMonthDate))
                  .GroupBy(s => (s.LastPayment.Year, s.LastPayment.Month))
