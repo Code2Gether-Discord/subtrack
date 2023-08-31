@@ -1,5 +1,6 @@
 ﻿@page "/details/{Id:int}"
 @using System.Globalization;
+@using System.Text;
 @using subtrack.MAUI.Utilities;
 @using subtrack.MAUI.Shared.Components
 @inject ISubscriptionService subscriptionService
@@ -26,6 +27,7 @@ else
             </div>
         </div>
         <div class="row border-bottom py-2">
+            <label>Billing cycle</label>
             <div class="col-12 d-flex justify-content-center">
                 <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
                 @if (_subscription.IsAutoPaid)
@@ -33,9 +35,11 @@ else
                     <i class="fa fa-repeat" aria-hidden="true"></i>
                 }
             </div>
+            <label class="col-12 d-flex justify-content-center">@GetOccurance()</label>
         </div>
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex flex-column justify-content-center">
+                <label>Next payment</label>
                 <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
                 <div class="text-center">@_dueTimeText</div>
             </div>
@@ -49,13 +53,15 @@ else
             </div>
         </div>
         <div class="row border-bottom py-2">
+            <label>Latest payment</label>
             <div class="col-12 d-flex justify-content-center">
                 Latest payment @_subscription.LastPayment.ToString("MMMM dd, yyyy", _usCulture)
             </div>
         </div>
         <div class="row border-bottom py-2">
+            <label>Annually</label>
             <div class="col-12 d-flex justify-content-center">
-                Annually - @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
+                @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
             </div>
         </div>
         @if (!string.IsNullOrWhiteSpace(_subscription.Description))
@@ -137,5 +143,19 @@ else
         }
         await subscriptionService.Delete(Id);
         navigationManager.NavigateTo("/", replace: true);
+    }
+    private string GetOccurance()
+    {
+        StringBuilder sb = new StringBuilder();
+        sb.Append("every ");
+        if(_subscription.BillingInterval==1)
+        {
+            sb.Append(_subscription.BillingOccurrence.Humanize().ToLower());
+            return sb.ToString();
+        }
+        sb.Append(_subscription.BillingInterval.ToWords());
+        sb.Append(" ");
+        sb.Append(_subscription.BillingOccurrence.Humanize().ToLower().Pluralize());
+        return sb.ToString();
     }
 }
