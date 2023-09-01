@@ -1,2 +1,10 @@
 global using Xunit;
 global using subtrack.Tests;
+global using subtrack.Tests.Utilities;
+global using Microsoft.Extensions.DependencyInjection;
+global using subtrack.DAL.Entities;
+global using subtrack.MAUI.Services;
+global using subtrack.MAUI.Services.Abstractions;
+global using NSubstitute;
+global using System.Collections;
+global using System.Collections.Generic;

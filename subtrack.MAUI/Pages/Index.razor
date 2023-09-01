@@ -15,7 +15,7 @@
             <h6 class="pt-1">Monthly</h6>
         </div>
         <div class="col">
-            <h5>@($"{_subscriptionsCost:C}")</h5>
+            <h5>@($"~{Math.Round(_subscriptionsCost, 2):C}")</h5>
         </div>
     </div>
 </div>
@@ -50,7 +50,7 @@
     protected override async void OnInitialized()
     {
         var subscriptions = await subscriptionService.GetAllAsync();
-        _subscriptionsCost = subscriptionsCalculator.GetTotalCost(subscriptions);
+        _subscriptionsCost = subscriptionsCalculator.GetAverageMonthlyCost(subscriptions);
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, subscriptionsCalculator)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
