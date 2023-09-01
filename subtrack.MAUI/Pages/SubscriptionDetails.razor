@@ -27,7 +27,7 @@ else
             </div>
         </div>
         <div class="row border-bottom py-2">
-            <label>Billing cycle</label>
+            <label>Billing</label>
             <div class="col-12 d-flex justify-content-center">
                 <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
                 @if (_subscription.IsAutoPaid)
@@ -35,7 +35,7 @@ else
                     <i class="fa fa-repeat" aria-hidden="true"></i>
                 }
             </div>
-            <label class="col-12 d-flex justify-content-center">@GetOccurance()</label>
+            <label class="col-12 d-flex justify-content-center">@GetOccuranceText()</label>
         </div>
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex flex-column justify-content-center">
@@ -144,7 +144,7 @@ else
         await subscriptionService.Delete(Id);
         navigationManager.NavigateTo("/", replace: true);
     }
-    private string GetOccurance()
+    private string GetOccuranceText()
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("every ");
