@@ -61,7 +61,7 @@ else
         <div class="row border-bottom py-2">
             <label>Annually</label>
             <div class="col-12 d-flex justify-content-center">
-                @($"{subscriptionsCalculator.GetYearlyCost(_subscription):C}")
+                @($"~{Math.Round(_subscriptionsCost, 2):C}")
             </div>
         </div>
         @if (!string.IsNullOrWhiteSpace(_subscription.Description))
@@ -82,6 +82,7 @@ else
 }
 
 @code {
+    private decimal _subscriptionsCost = 0;
     [Parameter]
     public int Id { get; set; }
 
@@ -103,6 +104,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         _subscription = await subscriptionService.GetByIdIfExists(Id);
+        _subscriptionsCost = subscriptionsCalculator.GetYearlyCost(_subscription);
         _deleteButtonClicked = false;
         if (_subscription is not null)
         {
