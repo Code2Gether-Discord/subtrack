@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 
 namespace subtrack.DAL.Entities;
 
-public class Subscription
+[DebuggerDisplay("Name = {Name} LastPayment = {LastPayment} BillingOccurrence = {BillingOccurrence}")]
+public class Subscription : ICloneable
 {
     public int Id { get; set; }
 
@@ -23,4 +25,9 @@ public class Subscription
 
     [Range(1, int.MaxValue, ErrorMessage = "Interval has to be greater than 0")]
     public int BillingInterval { get; set; }
+
+    public object Clone()
+    {
+        return (Subscription)MemberwiseClone();
+    }
 }

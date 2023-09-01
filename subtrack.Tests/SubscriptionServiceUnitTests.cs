@@ -1,8 +1,4 @@
-﻿using NSubstitute;
-using subtrack.MAUI.Services;
-using subtrack.MAUI.Services.Abstractions;
-
-namespace subtrack.Tests;
+﻿namespace subtrack.Tests;
 public class SubscriptionServiceUnitTests : IntegrationTestBase
 {
     private readonly SubscriptionService _sut;

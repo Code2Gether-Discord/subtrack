@@ -21,8 +21,8 @@ public class SubtrackDbContext : DbContext
 
         modelBuilder.Entity<Subscription>(entity =>
         {
-            entity.Property(e => e.BillingOccurrence).HasDefaultValue(BillingOccurrence.Month);
-            entity.Property(e => e.BillingInterval).HasDefaultValue(1);
+            entity.Property(e => e.BillingOccurrence).HasDefaultValue(BillingOccurrence.Month).ValueGeneratedNever();
+            entity.Property(e => e.BillingInterval).HasDefaultValue(1).ValueGeneratedNever();
         });
     }
 }

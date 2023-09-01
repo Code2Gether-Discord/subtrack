@@ -49,18 +49,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         return subscription.Cost * yearlyPaymentsCount;
     }
 
-    public IEnumerable<Subscription> GetSubscriptionListByMonth(IEnumerable<Subscription> subscriptions, DateTime monthDate)
-    {
-        bool paidThisMonth(Subscription s) => s.LastPayment.Month == monthDate.Month && s.LastPayment.Year == monthDate.Year;
-        bool paymentStartsInTheFuture(Subscription s) => s.LastPayment > monthDate;
-
-        var subscriptionsByMonth = subscriptions
-                    .Where(s => !paidThisMonth(s) && !paymentStartsInTheFuture(s))
-                    .ToList();
-
-        return subscriptionsByMonth;
-    }
-
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
         int startDay = subscription.FirstPaymentDay;
@@ -87,12 +75,32 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
             default:
                 throw new ArgumentOutOfRangeException(subscription.BillingOccurrence.ToString());
         }
-        
     }
 
     public (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription)
     {
         var nextPaymentDate = GetNextPaymentDate(subscription);
         return (nextPaymentDate <= _dateProvider.Today, nextPaymentDate);
+    }
+
+    private decimal GetAverageMonthlyCost(Subscription subscription)
+    {
+        if (subscription is null)
+            throw new ArgumentNullException(nameof(subscription));
+        var weeksInYear = ISOWeek.GetWeeksInYear(_dateProvider.Today.Year);
+        var totalDuration = subscription.BillingOccurrence switch
+        {
+            BillingOccurrence.Month => _monthsInAYear,
+            BillingOccurrence.Week => weeksInYear,
+            BillingOccurrence.Year => 1,
+            _ => throw new ArgumentOutOfRangeException($"Billing occurrence ${subscription.BillingOccurrence} is not supported in GetAverageMonthlyCost")
+        };
+        var yearlyPaymentsCount = totalDuration / subscription.BillingInterval;
+        return yearlyPaymentsCount * subscription.Cost / _monthsInAYear;
+    }
+
+    public decimal GetAverageMonthlyCost(IEnumerable<Subscription> subscriptions)
+    {
+        return subscriptions.Select(GetAverageMonthlyCost).Sum();
     }
 }
