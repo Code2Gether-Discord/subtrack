@@ -35,7 +35,7 @@ else
                     <i class="fa fa-repeat" aria-hidden="true"></i>
                 }
             </div>
-            <label class="col-12 d-flex justify-content-center">@GetOccuranceText()</label>
+            <label class="col-12 d-flex justify-content-center">@GetOccurrenceText()</label>
         </div>
         <div class="row border-bottom py-2">
             <div class="col-12 d-flex flex-column justify-content-center">
@@ -144,7 +144,7 @@ else
         await subscriptionService.Delete(Id);
         navigationManager.NavigateTo("/", replace: true);
     }
-    private string GetOccuranceText()
+    private string GetOccurrenceText()
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("every ");
