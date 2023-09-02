@@ -60,7 +60,8 @@ After making changes to any entity you need to add a migration and update the da
 - Check if there are any open issues that are required for the release
 - Briefly test the app's functionality on the dev branch and open any necessary issues
 - Open a PR from dev to master branch that should contain the release number in the title
-  - The PR should update the application version `<ApplicationDisplayVersion></ApplicationDisplayVersion>` inside *subtrack.maui.csproj*. This should be set to the same value as the release version
+  - Update the application version `<ApplicationDisplayVersion></ApplicationDisplayVersion>` inside *subtrack.maui.csproj*. This should be set to the same value as the release version
+  - Update the Roadmap
 - Git pull master
 - Open up *subtrack.maui.csproj*
     - Set the value of application Id to `<ApplicationId>com.companyname.subtrack</ApplicationId>``
