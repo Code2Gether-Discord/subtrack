@@ -8,6 +8,7 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
   - [Github Issues](#github-issues)
   - [Creating database migrations](#creating-database-migrations)
   - [Design](#design)
+  - [Creating a Release](#creating-a-release)
 - [Roadmap 2023](#roadmap-2023)
 
 # Development Info
@@ -54,6 +55,25 @@ After making changes to any entity you need to add a migration and update the da
 ## Design
 - This project makes use of the cyborg theme from bootswatch https://bootswatch.com/cyborg/ and bootstrap v5.3.0
 - Mockups are created with drawio and any changes are saved as a png inside /docs
+
+## Creating a Release
+- Check if there are any open issues that are required for the release
+- Briefly test the app's functionality on the dev branch and open any necessary issues
+- Open a PR from dev to master branch that should contain the release number in the title
+  - The PR should update the application version `<ApplicationDisplayVersion></ApplicationDisplayVersion>` inside *subtrack.maui.csproj*. This should be set to the same value as the release version
+- Git pull master
+- Open up *subtrack.maui.csproj*
+    - Set the value of application Id to `<ApplicationId>com.companyname.subtrack</ApplicationId>``
+    - Set the value of application Title `<ApplicationTitle>subtrack</ApplicationTitle>`
+- Inside Visual Studio set build mode to **Release**
+- Build the project
+- Run the project
+- The APK file should have been created at this location: *subtrack.MAUI\bin\Release\net6.0-android\com.companyname.subtrack-Signed.apk*
+- Remove the changes that were made to the *.csproj* file
+- Upload the APK release to Github
+  - The version should be prefixed with a **"v"** and suffix of (app stage which is currently alpha 2/9-2023) **"-alpha"**
+  - Should contain notable changes/features that were added
+  - Should display the contributors
 
 # Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
