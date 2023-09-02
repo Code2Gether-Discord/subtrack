@@ -13,16 +13,19 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <EnableDefaultCssItems>false</EnableDefaultCssItems>
 
-        <!-- Display name -->
-        <ApplicationTitle>subtrack.MAUI</ApplicationTitle>
-
         <!-- App Identifier -->
-        <ApplicationId>com.companyname.subtrack.maui</ApplicationId>
         <ApplicationIdGuid>534AC803-FA5C-4FC7-9B68-B72408BE0A72</ApplicationIdGuid>
+		
+		<!-- Remove ".Test" when making an APK release but do not commit -->
+        <!-- Display name -->
+        <ApplicationTitle>subtrack.Test</ApplicationTitle>
+		<!-- App Identifier -->
+        <ApplicationId>com.companyname.subtrack.test</ApplicationId>
 
         <!-- Versions -->
-        <ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
         <ApplicationVersion>1</ApplicationVersion>
+        <!-- Update when merging from dev to master -->
+        <ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
 
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">14.2</SupportedOSPlatformVersion>
         <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">14.0</SupportedOSPlatformVersion>
