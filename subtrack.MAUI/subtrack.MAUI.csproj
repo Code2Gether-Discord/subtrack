@@ -20,7 +20,7 @@
 		<!-- Display name -->
 		<ApplicationTitle>subtrack.Test</ApplicationTitle>
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.subtrack.test</ApplicationId>
+		<ApplicationId>com.code2gether.subtrack.test</ApplicationId>
 
 		<ApplicationVersion>1</ApplicationVersion>
 		<ApplicationDisplayVersion>1.0.0</ApplicationDisplayVersion>
