@@ -1,23 +1,23 @@
 ﻿namespace subtrack.Tests.SubscriptionCalculatorTests;
 
-public class GetAverageMonthlyCostTests
+public class GetMonthlyAverageCostTests
 {
     private readonly ISubscriptionsCalculator _sut;
     private readonly IDateProvider _dateTimeProvider = Substitute.For<IDateProvider>();
     private readonly DateTime _date = new(2023, 4, 1);
 
-    public GetAverageMonthlyCostTests()
+    public GetMonthlyAverageCostTests()
     {
         _sut = new SubscriptionsCalculator(_dateTimeProvider);
         _dateTimeProvider.Today.Returns(_date);
     }
 
     [Theory]
-    [ClassData(typeof(GetAverageMonthlyCostsTestData))]
+    [ClassData(typeof(GetMonthlyAverageCostsTestData))]
     public void GivenSubscriptions_WhenCalculatingAverageMonthlyCosts_ShouldReturnExpectedResults(IEnumerable<Subscription> subscriptions, decimal expectedCost)
     {
         // Act
-        var averageMonthlyCost = _sut.GetAverageMonthlyCost(subscriptions);
+        var averageMonthlyCost = _sut.GetMonthlyAverageCost(subscriptions);
 
         // Assert
         Assert.Equal(expectedCost, averageMonthlyCost, 2);
@@ -30,17 +30,17 @@ public class GetAverageMonthlyCostTests
         IEnumerable<Subscription> subscriptions = new List<Subscription> { null };
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => _sut.GetAverageMonthlyCost(subscriptions));
+        Assert.Throws<ArgumentNullException>(() => _sut.GetMonthlyAverageCost(subscriptions));
     }
 }
 
-public class GetAverageMonthlyCostsTestData : IEnumerable<object[]>
+public class GetMonthlyAverageCostsTestData : IEnumerable<object[]>
 {
     public IEnumerator<object[]> GetEnumerator()
     {
         yield return new object[] { 
-            new[] { new Subscription { Name = "Subscription 1", BillingInterval = 1, Cost = 24, BillingOccurrence = BillingOccurrence.Year } }, 
-            2 
+            new[] { new Subscription { Name = "Subscription 1", BillingInterval = 1, Cost = 24, BillingOccurrence = BillingOccurrence.Year } },
+            2
         };
         yield return new object[] {
             new[] { new Subscription { Name = "Subscription 2", BillingInterval = 1, Cost = 5, BillingOccurrence = BillingOccurrence.Week } },

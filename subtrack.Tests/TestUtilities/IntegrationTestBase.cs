@@ -1,12 +1,10 @@
 ﻿using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using subtrack.DAL;
-using subtrack.DAL.Entities;
 using subtrack.MAUI;
 
-namespace subtrack.Tests.Utilities;
+namespace subtrack.Tests.TestUtilities;
 
 /// <summary>
 /// Allows us simulate a real scenario with actual services used in the project and a in memory database

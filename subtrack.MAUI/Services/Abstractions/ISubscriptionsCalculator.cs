@@ -6,14 +6,14 @@ namespace subtrack.MAUI.Services.Abstractions
     {
         int GetDueDays(Subscription subscription);
 
+        DateTime GetNextPaymentDate(Subscription subscription);
+
         decimal GetTotalCost(IEnumerable<Subscription> subscriptions);
 
-        decimal GetYearlyCost(Subscription subscription);
-
-        DateTime GetNextPaymentDate(Subscription subscription);
+        decimal GetYearlyAverageCost(Subscription subscription);
 
         (bool IsDue, DateTime NextPaymentDate) IsDue(Subscription subscription);
 
-        decimal GetAverageMonthlyCost(IEnumerable<Subscription> subscriptions);
+        decimal GetMonthlyAverageCost(IEnumerable<Subscription> subscriptions);
     }
 }

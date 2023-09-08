@@ -1,16 +1,16 @@
 ﻿using subtrack.MAUI.Responses;
 using subtrack.MAUI.Utilities;
 
-namespace subtrack.Tests.SubscriptionCalculatorTests
+namespace subtrack.Tests.MonthlyPageCalculatorTests
 {
-    public class GetSubscriptionListByMonthTests
+    public class GetMonthlySubscriptionListsTests
     {
         private readonly IMonthlyPageCalculator _sut;
         private readonly int _numberOfMonths = 3;
         private readonly DateTime _fromIncludedDate = new(2023, 4, 1),
                                   _toIncludedDate;
 
-        public GetSubscriptionListByMonthTests()
+        public GetMonthlySubscriptionListsTests()
         {
             _toIncludedDate = _fromIncludedDate.AddMonths(_numberOfMonths - 1);
             var dateProvider = Substitute.For<IDateProvider>();
