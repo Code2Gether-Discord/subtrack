@@ -40,11 +40,6 @@ public class SubscriptionsCalculator : ISubscriptionsCalculator
         return GetAverageMonthlyCost(subscription) * 12;
     }
 
-    public decimal GetAverageYearlyCost(Subscription subscription)
-    {
-        return GetAverageMonthlyCost(subscription) * 12;
-    }
-
     public DateTime GetNextPaymentDate(Subscription subscription)
     {
         int startDay = subscription.FirstPaymentDay;
