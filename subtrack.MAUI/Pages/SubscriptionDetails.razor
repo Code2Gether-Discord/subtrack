@@ -104,7 +104,7 @@ else
     protected override async Task OnInitializedAsync()
     {
         _subscription = await subscriptionService.GetByIdIfExists(Id);
-        _subscriptionsCost = subscriptionsCalculator.GetYearlyCost(_subscription);
+        _subscriptionsCost = subscriptionsCalculator.GetYearlyAverageCost(_subscription);
         _deleteButtonClicked = false;
         if (_subscription is not null)
         {
