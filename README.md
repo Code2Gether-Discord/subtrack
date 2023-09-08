@@ -63,12 +63,12 @@ After making changes to any entity you need to add a migration and update the da
   - Update the Roadmap
 - Git pull master
 - Open up *subtrack.maui.csproj*
-    - Set the value of application Id to `<ApplicationId>com.companyname.subtrack</ApplicationId>`
+    - Set the value of application Id to `<ApplicationId>com.code2gether.subtrack</ApplicationId>`
     - Set the value of application Title `<ApplicationTitle>subtrack</ApplicationTitle>`
 - Inside Visual Studio set build mode to **Release**
 - Build the project
 - Run the project
-- The APK file should have been created at this location: *subtrack.MAUI\bin\Release\net6.0-android\com.companyname.subtrack-Signed.apk*
+- The APK file should have been created at this location: *subtrack.MAUI\bin\Release\net6.0-android\com.code2gether.subtrack-Signed.apk*
 - Remove the changes that were made to the *.csproj* file
 - Upload the APK release to Github
   - The version should be prefixed with a **"v"** and suffix of (app stage which is currently alpha 2/9-2023) **"-alpha"**
