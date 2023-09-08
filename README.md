@@ -64,7 +64,7 @@ After making changes to any entity you need to add a migration and update the da
   - Update the Roadmap
 - Git pull master
 - Open up *subtrack.maui.csproj*
-    - Set the value of application Id to `<ApplicationId>com.companyname.subtrack</ApplicationId>``
+    - Set the value of application Id to `<ApplicationId>com.companyname.subtrack</ApplicationId>`
     - Set the value of application Title `<ApplicationTitle>subtrack</ApplicationTitle>`
 - Inside Visual Studio set build mode to **Release**
 - Build the project
