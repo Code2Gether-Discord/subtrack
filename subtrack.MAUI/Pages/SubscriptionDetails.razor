@@ -122,7 +122,7 @@ else
             return "today";
         }
 
-        var dueTimeText = dueTime.Humanize(3, minUnit: Humanizer.Localisation.TimeUnit.Day, maxUnit: Humanizer.Localisation.TimeUnit.Month);
+        var dueTimeText = dueTime.Humanize(3, minUnit: Humanizer.Localisation.TimeUnit.Day, maxUnit: Humanizer.Localisation.TimeUnit.Year);
 
         return duedate.IsPastDate(dateTimeProvider) ? $"{dueTimeText} ago" : dueTimeText;
     }
@@ -150,12 +150,14 @@ else
     {
         StringBuilder sb = new StringBuilder();
         sb.Append("every ");
+
         if(_subscription.BillingInterval==1)
         {
             sb.Append(_subscription.BillingOccurrence.Humanize().ToLower());
             return sb.ToString();
         }
-        sb.Append(_subscription.BillingInterval.ToWords());
+
+        sb.Append(_subscription.BillingInterval.ToWords(_usCulture));
         sb.Append(" ");
         sb.Append(_subscription.BillingOccurrence.Humanize().ToLower().Pluralize());
         return sb.ToString();
