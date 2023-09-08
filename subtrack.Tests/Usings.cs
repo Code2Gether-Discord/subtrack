@@ -1,6 +1,6 @@
 global using Xunit;
 global using subtrack.Tests;
-global using subtrack.Tests.Utilities;
+global using subtrack.Tests.TestUtilities;
 global using Microsoft.Extensions.DependencyInjection;
 global using subtrack.DAL.Entities;
 global using subtrack.MAUI.Services;

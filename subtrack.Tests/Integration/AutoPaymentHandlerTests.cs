@@ -1,4 +1,4 @@
-﻿namespace subtrack.Tests
+﻿namespace subtrack.Tests.Integration
 {
     public class AutoPaymentHandlerTests : IntegrationTestBase
     {

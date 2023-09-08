@@ -1,10 +1,10 @@
-﻿namespace subtrack.Tests;
-public class SubscriptionServiceUnitTests : IntegrationTestBase
+﻿namespace subtrack.Tests.Integration;
+public class SubscriptionServiceTests : IntegrationTestBase
 {
     private readonly SubscriptionService _sut;
     private readonly IDateProvider _dateProvider = Substitute.For<IDateProvider>();
 
-    public SubscriptionServiceUnitTests()
+    public SubscriptionServiceTests()
     {
         _sut = new SubscriptionService(_dbContext, new SubscriptionsCalculator(_dateProvider));
     }

@@ -50,7 +50,7 @@
     protected override async void OnInitialized()
     {
         var subscriptions = await subscriptionService.GetAllAsync();
-        _subscriptionsCost = subscriptionsCalculator.GetAverageMonthlyCost(subscriptions);
+        _subscriptionsCost = subscriptionsCalculator.GetMonthlyAverageCost(subscriptions);
         _subscriptionResponses = SubscriptionMapper.ToResponses(subscriptions, subscriptionsCalculator)
                                                    .OrderBy(sub => sub.DueDays)
                                                    .ToList();
