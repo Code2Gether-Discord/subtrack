@@ -85,4 +85,8 @@ a, .btn-link {
     .flex-column, .navbar-brand {
         padding-left: env(safe-area-inset-left);
     }
+
+    .overdue {
+        color: #f35555
+    }
 }
