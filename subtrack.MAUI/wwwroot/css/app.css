@@ -71,6 +71,10 @@ a, .btn-link {
     display: none;
 }
 
+.overdue {
+    color: #f35555;
+}
+
 @supports (-webkit-touch-callout: none) {
     .status-bar-safe-area {
         display: flex;
@@ -84,9 +88,5 @@ a, .btn-link {
 
     .flex-column, .navbar-brand {
         padding-left: env(safe-area-inset-left);
-    }
-
-    .overdue {
-        color: #f35555;
     }
 }
