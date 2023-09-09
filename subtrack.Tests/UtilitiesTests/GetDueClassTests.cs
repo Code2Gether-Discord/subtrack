@@ -5,10 +5,10 @@ namespace subtrack.Tests.UtilitiesTests;
 public class GetDueClassTests
 {
     [Theory]
-    [InlineData(-1, ".overdue")]
-    [InlineData(0, ".overdue")]
-    [InlineData(1, ".text-warning")]
-    [InlineData(2, ".text-warning")]
+    [InlineData(-1, "overdue")]
+    [InlineData(0, "overdue")]
+    [InlineData(1, "text-warning")]
+    [InlineData(2, "text-warning")]
     [InlineData(3, "")]
     public void GetDueClass_ReturnsExpectedResult(int daysUntilDue, string expected)
     {
