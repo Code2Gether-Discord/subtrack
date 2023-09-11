@@ -37,7 +37,7 @@ else
             </div>
             <label class="col-12 d-flex justify-content-center">@GetOccurrenceText()</label>
         </div>
-        <div class="row border-bottom py-2">
+        <div class="row border-bottom py-2 @CssUtil.GetDueClass(_nextPaymentDate.TimeRemainingFromToday(dateTimeProvider).Days)">
             <div class="col-12 d-flex flex-column justify-content-center">
                 <label>Next payment</label>
                 <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
