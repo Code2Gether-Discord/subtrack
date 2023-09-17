@@ -34,8 +34,6 @@ namespace subtrack.DAL.Migrations
                     b.ToTable("Settings");
 
                     b.HasDiscriminator<string>("settings_type").HasValue("SettingsBase");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("subtrack.DAL.Entities.Subscription", b =>
