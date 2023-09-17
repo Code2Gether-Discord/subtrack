@@ -24,6 +24,19 @@
         <input @ref="costInputElement" inputmode="numeric" @onclick="@HightlightHandler" class="form-control" placeholder="Cost" @bind-value="@_subscription.Cost"></input>
     </div>
     <div style="display: flex;">
+        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Billing Cycle </label>
+    </div>
+    <div class="flex-fill d-flex" style="padding-top: 10px;">
+        <span class="me-4">every </span>
+        <InputNumber class="form-control me-4" placeholder="Billing Interval" @bind-Value="@_subscription.BillingInterval" id="billingInterval" style=" flex: 2 1 6em"></InputNumber>
+        <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control flex-grow-1">
+            <option value="@BillingOccurrence.Week">@GetBillingOccurrenceDisplayText("Week")</option>
+            <option value="@BillingOccurrence.Month">@GetBillingOccurrenceDisplayText("Month")</option>
+            <option value="@BillingOccurrence.Year">@GetBillingOccurrenceDisplayText("Year")</option>
+        </InputSelect>
+    </div>
+    <br />
+    <div style="display: flex;" class="mt-2">
         <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Last Payment </label>
         <InputDate class="form-control" @bind-Value="@_subscription.LastPayment"></InputDate>
     </div>
@@ -31,20 +44,18 @@
         <label class="form-check-label" for="autopaid">Auto Paid </label>
         <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@_subscription.IsAutoPaid"></InputCheckbox>
     </div>
-    <div class="form-group" style="padding-top: 10px;">
+    <div style="display: flex;">
+        <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Primary Color </label>
+        <input class="form-control" type="color" style="max-width: 100px;min-height:25px" id="backgroundColor" list="backgroundPresets" value="@_subscription.PrimaryColor" @onchange="@UpdateBackgroundColor" />
+        <datalist id="backgroundPresets">
+            @foreach (var backgroundColor in backgroundColorOptions)
+            {
+                <option value="@backgroundColor.ToLower()">@backgroundColor.ToLower()</option>
+            }
+        </datalist>
+    </div>
+    <div class="form-group mt-2" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
-    </div>
-    <div style="display: flex;padding-top: 10px;">
-        <label style="white-space: nowrap; padding-top: 5px; padding-right: 10px; font-size: 17px;">Billing Cycle </label>
-    </div>
-    <div class="flex-fill d-flex" style="padding-top: 10px;">
-        <span class="me-4">every </span>
-        <InputNumber class="form-control me-4" placeholder="Billing Interval" @bind-Value="@_subscription.BillingInterval" id="billingInterval" style=" flex: 2 1 6em"></InputNumber>
-         <InputSelect @bind-Value="@_subscription.BillingOccurrence" class="form-control flex-grow-1">
-            <option value="@BillingOccurrence.Week">@GetBillingOccurrenceDisplayText("Week")</option>
-            <option value="@BillingOccurrence.Month">@GetBillingOccurrenceDisplayText("Month")</option>
-            <option value="@BillingOccurrence.Year">@GetBillingOccurrenceDisplayText("Year")</option>
-        </InputSelect>
     </div>
     <br/>
 </EditForm>
@@ -69,6 +80,8 @@
             BillingOccurrence = BillingOccurrence.Month
         };
 
+    private IEnumerable<string> backgroundColorOptions = CssUtil.AvailableBackgroundColors;
+
     protected override void OnInitialized()
     {
         RegionInfo ri = new RegionInfo(System.Threading.Thread.CurrentThread.CurrentUICulture.LCID);
@@ -81,6 +94,9 @@
         if (Id != null)
         {
             _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
+        } else
+        {
+            _subscription.PrimaryColor = backgroundColorOptions.First();
         }
     }
 
@@ -111,4 +127,6 @@
     {
         return billingOccurrence.ToQuantity(_subscription.BillingInterval, showQuantityAs: ShowQuantityAs.None);
     }
+
+    private void UpdateBackgroundColor(ChangeEventArgs e) => _subscription.PrimaryColor = e.Value!.ToString();
 }

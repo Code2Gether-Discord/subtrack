@@ -10,5 +10,6 @@
         public decimal Cost { get; set; }
         public DateTime LastPayment { get; set; }
         public int DueDays { get; set; }
+        public string PrimaryColor { get; set; }
     }
 }

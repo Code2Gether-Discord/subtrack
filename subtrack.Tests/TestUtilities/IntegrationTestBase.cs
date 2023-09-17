@@ -83,7 +83,8 @@ public abstract class IntegrationTestBase : IDisposable
             Cost = cost,
             IsAutoPaid = autoPaid,
             BillingInterval = 1,
-            BillingOccurrence = BillingOccurrence.Month
+            BillingOccurrence = BillingOccurrence.Month,
+            PrimaryColor = "#fff"
         };
     }
 }

@@ -26,6 +26,8 @@ public class Subscription : ICloneable
     [Range(1, int.MaxValue, ErrorMessage = "Interval has to be greater than 0")]
     public int BillingInterval { get; set; }
 
+    public string PrimaryColor { get; set; }
+
     public object Clone()
     {
         return (Subscription)MemberwiseClone();

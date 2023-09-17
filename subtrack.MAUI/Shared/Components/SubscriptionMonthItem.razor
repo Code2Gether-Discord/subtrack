@@ -11,7 +11,7 @@
 
     @foreach (var sub in SubscriptionMonth.Subscriptions)
     {
-        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}?ReturnUrl={Navigator.Uri}")) class="card mb-2 clickable" style="max-width: 20rem;">
+        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}?ReturnUrl={Navigator.Uri}")) class="card mb-2 clickable" style="max-width: 20rem;background-color:@sub.PrimaryColor">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 5px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div class="text-truncate flex-grow-1">@sub.Name</div>
