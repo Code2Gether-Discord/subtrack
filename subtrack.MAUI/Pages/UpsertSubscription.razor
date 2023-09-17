@@ -46,7 +46,7 @@
     </div>
     <div style="display: flex;">
         <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Primary Color </label>
-        <input class="form-control" type="color" style="max-width: 100px;min-height:25px" id="backgroundColor" list="backgroundPresets" value="@_subscription.BackgroundColor" @onchange="@UpdateBackgroundColor" />
+        <input class="form-control" type="color" style="max-width: 100px;min-height:25px" id="backgroundColor" list="backgroundPresets" value="@_subscription.PrimaryColor" @onchange="@UpdateBackgroundColor" />
         <datalist id="backgroundPresets">
             @foreach (var backgroundColor in backgroundColorOptions)
             {
@@ -96,7 +96,7 @@
             _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
         } else
         {
-            _subscription.BackgroundColor = backgroundColorOptions.First();
+            _subscription.PrimaryColor = backgroundColorOptions.First();
         }
     }
 
@@ -128,5 +128,5 @@
         return billingOccurrence.ToQuantity(_subscription.BillingInterval, showQuantityAs: ShowQuantityAs.None);
     }
 
-    private void UpdateBackgroundColor(ChangeEventArgs e) => _subscription.BackgroundColor = e.Value!.ToString();
+    private void UpdateBackgroundColor(ChangeEventArgs e) => _subscription.PrimaryColor = e.Value!.ToString();
 }
