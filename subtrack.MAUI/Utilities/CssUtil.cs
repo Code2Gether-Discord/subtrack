@@ -2,7 +2,7 @@
 
 public static class CssUtil
 {
-    internal static IEnumerable<string> AvailableBackgroundColors = new[]
+    internal static readonly IEnumerable<string> AvailableBackgroundColors = new[]
     {
         "#282828",
         "#281439",
