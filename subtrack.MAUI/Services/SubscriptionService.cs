@@ -42,6 +42,7 @@ namespace subtrack.MAUI.Services
             sub.IsAutoPaid = subscriptionToUpdate.IsAutoPaid;
             sub.BillingOccurrence = subscriptionToUpdate.BillingOccurrence;
             sub.BillingInterval = subscriptionToUpdate.BillingInterval;
+            sub.BackgroundColor = subscriptionToUpdate.BackgroundColor;
             AutoPay(sub);
             sub.Cost = subscriptionToUpdate.Cost;
 
