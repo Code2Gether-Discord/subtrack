@@ -46,7 +46,7 @@
     </div>
     <div style="display: flex;">
         <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Primary Color </label>
-        <input class="form-control" type="color" id="backgroundColor" list="backgroundPresets" value="@_subscription.BackgroundColor" @onchange="@UpdateBackgroundColor" />
+        <input class="form-control" type="color" style="max-width: 100px;min-height:25px" id="backgroundColor" list="backgroundPresets" value="@_subscription.BackgroundColor" @onchange="@UpdateBackgroundColor" />
         <datalist id="backgroundPresets">
             @foreach (var backgroundColor in backgroundColorOptions)
             {
