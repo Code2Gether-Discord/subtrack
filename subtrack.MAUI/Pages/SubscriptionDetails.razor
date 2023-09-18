@@ -41,7 +41,7 @@ else
         </div>
         <div class="row py-2 @CssUtil.GetDueClass(_nextPaymentDate.TimeRemainingFromToday(dateTimeProvider).Days)">
             <div class="col-12 d-flex flex-column justify-content-center">
-                <label class="detail-label-fs opacity-50">Next payment</label>
+                <label class="detail-label-fs opacity-75">Next payment</label>
                 <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
                 <div class="text-center">@_dueTimeText</div>
             </div>
