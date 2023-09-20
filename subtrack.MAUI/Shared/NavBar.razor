@@ -1,24 +1,21 @@
 ﻿<style>
     .custom-navbar {
-        height: 50px; /* Adjust the height value as needed */
+        height: 3rem; /* Adjust the height value as needed */
     }
 </style>
 
-<nav class="navbar navbar-expand bg-dark fixed-bottom justify-content-center custom-navbar" data-bs-theme="dark">
-    <div id="navbarColor02">
-        <ul class="navbar-nav">
+<nav class="navbar navbar-expand bg-dark fixed-bottom custom-navbar" data-bs-theme="dark">
+
+    <ul class="nav navbar-nav flex w-100 justify-content-around">
             <li class="nav-item">
                 <NavLink class="nav-link d-flex flex-column align-items-center" href="/" Match="NavLinkMatch.All">
-                    <i class="bi bi-house"></i>
-                    <span>Home</span>
-                </NavLink>
+                    <i class="bi bi-house" style="font-size: 1.75rem;"></i>
+                    </NavLink>
             </li>
             <li class="nav-item">
                 <NavLink class="nav-link d-flex flex-column align-items-center" href="monthly" Match="NavLinkMatch.Prefix">
-                    <i class="bi bi-card-list"></i>
-                    <span>Monthly</span>
+                    <i class="bi bi-calendar2-week-fill" style="font-size: 1.75rem;"></i>
                 </NavLink>
             </li>
         </ul>
-    </div>
 </nav>
