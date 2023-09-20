@@ -42,7 +42,7 @@ else
         <div class="row py-2 @CssUtil.GetDueClass(_nextPaymentDate.TimeRemainingFromToday(dateTimeProvider).Days)">
             <div class="col-12 d-flex flex-column justify-content-center">
                 <label class="detail-label-fs opacity-75">Next payment</label>
-                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
+                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", Constants.UsCulture)</div>
                 <div class="text-center">@_dueTimeText</div>
             </div>
         </div>
@@ -59,7 +59,7 @@ else
             <hr />
             <label class="opacity-75 detail-label-fs">Latest payment</label>
             <div class="col-12 d-flex justify-content-center">
-                @_subscription.LastPayment.ToString("MMMM dd, yyyy", _usCulture)
+                @_subscription.LastPayment.ToString("MMMM dd, yyyy", Constants.UsCulture)
             </div>
         </div>
         <div class="row py-2">
@@ -105,7 +105,6 @@ else
     bool _deleteButtonClicked;
 
     DateTime _nextPaymentDate;
-    private CultureInfo _usCulture = new CultureInfo("en-US");
 
     protected override async Task OnInitializedAsync()
     {
@@ -163,7 +162,7 @@ else
             return sb.ToString();
         }
 
-        sb.Append(_subscription.BillingInterval.ToWords(_usCulture));
+        sb.Append(_subscription.BillingInterval.ToWords(Constants.UsCulture));
         sb.Append(" ");
         sb.Append(_subscription.BillingOccurrence.Humanize().ToLower().Pluralize());
         return sb.ToString();
