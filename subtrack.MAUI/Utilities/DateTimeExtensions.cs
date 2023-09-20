@@ -10,7 +10,7 @@ public static class DateTimeExtensions
 
     public static DateTime AddWeeks(this DateTime date, int weeks) => date.AddDays(weeks * 7);
 
-    public static string MonthName(this DateTime date) => date.ToString("MMMM");
+    public static string MonthName(this DateTime date) => date.ToString("MMMM", Constants.UsCulture);
 
     public static DateTime LastDayOfMonthDate(this DateTime date) => new(date.Year, date.Month, DateTime.DaysInMonth(date.Year, date.Month));
 
