@@ -15,7 +15,7 @@
 else
 {
     <div class="container">
-        <div class="d-flex justify-content-between border-bottom py-2">
+        <div class="d-flex justify-content-between py-2">
             <div>
                 <BackButton Url="@ReturnUrl"></BackButton>
             </div>
@@ -26,8 +26,9 @@ else
                 <EditButton Url="@EditUrl"></EditButton>
             </div>
         </div>
-        <div class="row border-bottom py-2">
-            <label>Billing</label>
+        <div class="row py-2">
+            <hr />
+            <label class="opacity-75 detail-label-fs">Billing</label>
             <div class="col-12 d-flex justify-content-center">
                 <h5 class="d-inline-block">@($"{_subscription.Cost:C}")</h5>&nbsp;&nbsp;
                 @if (_subscription.IsAutoPaid)
@@ -36,15 +37,17 @@ else
                 }
             </div>
             <label class="col-12 d-flex justify-content-center">@GetOccurrenceText()</label>
+            <hr class="mt-3" />
         </div>
-        <div class="row border-bottom py-2">
+        <div class="row py-2 @CssUtil.GetDueClass(_nextPaymentDate.TimeRemainingFromToday(dateTimeProvider).Days)">
             <div class="col-12 d-flex flex-column justify-content-center">
-                <label>Next payment</label>
-                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", _usCulture)</div>
+                <label class="detail-label-fs opacity-75">Next payment</label>
+                <div class="text-center">@_nextPaymentDate.ToString("MMMM dd, yyyy", Constants.UsCulture)</div>
                 <div class="text-center">@_dueTimeText</div>
             </div>
         </div>
-        <div class="row border-bottom py-2">
+        <div class="row py-2">
+
             <div class="col-12 d-flex justify-content-center">
                 <button aria-label="Mark as paid" type="button" class="btn btn-primary" onclick="@(() => MarkSubscriptionAsPaid())">
                     <i class="fa-solid fa-check"></i>&nbsp;
@@ -52,25 +55,28 @@ else
                 </button>
             </div>
         </div>
-        <div class="row border-bottom py-2">
-            <label>Latest payment</label>
+        <div class="row py-2">
+            <hr />
+            <label class="opacity-75 detail-label-fs">Latest payment</label>
             <div class="col-12 d-flex justify-content-center">
-                @_subscription.LastPayment.ToString("MMMM dd, yyyy", _usCulture)
+                @_subscription.LastPayment.ToString("MMMM dd, yyyy", Constants.UsCulture)
             </div>
         </div>
-        <div class="row border-bottom py-2">
-            <label>Annually</label>
+        <div class="row py-2">
+            <hr/>
+            <label class="opacity-75 detail-label-fs">Annually</label>
             <div class="col-12 d-flex justify-content-center">
                 @($"~{Math.Round(_subscriptionsCost, 2):C}")
             </div>
         </div>
-        @if (!string.IsNullOrWhiteSpace(_subscription.Description))
-        {
-            <div class="row border-bottom py-2 d-flex justify-content-center text-break">
-                @_subscription.Description
-            </div>
-        }
-        <div class="row border-bottom py-2">
+        <div class="row py-2">
+            <hr />
+            @if (!string.IsNullOrWhiteSpace(_subscription.Description))
+            {
+                <div class="row py-2 d-flex justify-content-center text-break" style="white-space: pre-line">
+                    @_subscription.Description
+                </div>
+            }
             <div class="col-12 d-flex justify-content-center">
                 <button onclick="@(() => OnDelete())" aria-label="Delete subscription" type="button" class="btn btn-danger">
                     <i class="fa-sharp fa-solid fa-trash"></i>&nbsp;
@@ -99,7 +105,6 @@ else
     bool _deleteButtonClicked;
 
     DateTime _nextPaymentDate;
-    private CultureInfo _usCulture = new CultureInfo("en-US");
 
     protected override async Task OnInitializedAsync()
     {
@@ -157,7 +162,7 @@ else
             return sb.ToString();
         }
 
-        sb.Append(_subscription.BillingInterval.ToWords(_usCulture));
+        sb.Append(_subscription.BillingInterval.ToWords(Constants.UsCulture));
         sb.Append(" ");
         sb.Append(_subscription.BillingOccurrence.Humanize().ToLower().Pluralize());
         return sb.ToString();

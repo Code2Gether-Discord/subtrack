@@ -11,14 +11,17 @@
 
     @foreach (var sub in SubscriptionMonth.Subscriptions)
     {
-        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}?ReturnUrl={Navigator.Uri}")) class="card mb-2 clickable" style="max-width: 20rem;">
+        <div @onclick=@(() => Navigator.NavigateTo($"/details/{sub.Id}?ReturnUrl={Navigator.Uri}")) class="card mb-2 clickable" style="max-width: 20rem;background-color:@sub.PrimaryColor">
             <div class="card-body" style="padding-top: 5px; padding-bottom: 5px;">
                 <div class="d-flex justify-content-between fs-5">
                     <div class="text-truncate flex-grow-1">@sub.Name</div>
                     <div class="text-end flex-shrink-1" style="flex-basis: 7rem;">@($"{sub.Cost:C}")</div>
                 </div>
+                @{
+                    int daysUntilDue = (int)(sub.LastPayment - DateTime.Now.Date).TotalDays;
+                }
                 <div class="d-flex justify-content-between fs-6">
-                    <div>@($"{sub.LastPayment.Day}{GetDateSuffix(sub.LastPayment.Day)}")</div>
+                    <div class="@CssUtil.GetDueClass(daysUntilDue)">@($"{sub.LastPayment.Day}{GetDateSuffix(sub.LastPayment.Day)}")</div>
                     <div class="text-end">
                         @if (sub.IsAutoPaid)
                         {

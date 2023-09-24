@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using subtrack.DAL;
 
@@ -10,12 +11,14 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    partial class SubtrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230916005301_BackgroundColor")]
+    partial class BackgroundColor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "6.0.18");
+            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
 
             modelBuilder.Entity("subtrack.DAL.Entities.SettingsBase", b =>
                 {
@@ -38,6 +41,11 @@ namespace subtrack.DAL.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("BackgroundColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("#282828");
 
                     b.Property<int>("BillingInterval")
                         .HasColumnType("INTEGER")
@@ -66,11 +74,6 @@ namespace subtrack.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
-
-                    b.Property<string>("PrimaryColor")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue("#282828");
 
                     b.HasKey("Id");
 
