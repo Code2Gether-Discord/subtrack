@@ -18,7 +18,7 @@ namespace subtrack.DAL.Migrations
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
-            modelBuilder.HasAnnotation("ProductVersion", "7.0.10");
+            modelBuilder.HasAnnotation("ProductVersion", "6.0.18");
 
             modelBuilder.Entity("subtrack.DAL.Entities.SettingsBase", b =>
                 {
@@ -34,8 +34,6 @@ namespace subtrack.DAL.Migrations
                     b.ToTable("Settings");
 
                     b.HasDiscriminator<string>("settings_type").HasValue("SettingsBase");
-
-                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("subtrack.DAL.Entities.Subscription", b =>
