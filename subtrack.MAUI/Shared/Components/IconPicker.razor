@@ -1,4 +1,22 @@
-﻿<!-- Button trigger modal -->
+﻿<style>
+    .btn-outline-primary {
+        --bs-btn-color: @Color;
+        --bs-btn-border-color: @Color;
+        --bs-btn-hover-bg: @Color;
+        --bs-btn-active-bg: @Color;
+        --bs-btn-active-border-color: @Color;
+        --bs-btn-hover-border-color: @Color;
+        --bs-btn-disabled-color: @Color;
+        --bs-btn-disabled-border-color: @Color;
+    }
+
+    ul.icon-grid li.selected {
+        color: @Color;
+        border-color: @Color;
+    }
+</style>
+
+<!-- Button trigger modal -->
 <button type="button" class="btn btn-outline-primary @SelectedIcon" data-bs-toggle="modal" data-bs-target="#iconPickerModal" style="height: 100%;">
 </button>
 
@@ -29,6 +47,9 @@
 
     [Parameter]
     public string SelectedIcon { get; set; }
+
+    [Parameter]
+    public string Color { get; set; }
 
     [Parameter]
     public EventCallback<string> OnIconSelected { get; set; }

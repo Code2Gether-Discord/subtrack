@@ -19,14 +19,13 @@ else
             <div>
                 <BackButton Url="@ReturnUrl"></BackButton>
             </div>
-            <div>
-                <h2 class="ps-3 text-break">
-                    @if (!string.IsNullOrWhiteSpace(_subscription.Icon))
-                    {
-                        <i class="me-2 @_subscription.Icon" style="color: @_subscription.SecondaryColor"></i>
-                    }
-                    @_subscription.Name
-                </h2>
+            <div class="text-center">
+                @if (!string.IsNullOrWhiteSpace(_subscription.Icon))
+                {
+                    <i class="me-2 @_subscription.Icon" style="color: @_subscription.SecondaryColor"></i>
+                    <br />
+                }
+                <h2 class="ps-3 text-break">@_subscription.Name</h2>
             </div>
             <div>
                 <EditButton Url="@EditUrl"></EditButton>
