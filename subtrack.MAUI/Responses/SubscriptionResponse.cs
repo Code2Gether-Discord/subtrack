@@ -11,5 +11,7 @@
         public DateTime LastPayment { get; set; }
         public int DueDays { get; set; }
         public string PrimaryColor { get; set; }
+        public string? Icon { get; set; }
+        public string SecondaryColor { get; set; }
     }
 }
