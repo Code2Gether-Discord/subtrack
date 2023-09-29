@@ -11,8 +11,8 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    [Migration("20230916005301_BackgroundColor")]
-    partial class BackgroundColor
+    [Migration("20230925114724_IconSecondaryColor")]
+    partial class IconSecondaryColor
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -42,11 +42,6 @@ namespace subtrack.DAL.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<string>("BackgroundColor")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
-                        .HasDefaultValue("#282828");
-
                     b.Property<int>("BillingInterval")
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(1);
@@ -64,6 +59,9 @@ namespace subtrack.DAL.Migrations
                     b.Property<int>("FirstPaymentDay")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsAutoPaid")
                         .HasColumnType("INTEGER");
 
@@ -74,6 +72,16 @@ namespace subtrack.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
+
+                    b.Property<string>("PrimaryColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("#282828");
+
+                    b.Property<string>("SecondaryColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("#2a9fd6");
 
                     b.HasKey("Id");
 

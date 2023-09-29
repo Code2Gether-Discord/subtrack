@@ -24,6 +24,7 @@ public class SubtrackDbContext : DbContext
             entity.Property(e => e.BillingOccurrence).HasDefaultValue(BillingOccurrence.Month).ValueGeneratedNever();
             entity.Property(e => e.BillingInterval).HasDefaultValue(1).ValueGeneratedNever();
             entity.Property(e => e.PrimaryColor).HasDefaultValue("#282828").ValueGeneratedNever();
+            entity.Property(e => e.SecondaryColor).HasDefaultValue("#2a9fd6").ValueGeneratedNever();
         });
     }
 }

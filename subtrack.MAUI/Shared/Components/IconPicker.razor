@@ -1,0 +1,65 @@
+﻿<style>
+    .btn-outline-primary {
+        --bs-btn-color: @Color;
+        --bs-btn-border-color: @Color;
+        --bs-btn-hover-bg: @Color;
+        --bs-btn-active-bg: @Color;
+        --bs-btn-active-border-color: @Color;
+        --bs-btn-hover-border-color: @Color;
+        --bs-btn-disabled-color: @Color;
+        --bs-btn-disabled-border-color: @Color;
+    }
+
+    ul.icon-grid li.selected {
+        color: @Color;
+        border-color: @Color;
+    }
+</style>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-outline-primary @SelectedIcon" data-bs-toggle="modal" data-bs-target="#iconPickerModal" style="height: 100%;min-height: 25px;">
+</button>
+
+<!-- Modal -->
+<div class="modal fade" id="iconPickerModal" tabindex="-1" aria-labelledby="iconPickerModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="iconPickerModalLabel">Select an icon</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <ul class="icon-grid">
+                    @foreach(var icon in Icons)
+                    {
+                        <li class="@icon @(SelectedIcon == icon ? "selected" : "")" data-bs-dismiss="modal" @onclick="() => OnClick(icon)"></li>
+                    }
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="() => OnClick(string.Empty)">Clear</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@code {
+    [Parameter]
+    public IEnumerable<string> Icons { get; set; }
+
+    [Parameter]
+    public string SelectedIcon { get; set; }
+
+    [Parameter]
+    public string Color { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnIconSelected { get; set; }
+
+    private async Task OnClick(string icon)
+    {
+        SelectedIcon = icon;
+        await OnIconSelected.InvokeAsync(icon);
+    }
+}

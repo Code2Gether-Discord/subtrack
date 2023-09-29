@@ -28,6 +28,10 @@ public class Subscription : ICloneable
 
     public string PrimaryColor { get; set; }
 
+    public string? Icon { get; set; }
+
+    public string SecondaryColor { get; set; }
+
     public object Clone()
     {
         return (Subscription)MemberwiseClone();

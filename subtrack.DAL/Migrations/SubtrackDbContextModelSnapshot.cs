@@ -56,6 +56,9 @@ namespace subtrack.DAL.Migrations
                     b.Property<int>("FirstPaymentDay")
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Icon")
+                        .HasColumnType("TEXT");
+
                     b.Property<bool>("IsAutoPaid")
                         .HasColumnType("INTEGER");
 
@@ -71,6 +74,11 @@ namespace subtrack.DAL.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT")
                         .HasDefaultValue("#282828");
+
+                    b.Property<string>("SecondaryColor")
+                        .IsRequired()
+                        .HasColumnType("TEXT")
+                        .HasDefaultValue("#2a9fd6");
 
                     b.HasKey("Id");
 
