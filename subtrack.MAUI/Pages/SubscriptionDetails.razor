@@ -22,10 +22,10 @@ else
             <div class="text-center">
                 @if (!string.IsNullOrWhiteSpace(_subscription.Icon))
                 {
-                    <i class="me-2 @_subscription.Icon" style="color: @_subscription.SecondaryColor"></i>
+                    <i class="me-2 @_subscription.Icon" style="color: @_subscription.SecondaryColor;font-size:30px"></i>
                     <br />
                 }
-                <h2 class="ps-3 text-break">@_subscription.Name</h2>
+                <h2 class="text-break">@_subscription.Name</h2>
             </div>
             <div>
                 <EditButton Url="@EditUrl"></EditButton>
