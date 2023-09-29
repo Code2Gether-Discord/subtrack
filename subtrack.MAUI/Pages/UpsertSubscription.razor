@@ -44,9 +44,9 @@
         <label class="form-check-label" for="autopaid">Auto Paid </label>
         <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@_subscription.IsAutoPaid"></InputCheckbox>
     </div>
-    <div style="display: flex;">
+    <div class="mt-2" style="display: flex;">
         <div class="d-flex flex-fill">
-            <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Primary Color </label>
+            <label class="pe-2" style="white-space: nowrap; font-size: 17px;" for="backgroundColor">Primary Color </label>
             <input class="form-control" type="color" id="backgroundColor" list="backgroundPresets" value="@_subscription.PrimaryColor" @onchange="@UpdateBackgroundColor" />
             <datalist id="backgroundPresets">
                 @foreach (var backgroundColor in backgroundColorOptions)
@@ -55,8 +55,8 @@
                 }
             </datalist>
         </div>
-        <div class="d-flex flex-fill">
-            <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Secondary Color </label>
+        <div class="d-flex flex-fill ms-2">
+            <label class="pe-2" style="white-space: nowrap; font-size: 17px;" for="backgroundColor">Secondary Color </label>
             <input class="form-control" type="color" value="@_subscription.SecondaryColor" id="secondaryColor" @onchange="UpdateSecondaryColor" />
         </div>  
     </div>

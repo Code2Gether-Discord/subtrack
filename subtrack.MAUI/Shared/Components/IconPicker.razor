@@ -17,7 +17,7 @@
 </style>
 
 <!-- Button trigger modal -->
-<button type="button" class="btn btn-outline-primary @SelectedIcon" data-bs-toggle="modal" data-bs-target="#iconPickerModal" style="height: 100%;">
+<button type="button" class="btn btn-outline-primary @SelectedIcon" data-bs-toggle="modal" data-bs-target="#iconPickerModal" style="height: 100%;min-height: 25px;">
 </button>
 
 <!-- Modal -->
@@ -35,6 +35,9 @@
                         <li class="@icon @(SelectedIcon == icon ? "selected" : "")" data-bs-dismiss="modal" @onclick="() => OnClick(icon)"></li>
                     }
                 </ul>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" @onclick="() => OnClick(string.Empty)">Clear</button>
             </div>
         </div>
     </div>
