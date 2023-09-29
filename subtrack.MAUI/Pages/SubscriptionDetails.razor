@@ -15,21 +15,23 @@
 else
 {
     <div class="container">
-        <div class="d-flex justify-content-between py-2">
+        <div class="d-flex justify-content-between pt-2">
             <div>
                 <BackButton Url="@ReturnUrl"></BackButton>
             </div>
-            <div class="text-center">
+            <div>
                 @if (!string.IsNullOrWhiteSpace(_subscription.Icon))
                 {
-                    <i class="me-2 @_subscription.Icon" style="color: @_subscription.SecondaryColor;font-size:30px"></i>
+                    <i class="@_subscription.Icon mt-1" style="color: @_subscription.SecondaryColor; font-size:30px"></i>
                     <br />
                 }
-                <h2 class="text-break">@_subscription.Name</h2>
             </div>
             <div>
                 <EditButton Url="@EditUrl"></EditButton>
             </div>
+        </div>
+        <div class="text-center">
+            <h2 class="mt-1 text-break">@_subscription.Name</h2>
         </div>
         <div class="row py-2">
             <hr style="color: @_subscription.SecondaryColor" />
