@@ -16,7 +16,7 @@
 <EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="UpsertSubscriptionAsync">
     <div>
         <ValidationSummary />
-        <DataAnnotationsValidator/>
+        <DataAnnotationsValidator />
         <InputText class="form-control" placeholder="Service Name" @bind-Value="@_subscription.Name"></InputText>
     </div>
     <div class="input-group mb-3" style="padding-top: 15px;">
@@ -58,7 +58,7 @@
         <div class="d-flex flex-fill ms-2">
             <label class="pe-2" style="white-space: nowrap; font-size: 17px;" for="backgroundColor">Secondary Color </label>
             <input class="form-control" type="color" value="@_subscription.SecondaryColor" id="secondaryColor" @onchange="UpdateSecondaryColor" />
-        </div>  
+        </div>
     </div>
     <div class="d-flex mt-2 mb-2">
         <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;">Icon</label>
@@ -67,7 +67,7 @@
     <div class="form-group mt-2" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
-    <br/>
+    <br />
 </EditForm>
 
 @code {
@@ -85,10 +85,12 @@
     private ElementReference costInputElement;
 
     Subscription? _subscription = new()
-        {
-            BillingInterval = 1,
-            BillingOccurrence = BillingOccurrence.Month
-        };
+    {
+        BillingInterval = 1,
+        BillingOccurrence = BillingOccurrence.Month,
+        PrimaryColor = CssUtil.AvailableBackgroundColors.First(),
+        SecondaryColor = CssUtil.DefaultSecondaryColor
+    };
 
     private IEnumerable<string> backgroundColorOptions = CssUtil.AvailableBackgroundColors;
     private IEnumerable<string> iconOptions = CssUtil.AvailableIcons;
@@ -105,9 +107,6 @@
         if (Id != null)
         {
             _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
-        } else
-        {
-            _subscription.PrimaryColor = backgroundColorOptions.First();
         }
     }
 
@@ -128,7 +127,7 @@
             NavigationManager.NavigateTo(ReturnUrl);
 
         }
-    } 
+    }
     public async ValueTask DisposeAsync()
     {
         await HighlightJsInterop.DisposeAsync();
