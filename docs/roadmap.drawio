@@ -1,6 +1,6 @@
 <mxfile host="65bd71144e">
     <diagram id="0sBSfLOzs08FeBCRcvm6" name="2023">
-        <mxGraphModel dx="1697" dy="531" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+        <mxGraphModel dx="1556" dy="413" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
             <root>
                 <mxCell id="0"/>
                 <mxCell id="1" parent="0"/>
@@ -20,7 +20,7 @@
                     </mxGeometry>
                 </mxCell>
                 <mxCell id="14" value="Billing cycle" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;labelBorderColor=none;strokeColor=#D154D1;strokeWidth=2;fontColor=#030303;fillColor=#FFFFFF;" parent="1" vertex="1">
-                    <mxGeometry x="280" y="165" width="80" height="25" as="geometry"/>
+                    <mxGeometry x="280" y="170" width="80" height="20" as="geometry"/>
                 </mxCell>
                 <mxCell id="15" value="" style="endArrow=none;html=1;rounded=1;strokeColor=#C60DFF;fontColor=#030303;strokeWidth=2;entryX=0.836;entryY=1.04;entryDx=0;entryDy=0;entryPerimeter=0;" parent="1" target="16" edge="1">
                     <mxGeometry width="50" height="50" relative="1" as="geometry">
@@ -145,17 +145,20 @@
                 <mxCell id="51" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;align=center;verticalAlign=top;fillColor=#2D9C5E;shape=mxgraph.gcp2.check" parent="1" vertex="1">
                     <mxGeometry x="271" y="158" width="25" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="52" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;align=center;verticalAlign=top;fillColor=#2D9C5E;shape=mxgraph.gcp2.check" vertex="1" parent="1">
+                <mxCell id="52" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;align=center;verticalAlign=top;fillColor=#2D9C5E;shape=mxgraph.gcp2.check" parent="1" vertex="1">
                     <mxGeometry x="242.5" y="198" width="25" height="20" as="geometry"/>
                 </mxCell>
-                <mxCell id="55" value=".NET 8" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;labelBorderColor=none;strokeColor=#D154D1;strokeWidth=2;fontColor=#030303;fillColor=#FFFFFF;" vertex="1" parent="1">
+                <mxCell id="55" value=".NET 8" style="rounded=1;whiteSpace=wrap;html=1;labelBackgroundColor=none;labelBorderColor=none;strokeColor=#D154D1;strokeWidth=2;fontColor=#030303;fillColor=#FFFFFF;" parent="1" vertex="1">
                     <mxGeometry x="306" y="352" width="54.75" height="33" as="geometry"/>
                 </mxCell>
-                <mxCell id="57" style="edgeStyle=none;rounded=1;html=1;strokeColor=default;fontColor=#030303;endArrow=none;endFill=0;" edge="1" parent="1">
+                <mxCell id="57" style="edgeStyle=none;rounded=1;html=1;strokeColor=default;fontColor=#030303;endArrow=none;endFill=0;" parent="1" edge="1">
                     <mxGeometry relative="1" as="geometry">
                         <mxPoint x="401" y="366.99999999999994" as="targetPoint"/>
                         <mxPoint x="360.99999999999955" y="366.99999999999994" as="sourcePoint"/>
                     </mxGeometry>
+                </mxCell>
+                <mxCell id="60" value="" style="sketch=0;html=1;aspect=fixed;strokeColor=none;shadow=0;align=center;verticalAlign=top;fillColor=#2D9C5E;shape=mxgraph.gcp2.check" vertex="1" parent="1">
+                    <mxGeometry x="425" y="206.5" width="25" height="20" as="geometry"/>
                 </mxCell>
             </root>
         </mxGraphModel>
