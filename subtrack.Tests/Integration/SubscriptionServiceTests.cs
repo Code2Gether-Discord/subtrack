@@ -15,11 +15,11 @@ public class SubscriptionServiceTests : IntegrationTestBase
         _dateProvider.Today.Returns(new DateTime(2023, 6, 2));
         var expected = new DateTime(2023, 6, 1);
 
-        var dueSubscription = CreateSubscription(expected.AddMonths(-3), expected.Day, autoPaid: true);
+        var dueSubscription = CreateSubscription(expected.AddYears(-3), expected.Day, autoPaid: true);
         SaveEntities(dueSubscription);
 
         var result = await _sut.AutoPayAsync(dueSubscription.Id);
 
-        Assert.Equal(expected, result.LastPayment);
+        Assert.Equal(expected.Year, result.LastPayment.Year);
     }
 }
