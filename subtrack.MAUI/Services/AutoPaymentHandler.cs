@@ -43,7 +43,6 @@ namespace subtrack.MAUI.Services
                     continue;
 
                 await _subscriptionService.AutoPayAsync(sub.Id);
-
             }
         }
     }

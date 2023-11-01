@@ -20,6 +20,8 @@ public static class CssUtil
         "#2d0903"
     };
 
+    public const string DefaultSecondaryColor = "#2a9fd6";
+
     internal static readonly IEnumerable<string> AvailableIcons = new[]
     {
         "fa-solid fa-music",
