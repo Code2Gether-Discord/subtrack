@@ -20,13 +20,13 @@
         public async Task AutoPaidSubsAreAutoPaid()
         {
             var dueSubs = SaveEntities(new[] {
-                CreateSubscription(DateTime.Today.AddMonths(-1), autoPaid: true),
-                CreateSubscription(DateTime.Today.AddMonths(-1), autoPaid: true),
+                CreateSubscription(DateTime.Today.AddYears(-2), autoPaid: true, billingOccurrence: BillingOccurrence.Week),
+                CreateSubscription(DateTime.Today.AddYears(-4), autoPaid: true, billingOccurrence: BillingOccurrence.Month),
              });
 
             await _sut.ExecuteAsync();
 
-            Assert.True(dueSubs.All(x => x.LastPayment.Date >= DateTime.Today.Date));
+            Assert.True(dueSubs.All(s => s.LastPayment.Year == DateTime.Today.Year));
         }
 
         [Fact]

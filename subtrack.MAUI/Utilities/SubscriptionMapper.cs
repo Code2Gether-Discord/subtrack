@@ -18,6 +18,8 @@ namespace subtrack.MAUI.Utilities
                 LastPayment = sub.LastPayment,
                 DueDays = subscriptionsCalculator.GetDueDays(sub),
                 PrimaryColor = sub.PrimaryColor,
+                SecondaryColor = sub.SecondaryColor,
+                Icon = sub.Icon,
             });
         }
     }

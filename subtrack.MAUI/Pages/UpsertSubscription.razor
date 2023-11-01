@@ -16,7 +16,7 @@
 <EditForm id="SubscriptionForm" Model="@_subscription" OnValidSubmit="UpsertSubscriptionAsync">
     <div>
         <ValidationSummary />
-        <DataAnnotationsValidator/>
+        <DataAnnotationsValidator />
         <InputText class="form-control" placeholder="Service Name" @bind-Value="@_subscription.Name"></InputText>
     </div>
     <div class="input-group mb-3" style="padding-top: 15px;">
@@ -44,25 +44,37 @@
         <label class="form-check-label" for="autopaid">Auto Paid </label>
         <InputCheckbox class="form-check-input" id="autopaid" @bind-Value="@_subscription.IsAutoPaid"></InputCheckbox>
     </div>
-    <div style="display: flex;">
-        <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;" for="backgroundColor">Primary Color </label>
-        <input class="form-control" type="color" style="max-width: 100px;min-height:25px" id="backgroundColor" list="backgroundPresets" value="@_subscription.PrimaryColor" @onchange="@UpdateBackgroundColor" />
-        <datalist id="backgroundPresets">
-            @foreach (var backgroundColor in backgroundColorOptions)
-            {
-                <option value="@backgroundColor.ToLower()">@backgroundColor.ToLower()</option>
-            }
-        </datalist>
+
+    <div class="mt-2" style="display: flex; flex-direction: column;">
+        <div class="d-flex">
+            <label class="pe-2" style="white-space: nowrap; font-size: 17px; min-width: 162px;" for="backgroundColor">Primary Color</label>
+            <input class="form-control px-1 py-1" style="max-width:60px" type="color" id="backgroundColor" list="backgroundPresets" value="@_subscription.PrimaryColor" @onchange="@UpdateBackgroundColor" />
+            <datalist id="backgroundPresets">
+                @foreach (var backgroundColor in backgroundColorOptions)
+                {
+                    <option value="@backgroundColor.ToLower()">@backgroundColor.ToLower()</option>
+                }
+            </datalist>
+        </div>
+        <div class="d-flex mt-2">
+            <label class="pe-2" style="white-space: nowrap; font-size: 17px; min-width: 162px;" for="secondaryColor">Secondary Color</label>
+            <input class="form-control px-1 py-1" style="max-width:60px"  type="color" value="@_subscription.SecondaryColor" id="secondaryColor" @onchange="UpdateSecondaryColor" />
+        </div>
+    </div>
+
+    <div class="d-flex mt-2 mb-2">
+        <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;">Icon</label>
+        <IconPicker Icons="@iconOptions" OnIconSelected="@SelectIcon" SelectedIcon="@_subscription.Icon" Color="@_subscription.SecondaryColor" />
     </div>
     <div class="form-group mt-2" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
-    <br/>
+    <br />
 </EditForm>
 
 @code {
 
-    [Inject] public HighlightJsInterop HighlightJsInterop { get; set; }   
+    [Inject] public HighlightJsInterop HighlightJsInterop { get; set; }
 
     [Parameter]
     public int? Id { get; set; }
@@ -75,12 +87,15 @@
     private ElementReference costInputElement;
 
     Subscription? _subscription = new()
-        {
-            BillingInterval = 1,
-            BillingOccurrence = BillingOccurrence.Month
-        };
+    {
+        BillingInterval = 1,
+        BillingOccurrence = BillingOccurrence.Month,
+        PrimaryColor = CssUtil.AvailableBackgroundColors.First(),
+        SecondaryColor = CssUtil.DefaultSecondaryColor
+    };
 
     private IEnumerable<string> backgroundColorOptions = CssUtil.AvailableBackgroundColors;
+    private IEnumerable<string> iconOptions = CssUtil.AvailableIcons;
 
     protected override void OnInitialized()
     {
@@ -94,9 +109,6 @@
         if (Id != null)
         {
             _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
-        } else
-        {
-            _subscription.PrimaryColor = backgroundColorOptions.First();
         }
     }
 
@@ -117,7 +129,7 @@
             NavigationManager.NavigateTo(ReturnUrl);
 
         }
-    } 
+    }
     public async ValueTask DisposeAsync()
     {
         await HighlightJsInterop.DisposeAsync();
@@ -129,4 +141,8 @@
     }
 
     private void UpdateBackgroundColor(ChangeEventArgs e) => _subscription.PrimaryColor = e.Value!.ToString();
+
+    private void UpdateSecondaryColor(ChangeEventArgs e) => _subscription.SecondaryColor = e.Value!.ToString();
+
+    private void SelectIcon(string selectedIcon) => _subscription.Icon = selectedIcon;
 }
