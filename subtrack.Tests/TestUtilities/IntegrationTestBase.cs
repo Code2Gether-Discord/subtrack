@@ -72,7 +72,7 @@ public abstract class IntegrationTestBase : IDisposable
     /// <summary>
     /// Helper to ensure that creating a sub does not cause a sql exception
     /// </summary>
-    protected Subscription CreateSubscription(DateTime lastPayment, int? firstPaymentDay = null, decimal cost = 0, bool autoPaid = false, string name = null, string description = null)
+    protected Subscription CreateSubscription(DateTime lastPayment, int? firstPaymentDay = null, decimal cost = 0, bool autoPaid = false, string name = null, string description = null, BillingOccurrence billingOccurrence = BillingOccurrence.Week)
     {
         return new Subscription()
         {
@@ -83,7 +83,7 @@ public abstract class IntegrationTestBase : IDisposable
             Cost = cost,
             IsAutoPaid = autoPaid,
             BillingInterval = 1,
-            BillingOccurrence = BillingOccurrence.Month,
+            BillingOccurrence = billingOccurrence,
             PrimaryColor = "#fff",
             SecondaryColor = "#2a9fd6"
         };
