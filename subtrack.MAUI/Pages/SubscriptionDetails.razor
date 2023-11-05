@@ -155,8 +155,9 @@ else
             _deleteButtonClicked = true;
             return;
         }
+
         await subscriptionService.Delete(Id);
-        navigationManager.NavigateTo("/", replace: true);
+        navigationManager.NavigateTo(ReturnUrl, replace: true);
     }
     private string GetOccurrenceText()
     {

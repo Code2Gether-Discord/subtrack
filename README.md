@@ -59,6 +59,7 @@ After making changes to any entity you need to add a migration and update the da
 ## Creating a Release
 - Check if there are any open issues that are required for the release
 - Briefly test the app's functionality on the dev branch and open any necessary issues
+- Merge master in to dev locally and push the merge
 - Open a PR from dev to master branch that should contain the release number in the title  
   - Update the Roadmap
 - Git pull master
