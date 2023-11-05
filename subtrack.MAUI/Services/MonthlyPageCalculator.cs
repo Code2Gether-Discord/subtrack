@@ -36,7 +36,10 @@ namespace subtrack.MAUI.Services
                           MonthDate = new DateTime(g.Key.Year, g.Key.Month, 1),
                           Subscriptions = g.OrderBy(s => s.LastPayment).ToList(),
                           Cost = _subscriptionsCalculator.GetTotalCost(g)
-                      }).GroupBy(r => r.MonthDate.Year).ToDictionary(k => k.Key, v => v.ToList());
+                      })
+                 .GroupBy(r => r.MonthDate.Year)
+                 .OrderBy(g => g.Key)
+                 .ToDictionary(k => k.Key, v => v.ToList());
         }
     }
 }
