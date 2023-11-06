@@ -74,7 +74,6 @@ After making changes to any entity you need to add a migration and update the da
 - Upload the APK release to Github
   - The version should be prefixed with a **"v"** and suffix of (app stage which is currently alpha 2/9-2023) **"-alpha"**
   - Should contain notable changes/features that were added
-  - Should display the contributors
-
+ 
 # Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
