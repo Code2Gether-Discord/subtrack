@@ -15,6 +15,12 @@ jobs:
     runs-on: windows-2022
 
     steps:
+    # temp solution until we upgrade to .net 8. same for restore workload
+    - uses: actions/setup-java@v2
+      with:
+        distribution: 'microsoft'
+        java-version: '11'
+        
     - uses: actions/checkout@v3
     - name: Setup .NET
       uses: actions/setup-dotnet@v3
