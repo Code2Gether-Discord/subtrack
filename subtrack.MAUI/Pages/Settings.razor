@@ -1,4 +1,9 @@
 ﻿@page "/settings"
+
+@inject ISubscriptionService subscriptionService
+
+@using CsvHelper
+
 <div class="d-flex justify-content-start mb-3">
     <div class="p-2">Import</div>
     <div class="p-2">
@@ -10,10 +15,24 @@
         Last Export:
     </div>
     <div class="p-2">
-        <button class="btn btn-secondary"><i class="bi bi-share-fill"></i></button>
+        <button class="btn btn-secondary" @onclick="ExportSubscriptions"><i class="bi bi-share-fill"></i></button>
     </div>
 </div>
 
 @code {
+    private async Task ExportSubscriptions()
+    {
+        using var csv = new StringWriter();
+        using var csvWriter = new CsvWriter(csv, CultureInfo.InvariantCulture);
 
+        var subscriptions = await subscriptionService.GetAllAsync();
+        csvWriter.WriteRecords(subscriptions);
+
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Title = "subtrack subs",
+            Subject = $"subtrack-subs_{DateTime.Now:dd-MM-yyyy-HH.mm}.csv",
+            Text = csv.ToString()
+        });
+    }
 }
