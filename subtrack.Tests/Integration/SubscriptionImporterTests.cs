@@ -19,6 +19,7 @@ public class SubscriptionImporterTests : IntegrationTestBase
 Subscription1,Description1,True,29.99,1,2023-12-01,Monthly,1,,,,,,
 ";
         var csv = new MemoryStream(Encoding.UTF8.GetBytes(csvText));
+
         await Assert.ThrowsAsync<TypeConverterException>(async () => await _sut.ImportFromCsvAsync(csv));
     }
 
@@ -46,6 +47,7 @@ Subscription1,,True,29.99,1,2023-12-01,Month,1,,,,,,
 Subscription2,,False,29.99,1,2022-12-01,Week,1,,,,,,
 ";
         var csv = new MemoryStream(Encoding.UTF8.GetBytes(csvText));
+
         var importedSubs = await _sut.ImportFromCsvAsync(csv);
 
         Assert.Equal(3, importedSubs.Count);
