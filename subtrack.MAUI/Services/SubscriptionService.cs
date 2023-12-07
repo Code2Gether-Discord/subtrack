@@ -66,13 +66,24 @@ namespace subtrack.MAUI.Services
 
         public async Task<Subscription> CreateSubscriptionAsync(Subscription subscriptionToCreate)
         {
-            subscriptionToCreate.LastPayment = subscriptionToCreate.LastPayment.Date;
-            subscriptionToCreate.FirstPaymentDay = subscriptionToCreate.LastPayment.Day;
-            AutoPay(subscriptionToCreate);
+            SetupNewSubscription(subscriptionToCreate);
             await _context.Subscriptions.AddAsync(subscriptionToCreate);
             await _context.SaveChangesAsync();
-
             return subscriptionToCreate;
+        }
+
+        public async Task<IReadOnlyCollection<Subscription>> CreateSubscriptionsAsync(IEnumerable<Subscription> subscriptionsToCreate)
+        {
+            var newSubscriptions = subscriptionsToCreate.Select(s =>
+            {
+                SetupNewSubscription(s);
+                return s;
+            }).ToArray();
+
+            await _context.Subscriptions.AddRangeAsync(newSubscriptions);
+            await _context.SaveChangesAsync();
+
+            return newSubscriptions;
         }
 
         public async Task<Subscription> MarkNextPaymentAsPaidAsync(int subscriptionId)
@@ -93,6 +104,12 @@ namespace subtrack.MAUI.Services
             return subscription;
         }
 
+        private void SetupNewSubscription(Subscription subscriptionToCreate)
+        {
+            subscriptionToCreate.LastPayment = subscriptionToCreate.LastPayment.Date;
+            subscriptionToCreate.FirstPaymentDay = subscriptionToCreate.LastPayment.Day;
+            AutoPay(subscriptionToCreate);
+        }
         private void AutoPay(Subscription subscription)
         {
             if (!subscription.IsAutoPaid)
