@@ -54,6 +54,7 @@ public static class MauiProgram
             services
             .AddDbContext<SubtrackDbContext>(opt => opt.UseSqlite(dbConnectionString))
             .AddScoped<ISubscriptionService, SubscriptionService>()
+            .AddScoped<ISubscriptionsImporter, SubscriptionsImporter>()
             .AddScoped<IDateProvider, DateProvider>()
             .AddScoped<ISubscriptionsCalculator, SubscriptionsCalculator>()
             .AddScoped<ISettingsService, SettingsService>()

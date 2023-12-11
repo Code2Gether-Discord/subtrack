@@ -1,0 +1,70 @@
+﻿@page "/settings"
+
+@inject ISubscriptionsImporter subscriptionImporter
+@inject ISubscriptionService subscriptionService
+@inject ISettingsService settingsService
+
+@using CsvHelper
+
+<div class="d-flex justify-content-start mb-3">
+    <div class="p-2">Import</div>
+    <div class="p-2">
+        <InputFile OnChange="ImportSubscriptions" />
+    </div>
+</div>
+
+<p>@_importResult</p>
+
+<div class="d-flex justify-content-start mb-3">
+    <div class="p-2">
+        Last Export: @(_lastSubscriptionExportTimeStamp.Value?.Humanize() ?? string.Empty)
+    </div>
+    <div class="p-2">
+        <button class="btn btn-secondary" @onclick="ExportSubscriptions"><i class="bi bi-share-fill"></i></button>
+    </div>
+</div>
+
+@code {
+    private string _importResult = string.Empty;
+    private DateTimeSetting _lastSubscriptionExportTimeStamp = new();
+
+    protected async override Task OnInitializedAsync()
+    {
+        _lastSubscriptionExportTimeStamp = await settingsService.GetByIdAsync<DateTimeSetting>(DateTimeSetting.LastSubscriptionExportTimeStampKey);        
+    }
+
+    private async Task ExportSubscriptions()
+    {
+        using var csv = new StringWriter();
+        using var csvWriter = new CsvWriter(csv, CultureInfo.InvariantCulture);
+        csvWriter.Context.RegisterClassMap<SubscriptionCsvMapping>();
+
+        var subscriptions = await subscriptionService.GetAllAsync();
+        await csvWriter.WriteRecordsAsync(subscriptions);
+
+        var dateNow = DateTime.Now;
+        await Share.Default.RequestAsync(new ShareTextRequest
+        {
+            Title = "subtrack subs",
+            Subject = $"subtrack-subs_{dateNow:dd-MM-yyyy}.csv",
+            Text = csv.ToString()
+        });
+
+        _lastSubscriptionExportTimeStamp.Value = DateTime.Now;
+        await settingsService.UpdateAsync(_lastSubscriptionExportTimeStamp);
+    }
+
+    private async Task ImportSubscriptions(InputFileChangeEventArgs e)
+    {
+        try
+        {
+            var maxFileSizeInBytes = (long)Math.Round(1.Megabytes().Bytes);
+            var importedSubscriptions = await subscriptionImporter.ImportFromCsvAsync(e.File.OpenReadStream(maxAllowedSize: maxFileSizeInBytes));
+            _importResult = $"imported {importedSubscriptions.Count} subscriptions";
+        }
+        catch (Exception ex)
+        {
+            _importResult = ex.Message;
+        }
+    }
+}

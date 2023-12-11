@@ -16,12 +16,12 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
 ## Running the project
 The project itself currently does not require any configuration at all. On startup data is seeded to a locally stored sqlite database.
 
-Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer
+Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer. Also ensure you have a .NET 8 SDK installed `dotnet --list-sdks`.
 
 <img src="https://i.postimg.cc/BnGYRhFy/vs-workloads.png)](https://postimg.cc/vc3tVt3L" width="450" height="250">
 
 1. To begin with we only have a mobile app and we focus on making the design and functionality work for Android. You do not need an android phone to actually run the project but you do need to enable **Hyper-V** on your PC https://learn.microsoft.com/en-us/xamarin/android/get-started/installation/android-emulator/hardware-acceleration?pivots=windows. You also need to enable developer mode on your PC https://www.c-sharpcorner.com/blogs/dep0100-please-ensure-that-target-device-has-developer-mode-enabled.
-2.  After enabling Hyper-V you can run the project with the **Android emulator** (built in to VS) - I am using a **Pixel 5 - API 31 (Android 12.0)** since that was default. You can add the device by opening the **Android Device Manager** inside VS
+2.  After enabling Hyper-V you can run the project with the **Android emulator** (built in to VS) - I am using a **Pixel 5 - API 33 (Android 13.0)** since that was default. You can add the device by opening the **Android Device Manager** inside VS
 
 *Note that you can run the project without the android emulator as long as you won't be making any UI changes, alternatively tell someone else to verify the UI looks ok*
 
@@ -74,7 +74,6 @@ After making changes to any entity you need to add a migration and update the da
 - Upload the APK release to Github
   - The version should be prefixed with a **"v"** and suffix of (app stage which is currently alpha 2/9-2023) **"-alpha"**
   - Should contain notable changes/features that were added
-  - Should display the contributors
-
+ 
 # Roadmap 2023
 ![Roadmap 2023](docs/roadmap.png?)
