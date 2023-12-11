@@ -16,7 +16,7 @@ Keep track of what subscriptions you have, when they have to be paid and how muc
 ## Running the project
 The project itself currently does not require any configuration at all. On startup data is seeded to a locally stored sqlite database.
 
-Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer. Also ensure you have a .NET 8 SDK installed `dotnet --list-sdks`.
+Before preceding make sure you have installed ".NET Multi-platform App UI development" in the visual studio installer. Also ensure you have a `>=.NET 7` SDK installed `dotnet --list-sdks`.
 
 <img src="https://i.postimg.cc/BnGYRhFy/vs-workloads.png)](https://postimg.cc/vc3tVt3L" width="450" height="250">
 
@@ -69,7 +69,7 @@ After making changes to any entity you need to add a migration and update the da
 - Inside Visual Studio set build mode to **Release**
 - Build the project
 - Run the project
-- The APK file should have been created at this location: *subtrack.MAUI\bin\Release\net6.0-android\com.code2gether.subtrack-Signed.apk*
+- The APK file should have been created at this location: *subtrack.MAUI\bin\Release\net7.0-android\com.code2gether.subtrack-Signed.apk*
 - Remove the changes that were made to the *.csproj* file
 - Upload the APK release to Github
   - The version should be prefixed with a **"v"** and suffix of (app stage which is currently alpha 2/9-2023) **"-alpha"**
