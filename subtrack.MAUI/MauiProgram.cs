@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using subtrack.MAUI.Shared.JsInterop;
 using subtrack.MAUI.Utilities;
 using System.Globalization;
+using Plugin.LocalNotification;
 
 [assembly: InternalsVisibleTo("subtrack.Tests")]
 
@@ -21,6 +22,7 @@ public static class MauiProgram
             .UseMauiApp<App>()
             .ConfigureFonts(fonts => fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"));
 
+        builder.UseLocalNotification();
         builder.Services.AddMauiBlazorWebView();
 #if DEBUG
         builder.Services.AddBlazorWebViewDeveloperTools();
