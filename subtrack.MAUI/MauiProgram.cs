@@ -7,6 +7,8 @@ using subtrack.MAUI.Shared.JsInterop;
 using subtrack.MAUI.Utilities;
 using System.Globalization;
 using Plugin.LocalNotification;
+using Shiny.Jobs;
+using Shiny;
 
 [assembly: InternalsVisibleTo("subtrack.Tests")]
 
@@ -20,25 +22,51 @@ public static class MauiProgram
         var builder = MauiApp.CreateBuilder();
         builder
             .UseMauiApp<App>()
-            .ConfigureFonts(fonts => fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"));
+            .ConfigureFonts(fonts => fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular"))
+            .ConfigureAndroid()
+            .UseLocalNotification();
 
-        builder.UseLocalNotification();
-        builder.Services.AddMauiBlazorWebView();
-#if DEBUG
-        builder.Services.AddBlazorWebViewDeveloperTools();
-#endif
-        _ = builder.Services.AddSubtrackServices();
+        builder.Services
+            .AddDebugServices()
+            .AddSubtrackServices()
+            .AddMauiBlazorWebView();
+
         using var sp = builder.Services.BuildServiceProvider();
-        var db = sp.GetRequiredService<SubtrackDbContext>();
-#if DEBUG
-        SeedDb(db);
-#else
-            db.Database.Migrate();
-#endif      
+        SetupDb(sp);
+
         sp.GetRequiredService<AutoPaymentHandler>()
             .ExecuteAsync().Wait();
 
         return builder.Build();
+    }
+
+    private static void SetupDb(ServiceProvider serviceProvider)
+    {
+        var db = serviceProvider.GetRequiredService<SubtrackDbContext>();
+
+#if DEBUG
+        SeedDb(db);
+#else
+            db.Database.Migrate();
+#endif
+    }
+
+    private static IServiceCollection AddDebugServices(this IServiceCollection services)
+    {
+#if DEBUG
+        services.AddBlazorWebViewDeveloperTools();
+#endif
+        return services;
+    }
+
+    private static MauiAppBuilder ConfigureAndroid(this MauiAppBuilder builder)
+    {
+        var notifyDueSubscriptionsJob = new JobInfo(nameof(Services.Android.NotifyDueSubscriptionsJob), typeof(Services.Android.NotifyDueSubscriptionsJob), true);
+#if ANDROID
+        builder.UseShiny();
+        builder.Services.AddJob(notifyDueSubscriptionsJob);
+#endif
+        return builder;
     }
 
     private static void SetupCulture()
