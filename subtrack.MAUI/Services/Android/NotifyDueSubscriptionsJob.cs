@@ -1,5 +1,6 @@
 ﻿using Plugin.LocalNotification;
 using Shiny.Jobs;
+using subtrack.MAUI.Utilities;
 
 namespace subtrack.MAUI.Services.Android;
 
@@ -13,14 +14,6 @@ public class NotifyDueSubscriptionsJob : IJob
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-    private static async Task EnsureNotificationsAreEnabled()
-    {
-        var hasEnabledNotifications = await LocalNotificationCenter.Current.AreNotificationsEnabled();
-        if (!hasEnabledNotifications)
-        {
-            await LocalNotificationCenter.Current.RequestNotificationPermission();
-        }
-    }
 
     private static void SendNotification(int notificationId, string title, string group)
     {
@@ -45,7 +38,7 @@ public class NotifyDueSubscriptionsJob : IJob
             // jobs are singletons, use this to create a scope for fetching transient/scoped dependencies
             using var scope = _serviceScopeFactory.CreateScope();
 
-            await EnsureNotificationsAreEnabled();
+            await NotificationsUtil.EnsureNotificationsAreEnabled();
 
             var notificationGroup = DateTime.Today.Day.ToString();
             SendNotification(1, "Netflix is due in 2 days", notificationGroup);

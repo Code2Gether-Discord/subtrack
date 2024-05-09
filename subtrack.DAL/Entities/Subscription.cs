@@ -9,7 +9,7 @@ public class Subscription : ICloneable
     public int Id { get; set; }
 
     [Required]
-    [StringLength(50,ErrorMessage = "Service name should be less than 50 characters.")]
+    [StringLength(50, ErrorMessage = "Service name should be less than 50 characters.")]
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
     public bool IsAutoPaid { get; set; }
@@ -17,7 +17,7 @@ public class Subscription : ICloneable
     public decimal Cost { get; set; }
 
     [Required]
-    public int FirstPaymentDay { get; set; } 
+    public int FirstPaymentDay { get; set; }
     [Required]
     public DateTime LastPayment { get; set; }
 
@@ -31,6 +31,9 @@ public class Subscription : ICloneable
     public string? Icon { get; set; }
 
     public string SecondaryColor { get; set; }
+
+    [Range(0, 31, ErrorMessage = "Notification can be set up to 31 days before due date")]
+    public int? NotificationDays { get; set; }
 
     public object Clone()
     {
