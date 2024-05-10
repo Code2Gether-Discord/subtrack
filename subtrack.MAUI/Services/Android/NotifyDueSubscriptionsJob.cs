@@ -17,7 +17,6 @@ public class NotifyDueSubscriptionsJob : IJob
         _serviceScopeFactory = serviceScopeFactory;
     }
 
-
     private static void SendNotification(int notificationId, string title, string group)
     {
         var sampleNotification = new NotificationRequest()
@@ -50,7 +49,7 @@ public class NotifyDueSubscriptionsJob : IJob
 
             if (lastSubscriptionReminderTimeStamp.Value?.Date != today)
             {
-                await RunInternal(serviceProvider, today);
+                await NotifyDueSubscriptionsJob.RunInternal(serviceProvider, today);
 
                 lastSubscriptionReminderTimeStamp.Value = now;
                 await settingsService.UpdateAsync(lastSubscriptionReminderTimeStamp);
@@ -63,7 +62,7 @@ public class NotifyDueSubscriptionsJob : IJob
         }
     }
 
-    private async Task RunInternal(IServiceProvider serviceProvider, DateTime today)
+    private static async Task RunInternal(IServiceProvider serviceProvider, DateTime today)
     {
         var subscriptionService = serviceProvider.GetRequiredService<ISubscriptionService>();
         var subscriptionsCalculator = serviceProvider.GetRequiredService<ISubscriptionsCalculator>();
