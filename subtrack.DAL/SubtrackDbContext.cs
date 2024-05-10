@@ -19,6 +19,7 @@ public class SubtrackDbContext : DbContext
 
         modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.LastAutoPaymentTimeStampKey, Value = null });
         modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.LastSubscriptionExportTimeStampKey, Value = null });
+        modelBuilder.Entity<DateTimeSetting>().HasData(new DateTimeSetting { Id = DateTimeSetting.LastSubscriptionReminderTimeStampKey, Value = null });
 
         modelBuilder.Entity<Subscription>(entity =>
         {
