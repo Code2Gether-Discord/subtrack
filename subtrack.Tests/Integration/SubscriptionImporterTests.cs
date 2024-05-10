@@ -15,8 +15,8 @@ public class SubscriptionImporterTests : IntegrationTestBase
     [Fact]
     public async Task ImportCsv_InvalidCsv_ShouldThrow()
     {
-        var csvText = @"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor
-Subscription1,Description1,True,29.99,1,2023-12-01,Monthly,1,,,,,,
+        var csvText = @"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor,NotificationDays
+Subscription1,Description1,True,29.99,1,2023-12-01,Monthly,1,,,,,,,,
 ";
         var csv = new MemoryStream(Encoding.UTF8.GetBytes(csvText));
 
@@ -26,9 +26,9 @@ Subscription1,Description1,True,29.99,1,2023-12-01,Monthly,1,,,,,,
     [Fact]
     public async Task ImportCsv_EmptyValuesForOptionalProperties_ShouldReturnImportedItems()
     {
-        var csvText = @"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor
-Subscription1,Description1,True,29.99,1,2023-12-01,Month,1,,,,,,
-Subscription2,,True,29.99,1,2023-12-01,Month,1,,,,,,
+        var csvText = @"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor,NotificationDays
+Subscription1,Description1,True,29.99,1,2023-12-01,Month,1,,,,,,,,
+Subscription2,,True,29.99,1,2023-12-01,Month,1,,,,,,,,
 ";
         var csv = new MemoryStream(Encoding.UTF8.GetBytes(csvText));
 
@@ -41,10 +41,10 @@ Subscription2,,True,29.99,1,2023-12-01,Month,1,,,,,,
     public async Task ImportCsv_WithSameDetailsAsExisting_ShouldReturnImportedSubs()
     {
         var existingSubscription = CreateSubscription(DateTime.Today, description: null);
-        var csvText = $@"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor
+        var csvText = $@"Name,Description,IsAutoPaid,Cost,FirstPaymentDay,LastPayment,BillingOccurrence,BillingInterval,PrimaryColor,Icon,SecondaryColor,NotificationDays
 {existingSubscription.Name},,{existingSubscription.IsAutoPaid},{existingSubscription.Cost},{existingSubscription.FirstPaymentDay},{existingSubscription.LastPayment},{existingSubscription.BillingOccurrence},{existingSubscription.BillingInterval},,,,,,
-Subscription1,,True,29.99,1,2023-12-01,Month,1,,,,,,
-Subscription2,,False,29.99,1,2022-12-01,Week,1,,,,,,
+Subscription1,,True,29.99,1,2023-12-01,Month,1,,,,,,,,
+Subscription2,,False,29.99,1,2022-12-01,Week,1,,,,,,,,
 ";
         var csv = new MemoryStream(Encoding.UTF8.GetBytes(csvText));
 
