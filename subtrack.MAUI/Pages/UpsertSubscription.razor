@@ -1,11 +1,14 @@
 @page "/CreateSubscription"
 @page "/EditSubscription/{Id:int}"
+
 @using System.Globalization;
 @using subtrack.MAUI.Shared.Components
 @using subtrack.MAUI.Shared.JsInterop;
+
 @inject NavigationManager NavigationManager
 @inject ISubscriptionService SubscriptionService
 @implements IAsyncDisposable
+
 <div class="d-flex justify-content-between" style="padding-bottom: 20px;">
     <BackButton Url="@ReturnUrl"></BackButton>
     <button type="submit" form="SubscriptionForm" class="btn btn-success">
@@ -58,7 +61,7 @@
         </div>
         <div class="d-flex mt-2">
             <label class="pe-2" style="white-space: nowrap; font-size: 17px; min-width: 162px;" for="secondaryColor">Secondary Color</label>
-            <input class="form-control px-1 py-1" style="max-width:60px"  type="color" value="@_subscription.SecondaryColor" id="secondaryColor" @onchange="UpdateSecondaryColor" />
+            <input class="form-control px-1 py-1" style="max-width:60px" type="color" value="@_subscription.SecondaryColor" id="secondaryColor" @onchange="UpdateSecondaryColor" />
         </div>
     </div>
 
@@ -66,6 +69,20 @@
         <label style="white-space: nowrap; padding-right: 10px; font-size: 17px;">Icon</label>
         <IconPicker Icons="@iconOptions" OnIconSelected="@SelectIcon" SelectedIcon="@_subscription.Icon" Color="@_subscription.SecondaryColor" />
     </div>
+
+    <div class="form-check form-switch" style="padding-top: 10px">
+        <label class="form-check-label" for="isNotificationsEnabled">Notifications</label>
+        <InputCheckbox class="form-check-input" id="isNotificationsEnabled" @bind-Value="_isNotificationsEnabled" @onclick="(async () => await OnNotificationsEnabledChanged())"></InputCheckbox>
+    </div>
+    @if (_isNotificationsEnabled)
+    {
+        <div class="d-flex mt-2 mb-2" style="padding-top: 10px;">
+            <span>Notify</span>
+            <InputNumber class="form-control ms-2 me-2" @bind-Value="@_subscription.NotificationDays" id="notificationDays" style="max-width:50px"></InputNumber>
+            <span>days before due</span>
+        </div>
+    }
+
     <div class="form-group mt-2" style="padding-top: 10px;">
         <InputTextArea class="form-control" rows="3" placeholder="Description" @bind-Value="@_subscription.Description"></InputTextArea>
     </div>
@@ -83,6 +100,7 @@
     [SupplyParameterFromQuery]
     public string ReturnUrl { get; set; }
 
+    bool _isNotificationsEnabled = false;
     string _currency = "";
     private ElementReference costInputElement;
 
@@ -106,10 +124,13 @@
 
     protected override async Task OnParametersSetAsync()
     {
-        if (Id != null)
+        if (Id == null)
         {
-            _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
+            return;
         }
+
+        _subscription = await SubscriptionService.GetByIdIfExists(Id.Value);
+        _isNotificationsEnabled = _subscription.NotificationDays.HasValue;
     }
 
     protected async Task HightlightHandler() => await HighlightJsInterop.HighLight(costInputElement);
@@ -138,6 +159,12 @@
     private string GetBillingOccurrenceDisplayText(string billingOccurrence)
     {
         return billingOccurrence.ToQuantity(_subscription.BillingInterval, showQuantityAs: ShowQuantityAs.None);
+    }
+
+    private async Task OnNotificationsEnabledChanged()
+    {
+        _subscription.NotificationDays = _isNotificationsEnabled ? 0 : null;
+        await NotificationsUtil.EnsureNotificationsAreEnabled();
     }
 
     private void UpdateBackgroundColor(ChangeEventArgs e) => _subscription.PrimaryColor = e.Value!.ToString();

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using subtrack.DAL;
 
@@ -10,9 +11,11 @@ using subtrack.DAL;
 namespace subtrack.DAL.Migrations
 {
     [DbContext(typeof(SubtrackDbContext))]
-    partial class SubtrackDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240509182319_NotificationDays")]
+    partial class NotificationDays
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "7.0.14");
@@ -107,10 +110,6 @@ namespace subtrack.DAL.Migrations
                         new
                         {
                             Id = "LastSubscriptionExportTimeStamp"
-                        },
-                        new
-                        {
-                            Id = "LastSubscriptionReminderTimeStampKey"
                         });
                 });
 #pragma warning restore 612, 618

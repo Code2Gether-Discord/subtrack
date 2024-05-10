@@ -45,6 +45,7 @@ namespace subtrack.MAUI.Services
             sub.PrimaryColor = subscriptionToUpdate.PrimaryColor;
             sub.SecondaryColor = subscriptionToUpdate.SecondaryColor;
             sub.Icon = subscriptionToUpdate.Icon;
+            sub.NotificationDays = subscriptionToUpdate.NotificationDays;
             AutoPay(sub);
             sub.Cost = subscriptionToUpdate.Cost;
 
