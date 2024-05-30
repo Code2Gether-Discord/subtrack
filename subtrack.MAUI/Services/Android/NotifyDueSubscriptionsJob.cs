@@ -49,7 +49,12 @@ public class NotifyDueSubscriptionsJob : IJob
 
             if (lastSubscriptionReminderTimeStamp.Value?.Date != today)
             {
-                await NotifyDueSubscriptionsJob.RunInternal(serviceProvider, today);
+                var subscriptionService = serviceProvider.GetRequiredService<ISubscriptionService>();
+                var subscriptionsCalculator = serviceProvider.GetRequiredService<ISubscriptionsCalculator>();
+
+                var subscriptions = await subscriptionService.GetAllAsync();
+                await NotifyUpcomingPayments(subscriptions, today, subscriptionsCalculator);
+                await NotifyMissedPaymentsAsync(subscriptions, subscriptionsCalculator, today);
 
                 lastSubscriptionReminderTimeStamp.Value = now;
                 await settingsService.UpdateAsync(lastSubscriptionReminderTimeStamp);
@@ -62,12 +67,8 @@ public class NotifyDueSubscriptionsJob : IJob
         }
     }
 
-    private static async Task RunInternal(IServiceProvider serviceProvider, DateTime today)
+    private static async Task NotifyUpcomingPayments(IEnumerable<Subscription> subscriptions, DateTime today, ISubscriptionsCalculator subscriptionsCalculator)
     {
-        var subscriptionService = serviceProvider.GetRequiredService<ISubscriptionService>();
-        var subscriptionsCalculator = serviceProvider.GetRequiredService<ISubscriptionsCalculator>();
-
-        var subscriptions = await subscriptionService.GetAllAsync();
         var subscriptionsWithNotificationsEnabled = subscriptions.Where(x => x.NotificationDays.HasValue).ToList();
         if (!subscriptionsWithNotificationsEnabled.Any())
         {
@@ -76,7 +77,7 @@ public class NotifyDueSubscriptionsJob : IJob
 
         await NotificationsUtil.EnsureNotificationsAreEnabled();
 
-        var notificationGroup = today.Day.ToString();
+        var notificationGroup = $"upcoming {today.Day}";
         subscriptionsWithNotificationsEnabled.ForEach(sub =>
         {
             var dueDate = subscriptionsCalculator.GetNextPaymentDate(sub);
@@ -88,6 +89,23 @@ public class NotifyDueSubscriptionsJob : IJob
                 SendNotification(sub.Id, $"{sub.Name} is due {GetDueDaysText(dueDays)} ({dueDate.DayOfWeek.Humanize(LetterCasing.LowerCase)})", notificationGroup);
             }
         });
+    }
+
+    private static async Task NotifyMissedPaymentsAsync(IEnumerable<Subscription> subscriptions, ISubscriptionsCalculator subscriptionsCalculator, DateTime today)
+    {
+        if (!await NotificationsUtil.HasEnabledNotifications())
+        {
+            return;
+        }
+
+        foreach (var sub in subscriptions)
+        {
+            var dueDate = subscriptionsCalculator.GetNextPaymentDate(sub);
+            if (dueDate.IsPastDate(today))
+            {
+                SendNotification(sub.Id, $"Missed payment for {sub.Name}", $"missed {today.Day}");
+            }
+        }
     }
 
     private static string GetDueDaysText(int dueDays)
