@@ -6,7 +6,8 @@ public static class DateTimeExtensions
 {
     public static TimeSpan TimeRemainingFromToday(this DateTime date, IDateProvider dateTimeProvider) => date.Subtract(dateTimeProvider.Today);
 
-    public static bool IsPastDate(this DateTime date, IDateProvider dateTimeProvider) => date < dateTimeProvider.Today;
+    public static bool IsPastDate(this DateTime date, IDateProvider dateTimeProvider) => IsPastDate(date, dateTimeProvider.Today);
+    public static bool IsPastDate(this DateTime date, DateTime today) => date < today;
 
     public static DateTime AddWeeks(this DateTime date, int weeks) => date.AddDays(weeks * 7);
 
