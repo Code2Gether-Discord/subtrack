@@ -11,4 +11,6 @@ public static class NotificationsUtil
             await LocalNotificationCenter.Current.RequestNotificationPermission();
         }
     }
+
+    public static async Task<bool> HasEnabledNotifications() => await LocalNotificationCenter.Current.AreNotificationsEnabled();
 }
